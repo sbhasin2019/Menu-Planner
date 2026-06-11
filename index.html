@@ -313,7 +313,16 @@ const T = {
   catMeat:['Meat & Fish','मीट और मछली'], catVeg:['Vegetables & Fruit','सब्ज़ी और फल'], catDairy:['Dairy & Eggs','डेयरी और अंडे'],
   catPantry:['Pantry & Masale','पैंट्री और मसाले'], catBakery:['Bakery & Bread','बेकरी और ब्रेड'],
   sdal:['Dal','दाल'], ssabzi:['Sabzi','सब्ज़ी'], sstaple:['Roti / Rice','रोटी / चावल'], ssalad:['Salad','सलाद'], sraita:['Curd / Raita','दही / रायता'],
-  grpProtein:['Protein','प्रोटीन'], grpSabzi:['Vegetables','सब्ज़ी'], grpPantry:['Pantry & Dairy','पैंट्री और डेयरी']
+  grpProtein:['Protein','प्रोटीन'], grpSabzi:['Vegetables','सब्ज़ी'], grpPantry:['Pantry & Dairy','पैंट्री और डेयरी'],
+  tasteHead:['Taste profile','स्वाद प्रोफ़ाइल'],
+  tasteNote:['The app learns from what you pick, lock and swap. Favourites come up more often; swapped-away dishes get rested.','आप जो चुनते, लॉक करते और बदलते हैं, ऐप उससे सीखता है। पसंदीदा ज़्यादा आएँगे; हटाए हुए कुछ दिन कम।'],
+  likeMore:['More often','ज़्यादा बार'], likeNormal:['Normal','सामान्य'], likeLess:['Rarely','कभी-कभार'],
+  favs:['House favourites','घर के पसंदीदा'], resting:['Being rested','अभी कम आ रहे'],
+  noTaste:['Nothing learned yet — pick, lock and swap dishes and this fills up on its own.','अभी कुछ नहीं सीखा — डिश चुनें, लॉक करें, बदलें — यह अपने आप भरता जाएगा।'],
+  resetTaste:['♻️ Reset taste memory','♻️ स्वाद मेमोरी रीसेट'], tasteCleared:['Taste memory cleared','स्वाद मेमोरी साफ़ हो गई'],
+  tuneHead:['Menu tuning','मेनू ट्यूनिंग'],
+  indDin:['Indian dinners / week (max)','हफ्ते में भारतीय डिनर (अधिकतम)'],
+  heavyDin:['🔥🔥🔥 dinners / week (max)','🔥🔥🔥 डिनर हफ्ते में (अधिकतम)']
 };
 let lang = 'en';
 function L(x){ if(Array.isArray(x)) return x[lang==='hi'?1:0]||x[0]; return x }
@@ -553,6 +562,65 @@ SEED.push(
  ing:[['Pork chops (bone-in)','पोर्क चॉप्स','2 thick','meat'],['Salt, pepper, garlic','नमक, काली मिर्च, लहसुन','','pantry'],['Honey + mustard (glaze)','शहद + मस्टर्ड (ग्लेज़)','2 tbsp','pantry'],['Butter','मक्खन','2 tbsp','dairy'],['Sautéed potatoes/beans','भुने आलू/बीन्स','','veg']],
  st:[['Salt chops 30 min ahead; pat dry.','चॉप्स पर 30 मिनट पहले नमक; पोंछकर सुखाएँ।'],['Sear 3-4 min a side; brush honey-mustard in the last minute.','हर तरफ़ 3-4 मिनट सेकें; आख़िरी मिनट में शहद-मस्टर्ड लगाएँ।'],['Rest 5 min; serve with sautéed potatoes.','5 मिनट रखें; भुने आलू के साथ दें।'],['(Weekday lunch — just us two.)','(वीकडे लंच — सिर्फ़ हम दोनों।)']]}
 );
+/* --- NEW ROTATION ADDITIONS — world dishes, Goa-procurable --- */
+SEED.push(
+{id:'n1',n:['Chicken Adobo (Filipino)','चिकन अडोबो (फिलिपीनो)'],cz:'Other',p:'chicken',co:['dinner'],ef:1,tm:50,ev:false,needs:['chicken','soy','rice','onions'],onepot:true,
+ gn:['Nothing exotic needed — soy, vinegar, garlic and pepper are all kirana staples.','कुछ ख़ास नहीं चाहिए — सोया, सिरका, लहसुन, काली मिर्च सब किराने का सामान है।'],
+ ing:[['Chicken (thigh/curry cut)','चिकन (थाई/करी कट)','800 g','meat'],['Soy sauce','सोया सॉस','1/3 cup','pantry'],['Vinegar','सिरका','1/3 cup','pantry'],['Garlic (whole cloves)','लहसुन (साबुत कलियाँ)','10','veg'],['Black peppercorns, bay leaves','साबुत काली मिर्च, तेज पत्ता','','pantry'],['Rice','चावल','2 cups','pantry']],
+ st:[['Marinate chicken in soy + vinegar + garlic 30 min.','चिकन सोया + सिरका + लहसुन में 30 मिनट रखें।'],['Simmer everything together, uncovered, 35 min — do not stir much.','सब कुछ बिना ढके 35 मिनट धीमा पकाएँ — ज़्यादा न चलाएँ।'],['Reduce till the sauce turns glossy and dark.','सॉस गाढ़ी और चमकदार होने तक सुखाएँ।'],['Over rice. Tastes like nothing else in the rotation.','चावल पर। रोटेशन में ऐसा स्वाद और किसी का नहीं।']]},
+{id:'n2',n:['Greek Lemon Chicken & Potatoes','ग्रीक लेमन चिकन और आलू'],cz:'Western',p:'chicken',co:['dinner'],ef:2,tm:60,ev:false,needs:['chicken','potatoes','butter'],onepot:true,
+ gn:['Dried oregano is the only "special" item — Delfino\'s keeps it; lemon and potatoes do the rest.','सिर्फ़ सूखा ओरेगानो "ख़ास" है — डेल्फ़िनोज़ में मिलता है; बाकी काम नींबू-आलू का है।'],
+ ing:[['Chicken (bone-in pieces)','चिकन (हड्डी वाले टुकड़े)','800 g','meat'],['Potatoes (wedges)','आलू (फाँकें)','5','veg'],['Lemon juice','नींबू का रस','1/3 cup','veg'],['Olive oil, garlic, dried oregano','ऑलिव ऑयल, लहसुन, ओरेगानो','','pantry'],['Mustard (a spoon)','मस्टर्ड (एक चम्मच)','','pantry']],
+ st:[['Toss everything in a baking dish with 1/2 cup water.','सब कुछ बेकिंग डिश में 1/2 कप पानी के साथ मिलाएँ।'],['Bake 200°C for 50 min, basting twice.','200°C पर 50 मिनट, बीच में दो बार रस डालें।'],['Potatoes soak the lemony juices — the best part.','आलू नींबू वाला रस सोख लेते हैं — सबसे अच्छा हिस्सा।']]},
+{id:'n3',n:['Chicken Shawarma Wraps','चिकन शावरमा रैप'],cz:'Other',p:'chicken',co:['dinner'],ef:2,tm:45,ev:false,needs:['chicken','yogurt','tortillas','onions'],onepot:true,
+ gn:['Shawarma spice = jeera + dhania + paprika + dalchini from your dabba; rumali or tortillas both work.','शावरमा मसाला = आपके डब्बे का जीरा + धनिया + पैपरिका + दालचीनी; रुमाली या टॉर्टिला दोनों चलेंगे।'],
+ ing:[['Chicken thigh (strips)','चिकन थाई (पट्टियाँ)','700 g','meat'],['Curd + shawarma spices','दही + शावरमा मसाले','1/2 cup','dairy'],['Garlic sauce: curd + mayo + garlic','गार्लिक सॉस: दही + मेयो + लहसुन','','dairy'],['Rumali/tortillas','रुमाली/टॉर्टिला','8','bakery'],['Onion, cucumber, lettuce','प्याज़, खीरा, लेट्यूस','','veg']],
+ st:[['Marinate chicken in spiced curd 1 hour; sear hard on the tawa.','चिकन मसालेदार दही में 1 घंटा; तवे पर तेज़ सेकें।'],['Whip the garlic sauce.','गार्लिक सॉस फेंट लें।'],['Build wraps at the table — chicken, salad, sauce, roll.','मेज़ पर रैप बनाएँ — चिकन, सलाद, सॉस, रोल।']]},
+{id:'n4',n:['Nasi Goreng (Indonesian fried rice)','नासी गोरेंग (इंडोनेशियन फ्राइड राइस)'],cz:'Other',p:'chicken',co:['dinner'],ef:1,tm:30,ev:false,needs:['rice','chicken','soy','onions'],onepot:true,
+ gn:['Kecap manis (sweet soy) = soy sauce + melted jaggery, stirred. Done.','केचप मानिस (मीठा सोया) = सोया सॉस + पिघला गुड़। बस।'],
+ ing:[['Cold/leftover rice','ठंडा/बचा चावल','4 cups','pantry'],['Chicken (small dice)','चिकन (छोटे टुकड़े)','300 g','meat'],['Soy + jaggery (sweet soy)','सोया + गुड़ (मीठा सोया)','3 tbsp','pantry'],['Garlic, shallots/onion, green chilli','लहसुन, प्याज़, हरी मिर्च','','veg'],['Cucumber + tomato (side)','खीरा + टमाटर (साथ में)','','veg']],
+ st:[['Fry garlic-onion-chilli; add chicken till done.','लहसुन-प्याज़-मिर्च भूनें; चिकन डालकर पकाएँ।'],['Rice on highest heat, sweet soy over, toss till every grain is brown.','चावल तेज़ आँच पर, मीठा सोया डालकर हर दाना भूरा होने तक चलाएँ।'],['Fried egg on top for us two; Aveer\'s plate without.','हम दोनों के लिए ऊपर फ्राइड अंडा; अवीर की प्लेट बिना।']]},
+{id:'n5',n:['Pad Krapow (Thai basil chicken)','पैड क्रपाओ (थाई बेसिल चिकन)'],cz:'Thai',p:'chicken',co:['lunch','dinner'],ef:1,tm:25,ev:false,needs:['chicken-keema','rice','soy'],onepot:true,
+ gn:['Holy basil is rare here — regular basil (Delfino\'s) or even a handful of mint-basil mix works fine.','होली बेसिल यहाँ मुश्किल है — सादा बेसिल (डेल्फ़िनोज़) या पुदीना-बेसिल मिक्स भी चलेगा।'],
+ ing:[['Chicken keema','चिकन कीमा','500 g','meat'],['Garlic + bird/green chillies','लहसुन + हरी मिर्च','','veg'],['Soy + fish sauce + a little sugar','सोया + फिश सॉस + थोड़ी चीनी','','pantry'],['Basil leaves (big handful)','बेसिल पत्ते (मुट्ठी भर)','','veg'],['Rice','चावल','2 cups','pantry']],
+ st:[['Smash garlic-chilli, fry 30 sec.','लहसुन-मिर्च कूटकर 30 सेकंड भूनें।'],['Keema on highest heat, sauces in, 5-6 min.','कीमा तेज़ आँच पर, सॉस डालकर 5-6 मिनट।'],['Kill the heat, fold in basil. Over rice.','आँच बंद, बेसिल मिलाएँ। चावल पर।']]},
+{id:'n6',n:['Chicken Yaki Udon','चिकन याकी उडोन'],cz:'Japanese',p:'chicken',co:['dinner'],ef:1,tm:30,ev:false,needs:['noodles','chicken','soy'],onepot:true,
+ gn:['No udon in Mapusa? Thick hakka noodles do the job honourably.','मापुसा में उडोन नहीं? मोटे हक्का नूडल्स बढ़िया काम चलाते हैं।'],
+ ing:[['Udon / thick noodles','उडोन / मोटे नूडल्स','400 g','pantry'],['Chicken (strips)','चिकन (पट्टियाँ)','400 g','meat'],['Soy + a little vinegar + honey (sauce)','सोया + थोड़ा सिरका + शहद (सॉस)','','pantry'],['Cabbage, carrot, spring onion','पत्तागोभी, गाजर, हरा प्याज़','','veg'],['Sesame','तिल','','pantry']],
+ st:[['Sear chicken; keep aside.','चिकन तेज़ सेककर अलग रखें।'],['Veg 2 min on high; noodles + sauce + chicken back in.','सब्ज़ी तेज़ आँच पर 2 मिनट; नूडल्स + सॉस + चिकन वापस।'],['Toss till glossy; sesame on top.','चमकदार होने तक चलाएँ; ऊपर तिल।']]},
+{id:'n7',n:['Fish en Papillote (foil-baked)','फॉइल में बेक्ड मछली'],cz:'Western',p:'fish',co:['dinner'],ef:1,tm:30,ev:false,needs:['fish','butter','tomatoes'],onepot:true,
+ gn:['Just foil, butter, lemon and whatever veg is in the fridge — zero special shopping.','सिर्फ़ फॉइल, मक्खन, नींबू और फ्रिज की कोई भी सब्ज़ी — कोई ख़ास ख़रीदारी नहीं।'],
+ ing:[['Fish fillets','मछली फ़िले','600 g','meat'],['Butter, garlic, lemon','मक्खन, लहसुन, नींबू','','dairy'],['Cherry tomatoes / zucchini / beans','चेरी टमाटर / ज़ुकीनी / बीन्स','2 cups','veg'],['Herbs (whatever is around)','हर्ब्स (जो भी हों)','','veg']],
+ st:[['Lay fish + veg + butter + lemon on foil; seal into parcels.','फॉइल पर मछली + सब्ज़ी + मक्खन + नींबू रखकर पैकेट बंद करें।'],['Bake 200°C, 15 min — the parcel steams everything.','200°C पर 15 मिनट — पैकेट में सब भाप से पकता है।'],['Open at the table — the puff of steam is the show.','मेज़ पर खोलें — भाप का बादल ही मज़ा है।']]},
+{id:'n8',n:['Cajun Fish Rice Bowl','केजन फिश राइस बाउल'],cz:'Western',p:'fish',co:['dinner'],ef:1,tm:30,ev:false,needs:['fish','rice','capsicum'],onepot:true,
+ gn:['Cajun mix is just paprika + garlic powder + oregano + pepper from the dabba — no imported jar needed.','केजन मसाला = डब्बे का पैपरिका + लहसुन पाउडर + ओरेगानो + काली मिर्च — कोई इम्पोर्टेड डिब्बा नहीं चाहिए।'],
+ ing:[['Fish cubes (firm)','मछली के टुकड़े','600 g','meat'],['Cajun spice mix (homemade)','केजन मसाला (घर का)','2 tbsp','pantry'],['Rice','चावल','2 cups','pantry'],['Capsicum, onion, corn','शिमला, प्याज़, कॉर्न','','veg'],['Curd-mayo drizzle, lemon','दही-मेयो ड्रिज़ल, नींबू','','dairy']],
+ st:[['Toss fish in the spice mix; sear 2-3 min a side.','मछली मसाले में लपेटकर हर तरफ़ 2-3 मिनट सेकें।'],['Sauté the veg in the same pan.','उसी पैन में सब्ज़ी भूनें।'],['Bowl: rice, veg, fish, drizzle, lemon.','बाउल: चावल, सब्ज़ी, मछली, ड्रिज़ल, नींबू।']]},
+{id:'n9',n:['Prawn Aglio e Olio','झींगा आल्यो ए ओल्यो'],cz:'Italian',p:'prawns',co:['dinner'],ef:1,tm:25,ev:false,needs:['prawns','pasta'],onepot:true,
+ gn:['Five ingredients, fifteen minutes — garlic, olive oil, chilli flakes, prawns, spaghetti.','पाँच चीज़ें, पंद्रह मिनट — लहसुन, ऑलिव ऑयल, चिली फ्लेक्स, झींगे, स्पगेटी।'],
+ ing:[['Spaghetti','स्पगेटी','400 g','pantry'],['Prawns','झींगे','400 g','meat'],['Garlic (sliced thin)','लहसुन (पतला कटा)','8 cloves','veg'],['Olive oil, chilli flakes, parsley/coriander','ऑलिव ऑयल, चिली फ्लेक्स, धनिया','','pantry'],['Lemon','नींबू','','veg']],
+ st:[['Boil spaghetti; keep a cup of pasta water.','स्पगेटी उबालें; एक कप पानी बचाएँ।'],['Garlic golden (not brown) in olive oil; prawns 2 min; chilli flakes.','लहसुन सुनहरा (भूरा नहीं) करें; झींगे 2 मिनट; चिली फ्लेक्स।'],['Toss pasta + pasta water till silky; lemon to finish.','पास्ता + पानी मिलाकर रेशमी करें; नींबू से ख़त्म।']]},
+{id:'n10',n:['Murgh Malai Tikka','मुर्ग़ मलाई टिक्का'],cz:'Indian',p:'chicken',co:['lunch','dinner'],ef:2,tm:45,ev:false,needs:['chicken-breast','cream','cheese','yogurt'],
+ gn:['The white tikka Delhi does best — cream, cheese and cardamom instead of red masala.','दिल्ली वाला सफ़ेद टिक्का — लाल मसाले की जगह क्रीम, चीज़ और इलायची।'],
+ ing:[['Chicken (boneless cubes)','चिकन (बोनलेस टुकड़े)','700 g','meat'],['Cream + hung curd','क्रीम + गाढ़ा दही','1/2 cup','dairy'],['Processed cheese (grated)','चीज़ (कसा)','3 tbsp','dairy'],['Ginger-garlic, green chilli, cardamom powder','अदरक-लहसुन, हरी मिर्च, इलायची पाउडर','','pantry'],['Butter','मक्खन','','dairy']],
+ st:[['Marinate in cream-cheese-curd mix, 2 hours minimum.','क्रीम-चीज़-दही में कम से कम 2 घंटे रखें।'],['Tawa or grill on medium — white tikka must not char dark.','तवा/ग्रिल मध्यम आँच पर — सफ़ेद टिक्का गहरा नहीं जलना चाहिए।'],['Butter baste; serve with pudina chutney.','मक्खन लगाएँ; पुदीना चटनी के साथ।']]},
+{id:'n11',n:['Paneer Shashlik','पनीर शाशलिक'],cz:'Indian',p:'paneer',co:['dinner'],ef:2,tm:35,ev:false,needs:['paneer','capsicum','onions','yogurt'],onepot:true,
+ gn:['Skewers optional — a hot tawa lined with the same marinade works just as well.','सीख़ ज़रूरी नहीं — गरम तवे पर उसी मसाले में भी उतना ही अच्छा बनता है।'],
+ ing:[['Paneer (big cubes)','पनीर (बड़े टुकड़े)','500 g','dairy'],['Capsicum + onion (squares)','शिमला + प्याज़ (चौकोर)','','veg'],['Hung curd + tandoori masala + ajwain','गाढ़ा दही + तंदूरी मसाला + अजवाइन','','dairy'],['Lemon, chaat masala','नींबू, चाट मसाला','','pantry']],
+ st:[['Marinate paneer + veg in spiced curd 30 min.','पनीर + सब्ज़ी मसालेदार दही में 30 मिनट।'],['Thread or lay flat; char on a hot tawa.','सीख़ में पिरोएँ या सीधे गरम तवे पर सेकें।'],['Lemon + chaat masala. Veg night, but nobody complains.','नींबू + चाट मसाला। वेज दिन, पर कोई शिकायत नहीं करता।']]},
+{id:'n12',n:['Rajma Burrito Bowl','राजमा बरीटो बाउल'],cz:'Mexican',p:'veg',co:['dinner'],ef:1,tm:35,ev:false,needs:['rajma','rice','tomatoes','cheese'],onepot:true,
+ gn:['Mexico via Delhi — leftover rajma is literally the filling; everything else is assembly.','दिल्ली के रास्ते मेक्सिको — बचा राजमा ही फिलिंग है; बाकी सब सजावट।'],
+ ing:[['Rajma (cooked/leftover)','राजमा (पका/बचा)','3 cups','pantry'],['Rice (cumin-lime)','चावल (जीरा-नींबू)','2 cups','pantry'],['Salsa: tomato-onion-coriander','साल्सा: टमाटर-प्याज़-धनिया','','veg'],['Cheese, curd (sour-cream stand-in)','चीज़, दही','','dairy'],['Lettuce, lemon','लेट्यूस, नींबू','','veg']],
+ st:[['Thicken rajma with a little cumin + paprika.','राजमा को जीरा + पैपरिका के साथ गाढ़ा करें।'],['Lime-cumin rice as the base.','नींबू-जीरा चावल नीचे।'],['Layer bowls at the table — everyone builds their own.','मेज़ पर परतें — सब अपना-अपना बनाएँ।']]},
+{id:'n13',n:['Quick Beef Stroganoff','क्विक बीफ़ स्ट्रोगानॉफ़'],cz:'Western',p:'beef',co:['lunch'],ef:2,tm:35,ev:false,needs:['beef','cream','onions'],onepot:true,
+ gn:['Button mushrooms and cream — both standard Delfino\'s stock; serve over rice or pasta.','बटन मशरूम और क्रीम — दोनों डेल्फ़िनोज़ में आम; चावल या पास्ता पर।'],
+ ing:[['Beef (thin strips)','बीफ़ (पतली पट्टियाँ)','500 g','meat'],['Mushrooms (sliced)','मशरूम (कटे)','200 g','veg'],['Onion, garlic','प्याज़, लहसुन','','veg'],['Cream + a spoon of mustard','क्रीम + एक चम्मच मस्टर्ड','3/4 cup','dairy'],['Rice or pasta','चावल या पास्ता','','pantry']],
+ st:[['Sear beef hard, remove.','बीफ़ तेज़ सेककर निकालें।'],['Mushroom-onion in the same pan till brown.','उसी पैन में मशरूम-प्याज़ भूरा होने तक।'],['Cream + mustard, beef back, 3 min only.','क्रीम + मस्टर्ड, बीफ़ वापस, सिर्फ़ 3 मिनट।'],['(Weekday lunch — just us two.)','(वीकडे लंच — सिर्फ़ हम दोनों।)']]},
+{id:'n14',n:['Vietnamese Caramel Pork','वियतनामी कैरेमल पोर्क'],cz:'Other',p:'pork',co:['lunch'],ef:2,tm:50,ev:false,needs:['pork','rice','onions'],onepot:true,
+ gn:['Sugar, fish sauce, black pepper — the fish sauce you already keep for Thai curry covers this.','चीनी, फिश सॉस, काली मिर्च — थाई करी वाला फिश सॉस ही काफ़ी है।'],
+ ing:[['Pork (small cubes, some fat)','पोर्क (छोटे टुकड़े)','600 g','meat'],['Sugar (for caramel)','चीनी (कैरेमल के लिए)','3 tbsp','pantry'],['Fish sauce','फिश सॉस','2 tbsp','pantry'],['Shallots/onion, garlic, black pepper','प्याज़, लहसुन, काली मिर्च','','veg'],['Rice + cucumber','चावल + खीरा','','pantry']],
+ st:[['Melt sugar to amber caramel — do not walk away.','चीनी को सुनहरा कैरेमल बनाएँ — छोड़कर न जाएँ।'],['Pork in, coat; fish sauce + a splash of water.','पोर्क डालकर लपेटें; फिश सॉस + थोड़ा पानी।'],['Simmer 35 min till sticky-dark and glossy.','35 मिनट, चिपचिपा-गहरा और चमकदार होने तक।'],['Lots of black pepper; rice + cucumber. (Weekday lunch.)','खूब काली मिर्च; चावल + खीरा। (वीकडे लंच।)']]}
+);
 </script>
 <script>
 /* ================= STATE ================= */
@@ -565,8 +633,17 @@ let hidden = store.get('hidden',[]);
 let plan = store.get('plan',null);
 let grocery = store.get('grocery',{items:[]});
 let pantryHave = store.get('pantry',[]);
-let settings = store.get('settings',{breakfast:false, quota:{chicken:5,fish:4,beef:2,mutton:1,pork:1}});
+let settings = store.get('settings',{breakfast:false, quota:{chicken:5,fish:4,beef:2,mutton:1,pork:1}, indianDinners:3, heavyDinners:2});
 if(!settings.quota) settings.quota={chicken:5,fish:4,beef:2,mutton:1,pork:1};
+if(settings.indianDinners===undefined) settings.indianDinners=3;
+if(settings.heavyDinners===undefined) settings.heavyDinners=2;
+let taste = store.get('taste',{scores:{},stars:{}});
+if(!taste.scores) taste.scores={}; if(!taste.stars) taste.stars={};
+function bumpTaste(id,d){ taste.scores[id]=Math.max(-6,Math.min(6,(taste.scores[id]||0)+d)); store.set('taste',taste) }
+function tasteWeight(id){ let w=Math.pow(1.5,(taste.scores[id]||0)); const st=taste.stars[id];
+  if(st==='more') w*=3; if(st==='less') w*=0.3; return Math.max(0.05,Math.min(40,w)) }
+function weightedPick(arr){ if(!arr.length) return null; let tot=0; const ws=arr.map(r=>{const w=tasteWeight(r.id);tot+=w;return w});
+  let x=Math.random()*tot; for(let i=0;i<arr.length;i++){ x-=ws[i]; if(x<=0) return arr[i] } return arr[arr.length-1] }
 let history = store.get('history',{});
 let sideHist = store.get('sideHist',{});
 lang = store.get('lang','en');
@@ -659,17 +736,18 @@ function pickMain(meal,dateIso,token,ctx){
   // rhythm: lunches lean Indian (red meats exempt — they come in all styles); dinners cap at 3 Indian/week
   const rhythm = r=>{
     if(meal==='lunch') return ['beef','mutton','pork'].includes(token) || isInd(r);
-    if(meal==='dinner') return (ctx.indianD||0)<3 || !isInd(r);
+    if(meal==='dinner') return (ctx.indianD||0)<(settings.indianDinners??3) || !isInd(r);
     return true;
   };
+  const heavyOK = r=>!(r.ef>=3&&(ctx.dayHeavy||(meal==='dinner'&&ctx.weekHeavyD>=(settings.heavyDinners??2))));
   const tiers=[
-    r=>rhythm(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && !(r.ef>=3&&(ctx.dayHeavy||(meal==='dinner'&&ctx.weekHeavyD>=2))),
-    r=>rhythm(r) && !ctx.picked.includes(r.id) && !(r.ef>=3&&ctx.dayHeavy),
-    r=>!ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && !(r.ef>=3&&ctx.dayHeavy),
+    r=>rhythm(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && heavyOK(r),
+    r=>rhythm(r) && !ctx.picked.includes(r.id) && heavyOK(r),
+    r=>!ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && heavyOK(r),
     r=>!ctx.picked.includes(r.id),
     r=>true
   ];
-  for(const f of tiers){ const c=shuffle(pool.filter(f)); if(c.length) return c[0] }
+  for(const f of tiers){ const c=pool.filter(f); if(c.length) return weightedPick(c) }
   return null;
 }
 
@@ -700,6 +778,8 @@ function assignSides(main, meal, dayAvoid){
 
 /* ================= GENERATE PLAN ================= */
 function generatePlan(){
+  Object.keys(taste.scores).forEach(k=>{ taste.scores[k]*=0.93; if(Math.abs(taste.scores[k])<0.2) delete taste.scores[k] });
+  store.set('taste',taste);
   const start=today0(); const old=plan;
   const dates=[]; for(let i=0;i<7;i++) dates.push(iso(new Date(start.getFullYear(),start.getMonth(),start.getDate()+i)));
   // collect locked slots
@@ -758,12 +838,15 @@ function swapSlot(di,meal){
     indianD:plan.days.filter(d=>d!==day&&d.dinner&&byId(d.dinner.main.id)&&['Indian','Goan'].includes(byId(d.dinner.main.id).cz)).length};
   const r=pickMain(meal,day.date,meal==='breakfast'?null:tok,ctx);
   if(!r||r.id===slot.main.id){ toast(LT('noAlt')); return }
+  bumpTaste(slot.main.id,-1);
   const dayAvoid=Object.values((day.lunch&&day.lunch.sides)||{}).concat(Object.values((day.dinner&&day.dinner.sides)||{}));
   day[meal]= meal==='breakfast' ? {main:{id:r.id,locked:false}} : {main:{id:r.id,locked:false}, token:tok, sides:assignSides(r,meal,dayAvoid)};
   history[r.id]=day.date; store.set('history',history); store.set('sideHist',sideHist);
   store.set('plan',plan); renderPlan();
 }
-function toggleLock(di,meal){ const s=plan.days[di][meal]; if(!s) return; s.main.locked=!s.main.locked; store.set('plan',plan); renderPlan() }
+function toggleLock(di,meal){ const s=plan.days[di][meal]; if(!s) return; s.main.locked=!s.main.locked;
+  if(s.main.locked) bumpTaste(s.main.id,2);
+  store.set('plan',plan); renderPlan() }
 function setSlot(dateIso,meal,id){
   if(!plan||dayDiff(plan.start)<-6){ generatePlan(); }
   const day=plan.days.find(d=>d.date===dateIso);
@@ -771,6 +854,7 @@ function setSlot(dateIso,meal,id){
   const r=byId(id);
   const dayAvoid=Object.values((day.lunch&&day.lunch.sides)||{}).concat(Object.values((day.dinner&&day.dinner.sides)||{}));
   day[meal]= meal==='breakfast' ? {main:{id,locked:true}} : {main:{id,locked:true}, token:tokenOf(r.p), sides:assignSides(r,meal,dayAvoid)};
+  bumpTaste(id,3);
   store.set('plan',plan); store.set('sideHist',sideHist); renderPlan(); closeSheet();
   goTab('plan',document.querySelector('[data-page=plan]'));
   toast(L(r.n)+' '+LT('setDone'));
@@ -941,6 +1025,7 @@ function openRecipe(id){
     <span class="chip haldi">${r.tm} ${LT('min')} · ${LT('effort'+r.ef)}</span>
     ${zoyaOK(r)?'':`<span class="chip warn">✗ Zoya</span>`}${aveerOK(r)?'':`<span class="chip warn">✗ Aveer (${lang==='hi'?'अंडा':'egg'})</span>`}
   </div>`;
+  if(r.gn) h+=`<div class="note">💡 ${esc(L(r.gn))}</div>`;
   if(!zoyaOK(r)) h+=`<div class="note">${LT('zoyaNote')}</div>`;
   h+=`<h3>${LT('ingredients')}</h3>`;
   r.ing.forEach(g=>h+=`<div class="ingline"><span>${esc(L([g[0],g[1]]))}</span><span>${esc(g[2]||'')}</span></div>`);
@@ -953,6 +1038,12 @@ function openRecipe(id){
       ${r.co.map(c=>`<option value="${c}">${LT(c)}</option>`).join('')}</select>
     <button class="btn primary small" onclick="setSlot(document.getElementById('ap-day').value,document.getElementById('ap-meal').value,'${r.id}')">${LT('set')}</button>
   </div>`;
+  const st=taste.stars[r.id]||'';
+  h+=`<h3>${LT('tasteHead')}</h3><div class="pgrid">
+    <button class="pchip ${st==='more'?'on':''}" onclick="setStar('${r.id}','more')">👍 ${LT('likeMore')}</button>
+    <button class="pchip ${st===''?'on':''}" onclick="setStar('${r.id}','')">${LT('likeNormal')}</button>
+    <button class="pchip ${st==='less'?'on':''}" onclick="setStar('${r.id}','less')">👎 ${LT('likeLess')}</button>
+  </div>`;
   h+=`<div class="btnrow" style="margin-top:16px">
     <button class="btn ghost small" onclick="shareRecipe('${r.id}')">${LT('sendRecipe')}</button>
     ${isCustom?`<button class="btn ghost small" onclick="openAddRecipe('${r.id}')">${LT('edit')}</button>
@@ -961,6 +1052,8 @@ function openRecipe(id){
   </div>`;
   openSheetHtml(h);
 }
+function setStar(id,v){ if(v) taste.stars[id]=v; else delete taste.stars[id]; store.set('taste',taste); openRecipe(id) }
+function tasteRank(id){ const st=taste.stars[id]; return (taste.scores[id]||0) + (st==='more'?4:st==='less'?-4:0) }
 function toggleHide(id){
   if(hidden.includes(id)) hidden=hidden.filter(x=>x!==id); else hidden.push(id);
   store.set('hidden',hidden); closeSheet(); renderRecipes(); toast(hidden.includes(id)?LT('hid'):LT('unhid'));
@@ -1096,6 +1189,15 @@ function openSettings(){
     ${['chicken','fish','beef','mutton','pork'].map(t=>`<div class="qcell"><label>${pName(t)}</label><input type="number" min="0" max="14" id="q-${t}" value="${q[t]||0}" onchange="saveQuota()"></div>`).join('')}
   </div>
   <div class="hint" style="font-size:12.5px;color:var(--muted)">${LT('quotaNote')}</div>
+  <h3>${LT('tuneHead')}</h3>
+  <div class="setrow"><div><b>${LT('indDin')}</b></div>
+    <input type="number" min="0" max="7" id="t-ind" value="${settings.indianDinners}" onchange="saveTuning()" style="width:64px;border:2px solid var(--ink);border-radius:10px;padding:8px;text-align:center;font-family:var(--body-font);background:var(--card)"></div>
+  <div class="setrow"><div><b>${LT('heavyDin')}</b></div>
+    <input type="number" min="0" max="4" id="t-heavy" value="${settings.heavyDinners}" onchange="saveTuning()" style="width:64px;border:2px solid var(--ink);border-radius:10px;padding:8px;text-align:center;font-family:var(--body-font);background:var(--card)"></div>
+  <h3>${LT('tasteHead')}</h3>
+  <div class="hint" style="font-size:12.5px;color:var(--muted);margin-bottom:8px">${LT('tasteNote')}</div>
+  ${tasteProfileHtml()}
+  <div class="btnrow"><button class="btn ghost small" onclick="resetTaste()">${LT('resetTaste')}</button></div>
   <div class="setrow"><div><b>${LT('bfToggle')}</b><div style="font-size:12.5px;color:var(--muted)">${LT('bfNote')}</div></div>
     <button class="toggle ${settings.breakfast?'on':''}" onclick="toggleBreakfast(this)"></button></div>
   <h3>${LT('data')}</h3>
@@ -1108,6 +1210,22 @@ function openSettings(){
   <div class="legend" style="margin-top:14px">${LT('deviceNote')}</div>`;
   openSheetHtml(h);
 }
+function saveTuning(){
+  settings.indianDinners=Math.max(0,Math.min(7,+document.getElementById('t-ind').value||0));
+  settings.heavyDinners=Math.max(0,Math.min(4,+document.getElementById('t-heavy').value||0));
+  store.set('settings',settings);
+}
+function tasteProfileHtml(){
+  const rated=allRecipes().map(r=>({r,k:tasteRank(r.id)})).filter(x=>Math.abs(x.k)>0.5);
+  if(!rated.length) return `<div class="hint" style="font-size:12.5px;color:var(--muted)">${LT('noTaste')}</div>`;
+  const top=rated.filter(x=>x.k>0).sort((a,b)=>b.k-a.k).slice(0,5);
+  const low=rated.filter(x=>x.k<0).sort((a,b)=>a.k-b.k).slice(0,5);
+  let h='';
+  if(top.length) h+=`<div style="margin-bottom:6px"><b style="font-size:12.5px;color:var(--dhaniya)">${LT('favs')}:</b> <span style="font-size:13px">${top.map(x=>esc(L(x.r.n))).join(' · ')}</span></div>`;
+  if(low.length) h+=`<div style="margin-bottom:6px"><b style="font-size:12.5px;color:var(--mirchi)">${LT('resting')}:</b> <span style="font-size:13px">${low.map(x=>esc(L(x.r.n))).join(' · ')}</span></div>`;
+  return h;
+}
+function resetTaste(){ taste={scores:{},stars:{}}; store.set('taste',taste); openSettings(); toast(LT('tasteCleared')) }
 function saveQuota(){
   const q={};
   ['chicken','fish','beef','mutton','pork'].forEach(t=>{ q[t]=Math.max(0,Math.min(14,+document.getElementById('q-'+t).value||0)) });
@@ -1115,7 +1233,7 @@ function saveQuota(){
 }
 function toggleBreakfast(btn){ settings.breakfast=!settings.breakfast; store.set('settings',settings); btn.classList.toggle('on',settings.breakfast); renderPlan() }
 function backup(){
-  const data={custom,hidden,plan,grocery,pantry:pantryHave,settings,history};
+  const data={custom,hidden,plan,grocery,pantry:pantryHave,settings,history,taste};
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
   a.download='ghar-ka-menu-backup.json'; a.click();
@@ -1132,6 +1250,7 @@ function restore(inp){
     if(d.pantry) {pantryHave=d.pantry; store.set('pantry',pantryHave)}
     if(d.settings) {settings=d.settings; if(!settings.quota) settings.quota={chicken:5,fish:4,beef:2,mutton:1,pork:1}; store.set('settings',settings)}
     if(d.history) {history=d.history; store.set('history',history)}
+    if(d.taste) {taste=d.taste; if(!taste.scores)taste.scores={}; if(!taste.stars)taste.stars={}; store.set('taste',taste)}
     renderAll(); closeSheet(); toast(LT('restored'));
   }catch(e){ toast(LT('badFile')) } };
   rd.readAsText(f);
