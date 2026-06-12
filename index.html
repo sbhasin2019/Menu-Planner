@@ -311,8 +311,9 @@ const T = {
   settings:['Settings','सेटिंग्स'],
   quotaHead:['Weekly non-veg quota (lunches + dinners = 14)','हफ्ते का नॉन-वेज कोटा (लंच + डिनर = 14)'],
   quotaNote:['Whatever is left over becomes veg/paneer meals. Beef, mutton & pork go to weekday lunches (Zoya\'s rule).','जो बचेगा वह वेज/पनीर बनेगा। बीफ़, मटन और पोर्क सिर्फ़ वीकडे लंच में (ज़ोया का नियम)।'],
-  bfToggle:['Plan breakfast too','नाश्ता भी प्लान करें'],
+  bfToggle:['Breakfast planning','नाश्ते का प्लान'],
   bfNote:['Adds a breakfast row to the week','हफ्ते में नाश्ते की लाइन जुड़ेगी'],
+  bfOff:['Off','बंद'], bfWknd:['Sat–Sun','शनि–रवि'], bfDaily:['Daily','रोज़'],
   data:['Data','डेटा'],
   backup:['⬇️ Backup (JSON)','⬇️ बैकअप (JSON)'], restore:['⬆️ Restore','⬆️ रीस्टोर'], reset:['♻️ Reset plan','♻️ प्लान रीसेट'],
   resetConfirm:['Reset plan and bazaar list? Recipes stay.','प्लान और बाज़ार लिस्ट रीसेट करें? रेसिपी बनी रहेंगी।'],
@@ -466,13 +467,13 @@ const SEED = [
 {id:'b1',n:['Kanda Poha','कांदा पोहा'],cz:'Indian',p:'veg',co:['breakfast'],ef:1,tm:20,kc:320,ev:false,needs:['poha','onions','potatoes'],
  ing:[['Thick poha','मोटा पोहा','2 cups','pantry'],['Onion','प्याज़','1 big','veg'],['Potato','आलू','1','veg'],['Curry leaves, mustard, turmeric','करी पत्ता, राई, हल्दी','','pantry'],['Peanuts','मूंगफली','2 tbsp','pantry'],['Lemon','नींबू','1','veg']],
  st:[['Rinse poha in a sieve, rest 5 min.','पोहा छलनी में धोकर 5 मिनट रखें।'],['Temper mustard, curry leaves, peanuts; sauté onion-potato.','राई, करी पत्ता, मूंगफली का तड़का; प्याज़-आलू भूनें।'],['Add turmeric, salt, poha; cover 3-4 min.','हल्दी, नमक, पोहा डालकर 3-4 मिनट ढकें।'],['Lemon and coriander to finish.','नींबू और धनिया डालकर परोसें।']]},
-{id:'b2',n:['Aloo Paratha + Dahi','आलू पराठा + दही'],cz:'Indian',p:'veg',co:['breakfast'],ef:2,tm:30,kc:450,ev:false,needs:['atta','potatoes','yogurt'],
+{id:'b2',n:['Aloo Paratha + Dahi','आलू पराठा + दही'],cz:'Indian',p:'veg',co:['breakfast'],ef:2,tm:30,kc:450,ev:false,fest:true,needs:['atta','potatoes','yogurt'],
  ing:[['Atta','आटा','2 cups','pantry'],['Boiled potatoes','उबले आलू','4','veg'],['Green chilli, coriander, ajwain','हरी मिर्च, धनिया, अजवाइन','','veg'],['Curd to serve','परोसने के लिए दही','','dairy'],['Butter','मक्खन','','dairy']],
  st:[['Mash potatoes with chilli, coriander, ajwain, salt.','आलू मसलकर मिर्च, धनिया, अजवाइन, नमक मिलाएँ।'],['Stuff dough balls, roll out.','लोई में भरकर बेल लें।'],['Cook on tawa with ghee till golden both sides.','तवे पर घी लगाकर दोनों तरफ़ सुनहरा सेकें।'],['Serve with curd and pickle.','दही और अचार के साथ दें।']]},
 {id:'b3',n:['Besan Chilla','बेसन चीला'],cz:'Indian',p:'veg',co:['breakfast'],ef:1,tm:15,kc:280,ev:false,needs:['besan','onions','tomatoes'],
  ing:[['Besan','बेसन','1.5 cups','pantry'],['Onion, tomato (fine)','प्याज़, टमाटर (बारीक)','1+1','veg'],['Green chilli, coriander','हरी मिर्च, धनिया','','veg'],['Ajwain, turmeric','अजवाइन, हल्दी','','pantry']],
  st:[['Make a dosa-like batter with besan and water.','बेसन में पानी मिलाकर डोसे जैसा घोल बनाएँ।'],['Mix in vegetables and spices.','सब्ज़ी और मसाले मिलाएँ।'],['Spread thin on non-stick, crisp both sides.','नॉन-स्टिक पर पतला फैलाकर दोनों तरफ़ कुरकुरा करें।'],['Serve with green chutney.','हरी चटनी के साथ दें।']]},
-{id:'b4',n:['Pancakes','पैनकेक'],cz:'Western',p:'egg',co:['breakfast'],ef:1,tm:20,kc:420,ev:false,needs:['maida','eggs','milk','butter'],
+{id:'b4',n:['Pancakes','पैनकेक'],cz:'Western',p:'egg',co:['breakfast'],ef:1,tm:20,kc:420,ev:false,fest:true,needs:['maida','eggs','milk','butter'],
  ing:[['Maida','मैदा','1.5 cups','pantry'],['Eggs (in batter — Aveer OK)','अंडे (घोल में — अवीर खाएगा)','2','dairy'],['Milk','दूध','1.25 cups','dairy'],['Baking powder','बेकिंग पाउडर','2 tsp','pantry'],['Sugar','चीनी','2 tbsp','pantry'],['Butter + honey/maple','मक्खन + शहद/मेपल','','dairy']],
  st:[['Mix dry; whisk egg-milk-melted butter separately.','सूखा सामान मिलाएँ; अंडा-दूध-पिघला मक्खन अलग फेंटें।'],['Fold together gently — do not overmix.','हल्के हाथ से मिलाएँ — ज़्यादा न फेंटें।'],['Ladle on non-stick; flip when bubbles appear.','नॉन-स्टिक पर डालें; बुलबुले आने पर पलटें।'],['Serve hot with butter and honey.','मक्खन और शहद के साथ गरम दें।']]},
 {id:'b5',n:['French Toast','फ्रेंच टोस्ट'],cz:'Western',p:'egg',co:['breakfast'],ef:1,tm:15,kc:380,ev:true,needs:['bread','eggs','milk'],
@@ -481,7 +482,7 @@ const SEED = [
 {id:'b6',n:['Masala Omelette + Toast','मसाला ऑमलेट + टोस्ट'],cz:'Indian',p:'egg',co:['breakfast'],ef:1,tm:10,kc:350,ev:true,needs:['eggs','onions','bread'],
  ing:[['Eggs','अंडे','4','dairy'],['Onion, tomato, chilli','प्याज़, टमाटर, मिर्च','','veg'],['Bread','ब्रेड','4 slices','bakery']],
  st:[['Whisk everything with salt and chilli.','सब कुछ नमक-मिर्च के साथ फेंटें।'],['Cook omelette in butter both sides.','मक्खन में दोनों तरफ़ ऑमलेट पकाएँ।'],['Serve with toast. (Aveer skips — this is for us two.)','टोस्ट के साथ दें। (अवीर नहीं — यह हम दोनों का है।)']]},
-{id:'b7',n:['Crepes (Nutella/Banana)','क्रेप (नूटेला/केला)'],cz:'Western',p:'egg',co:['breakfast'],ef:2,tm:25,kc:380,ev:false,needs:['maida','eggs','milk'],
+{id:'b7',n:['Crepes (Nutella/Banana)','क्रेप (नूटेला/केला)'],cz:'Western',p:'egg',co:['breakfast'],ef:2,tm:25,kc:380,ev:false,fest:true,needs:['maida','eggs','milk'],
  ing:[['Maida','मैदा','1 cup','pantry'],['Eggs (in batter — Aveer OK)','अंडे (घोल में — अवीर खाएगा)','2','dairy'],['Milk','दूध','1.5 cups','dairy'],['Butter','मक्खन','2 tbsp','dairy'],['Nutella / banana / sugar-lemon','नूटेला / केला / चीनी-नींबू','','pantry']],
  st:[['Make a thin batter, rest 15 min.','पतला घोल बनाकर 15 मिनट रखें।'],['Spread very thin on non-stick, 1 min each side.','नॉन-स्टिक पर बहुत पतला फैलाएँ, हर तरफ़ 1 मिनट।'],['Fill with Nutella or banana, fold.','नूटेला या केला भरकर मोड़ें।']]},
 {id:'b8',n:['Fruit + Curd + Granola Bowl','फल + दही + ग्रनोला बाउल'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:5,kc:320,ev:false,needs:['yogurt','fruit'],
@@ -525,7 +526,7 @@ const SEED = [
 {id:'l15',n:['Rajma','राजमा'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:60,kc:380,ev:false,needs:['rajma','onions','tomatoes','rice'],isDal:true,
  ing:[['Rajma (soaked overnight)','राजमा (रात भर भीगा)','1.5 cups','pantry'],['Onions','प्याज़','2','veg'],['Tomato puree','टमाटर प्यूरी','1 cup','veg'],['Ginger-garlic, rajma masala','अदरक-लहसुन, राजमा मसाला','','pantry']],
  st:[['Pressure cook soaked rajma 5-6 whistles.','भीगा राजमा 5-6 सीटी उबालें।'],['Make onion-tomato masala; add rajma with its water.','प्याज़-टमाटर मसाला बनाकर राजमा पानी सहित मिलाएँ।'],['Simmer 20 min till thick.','20 मिनट धीमी आँच पर गाढ़ा करें।'],['With rice — tastes like Delhi.','चावल के साथ — दिल्ली की याद आ जाएगी।']]},
-{id:'l16',n:['Chole','छोले'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:60,kc:400,ev:false,needs:['chole','onions','tomatoes'],isDal:true,
+{id:'l16',n:['Chole','छोले'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:60,kc:400,ev:false,fest:true,needs:['chole','onions','tomatoes'],isDal:true,
  ing:[['Chickpeas (soaked)','काबुली चना (भीगा)','1.5 cups','pantry'],['Onion, tomatoes','प्याज़, टमाटर','2+3','veg'],['Chole masala, anardana, tea-leaf potli','छोले मसाला, अनारदाना, चायपत्ती की पोटली','','pantry'],['Ginger, green chilli','अदरक, हरी मिर्च','','veg']],
  st:[['Boil chana with a tea-leaf potli (for the dark colour).','चने चायपत्ती की पोटली के साथ उबालें (गहरे रंग के लिए)।'],['Onion-tomato masala; add chole masala.','प्याज़-टमाटर मसाला; छोले मसाला डालें।'],['Mix chana, 20 min; ginger juliennes on top.','चने मिलाकर 20 मिनट; ऊपर अदरक के लच्छे।'],['Kulcha on weekends, else roti.','वीकेंड पर कुलचा, वरना रोटी।']]}
 ];
@@ -536,22 +537,22 @@ SEED.push(
 {id:'d1',n:['Spaghetti Carbonara','स्पगेटी कार्बोनारा'],cz:'Italian',p:'chicken',co:['dinner'],ef:2,tm:30,kc:580,ev:false,needs:['pasta','eggs','cheese','bacon'],onepot:true,
  ing:[['Spaghetti','स्पगेटी','400 g','pantry'],['Bacon / smoked chicken','बेकन / स्मोक्ड चिकन','200 g','meat'],['Eggs (in the sauce — Aveer OK)','अंडे (सॉस में — अवीर खाएगा)','3 + 1 yolk','dairy'],['Parmesan/cheese (grated)','परमेज़ान/चीज़ (कसा)','1 cup','dairy'],['Black pepper','काली मिर्च','lots','pantry']],
  st:[['Boil pasta al dente in salty water; save 1 cup pasta water.','पास्ता नमकीन पानी में हल्का सख़्त उबालें; 1 कप पानी बचाएँ।'],['Crisp the bacon/chicken.','बेकन/चिकन कुरकुरा करें।'],['Off the heat, toss with egg-cheese mix + pasta water — the egg must not scramble.','आँच बंद कर अंडा-चीज़ मिश्रण + पास्ता पानी मिलाएँ — अंडा फटना नहीं चाहिए।'],['Plenty of black pepper. This is Aveer\'s pasta.','काली मिर्च खुलकर। यह अवीर का पास्ता है।']]},
-{id:'d2',n:['Chicken Lasagna','चिकन लज़ान्या'],cz:'Italian',p:'chicken',co:['dinner'],ef:3,tm:90,kc:620,ev:false,needs:['pasta','chicken-keema','cheese','milk','tomatoes'],onepot:true,
+{id:'d2',n:['Chicken Lasagna','चिकन लज़ान्या'],cz:'Italian',p:'chicken',co:['dinner'],ef:3,tm:90,kc:620,ev:false,fest:true,needs:['pasta','chicken-keema','cheese','milk','tomatoes'],onepot:true,
  ing:[['Lasagna sheets','लज़ान्या शीट','1 packet','pantry'],['Chicken keema','चिकन कीमा','600 g','meat'],['Tomato puree/passata','टमाटर प्यूरी','2 cups','veg'],['Milk + maida + butter (white sauce)','दूध + मैदा + मक्खन (व्हाइट सॉस)','2 cups milk','dairy'],['Cheese (mozzarella + cheddar)','चीज़ (मोज़रेला + चेडर)','2 cups','dairy'],['Garlic, oregano, basil','लहसुन, ओरेगानो, बेसिल','','pantry']],
  st:[['Cook chicken keema with garlic-tomato-herbs into a ragu (30 min).','चिकन कीमा को लहसुन-टमाटर-हर्ब्स के साथ रागू बनाएँ (30 मिनट)।'],['White sauce: cook butter-maida, add milk slowly.','व्हाइट सॉस: मक्खन-मैदा भूनें, दूध धीरे-धीरे।'],['Layer ragu, sheet, white sauce, cheese — three times.','परतें: रागू, शीट, व्हाइट सॉस, चीज़ — तीन बार।'],['Bake 180°C, 35-40 min till golden; rest 10 min.','180°C पर 35-40 मिनट सुनहरा होने तक; 10 मिनट रखें।']]},
-{id:'d3',n:['Homemade Pizza Night','घर का पिज़्ज़ा'],cz:'Italian',p:'chicken',co:['dinner'],ef:3,tm:90,kc:650,ev:false,needs:['maida','cheese','tomatoes','chicken'],onepot:true,
+{id:'d3',n:['Homemade Pizza Night','घर का पिज़्ज़ा'],cz:'Italian',p:'chicken',co:['dinner'],ef:3,tm:90,kc:650,ev:false,fest:true,needs:['maida','cheese','tomatoes','chicken'],onepot:true,
  ing:[['Maida + yeast (dough)','मैदा + यीस्ट (आटा)','3 cups','pantry'],['Pizza sauce/passata','पिज़्ज़ा सॉस','1 cup','pantry'],['Mozzarella','मोज़रेला','300 g','dairy'],['Toppings: chicken tikka, capsicum, onion, olives, corn','टॉपिंग: चिकन टिक्का, शिमला, प्याज़, ऑलिव, कॉर्न','','meat']],
  st:[['Make the dough in the morning — 4-6 hours to rise.','आटा सुबह ही लगा दें — 4-6 घंटे उठने दें।'],['Heat oven to max with the tray inside.','ओवन ट्रे समेत सबसे तेज़ गरम करें।'],['Roll thin; sauce, cheese, toppings — 8-10 min.','पतला बेलें; सॉस, चीज़, टॉपिंग — 8-10 मिनट।'],['Everyone picks their own toppings — Friday night fix.','सब अपनी टॉपिंग चुनें — फ्राइडे नाइट स्पेशल।']]},
 {id:'d4',n:['Penne Arrabbiata + Grilled Chicken','पेने अराबियाता + ग्रिल्ड चिकन'],cz:'Italian',p:'chicken',co:['dinner'],ef:2,tm:35,kc:520,ev:false,needs:['pasta','tomatoes','chicken-breast'],onepot:true,
  ing:[['Penne','पेने','400 g','pantry'],['Tomatoes (blanched/puree)','टमाटर (प्यूरी)','5','veg'],['Garlic, chilli flakes, basil','लहसुन, चिली फ्लेक्स, बेसिल','','pantry'],['Chicken breast','चिकन ब्रेस्ट','2 big','meat'],['Olive oil, parmesan','ऑलिव ऑयल, परमेज़ान','','pantry']],
  st:[['Garlic + chilli flakes in olive oil; add tomato, 15 min sauce.','ऑलिव ऑयल में लहसुन-चिली फ्लेक्स; टमाटर डालकर 15 मिनट सॉस।'],['Grill chicken with salt-pepper-oregano; slice.','चिकन नमक-मिर्च-ओरेगानो से ग्रिल करें; काटें।'],['Toss pasta in sauce, chicken on top.','पास्ता सॉस में मिलाएँ, ऊपर चिकन।'],['Grate cheese generously.','चीज़ खुलकर कसें।']]},
-{id:'d5',n:['Grilled Chicken + Mash + Veggies','ग्रिल्ड चिकन + मैश + सब्ज़ियाँ'],cz:'Western',p:'chicken',co:['dinner'],ef:2,tm:45,kc:480,ev:false,needs:['chicken-breast','potatoes','butter'],onepot:true,
+{id:'d5',n:['Grilled Chicken + Mash + Veggies','ग्रिल्ड चिकन + मैश + सब्ज़ियाँ'],cz:'Western',p:'chicken',co:['dinner'],ef:2,tm:45,kc:480,ev:false,fest:true,needs:['chicken-breast','potatoes','butter'],onepot:true,
  ing:[['Chicken breast/thigh','चिकन ब्रेस्ट/थाई','700 g','meat'],['Potatoes (for mash)','आलू (मैश के लिए)','5','veg'],['Butter, milk','मक्खन, दूध','','dairy'],['Beans/broccoli/carrot','बीन्स/ब्रोकली/गाजर','2 cups','veg'],['Garlic, herbs, lemon','लहसुन, हर्ब्स, नींबू','','pantry']],
  st:[['Marinate chicken in lemon-garlic-herbs, 30 min.','चिकन नींबू-लहसुन-हर्ब्स में 30 मिनट रखें।'],['Grill 5-6 min each side.','हर तरफ़ 5-6 मिनट ग्रिल करें।'],['Mash: boiled potato + butter + warm milk + salt.','मैश: उबला आलू + मक्खन + गरम दूध + नमक।'],['Toss veggies in butter; pan juices over the chicken.','सब्ज़ियाँ मक्खन में; पैन का रस चिकन पर।']]},
 {id:'d6',n:['Crumb-Fried Fish + Fries','क्रम्ब फ्राई मछली + फ्राइज़'],cz:'Western',p:'fish',co:['dinner'],ef:2,tm:40,kc:540,ev:false,needs:['fish','breadcrumbs','potatoes','eggs'],onepot:true,
  ing:[['Fish fillets (basa/kingfish)','मछली फ़िले (बासा/सुरमई)','600 g','meat'],['Breadcrumbs','ब्रेडक्रम्ब्स','1.5 cups','pantry'],['Egg (coating — Aveer OK)','अंडा (कोटिंग — अवीर खाएगा)','2','dairy'],['Maida, pepper, lemon','मैदा, काली मिर्च, नींबू','','pantry'],['Potatoes (fries)','आलू (फ्राइज़)','4','veg'],['Mayo/tartare','मेयो/टार्टर','','pantry']],
  st:[['Season fish with salt-pepper-lemon, 15 min.','मछली पर नमक-मिर्च-नींबू, 15 मिनट।'],['Coat: maida → egg → breadcrumbs.','कोटिंग: मैदा → अंडा → ब्रेडक्रम्ब्स।'],['Fry golden on medium (or air-fry).','मध्यम आँच पर सुनहरा तलें (या एयर-फ्राई)।'],['With fries and tartare — home fish & chips.','फ्राइज़ और टार्टर के साथ — घर का फिश एंड चिप्स।']]},
-{id:'d7',n:['Chicken Katsu Curry','चिकन कात्सु करी'],cz:'Japanese',p:'chicken',co:['dinner'],ef:3,tm:60,kc:620,ev:false,needs:['chicken-breast','breadcrumbs','rice','onions'],onepot:true,
+{id:'d7',n:['Chicken Katsu Curry','चिकन कात्सु करी'],cz:'Japanese',p:'chicken',co:['dinner'],ef:3,tm:60,kc:620,ev:false,fest:true,needs:['chicken-breast','breadcrumbs','rice','onions'],onepot:true,
  ing:[['Chicken breast (flattened)','चिकन ब्रेस्ट (पतला किया)','4','meat'],['Panko/breadcrumbs','पैंको/ब्रेडक्रम्ब्स','2 cups','pantry'],['Egg (coating — Aveer OK)','अंडा (कोटिंग — अवीर खाएगा)','2','dairy'],['Curry: onion, carrot, potato, curry powder','करी: प्याज़, गाजर, आलू, करी पाउडर','','veg'],['Soy, honey','सोया, शहद','','pantry'],['Rice (sticky)','चावल','2 cups','pantry']],
  st:[['Curry: sauté onion-carrot, curry powder, water, soy-honey — blend smooth.','करी: प्याज़-गाजर भूनें, करी पाउडर, पानी, सोया-शहद — पीसकर चिकना करें।'],['Chicken: maida-egg-panko, fry golden.','चिकन: मैदा-अंडा-पैंको, सुनहरा तलें।'],['Slice over rice, curry on top.','काटकर चावल पर, ऊपर करी।'],['Already a house hit — locked in the rotation.','घर का हिट है — रोटेशन में पक्का।']]},
 {id:'d8',n:['Teriyaki Chicken Bowl + Miso Soup','तेरियाकी चिकन बाउल + मीसो सूप'],cz:'Japanese',p:'chicken',co:['dinner'],ef:2,tm:40,kc:520,ev:false,needs:['chicken','rice','soy','miso'],onepot:true,
@@ -569,13 +570,13 @@ SEED.push(
 {id:'d12',n:['Chicken Hakka Noodles','चिकन हक्का नूडल्स'],cz:'Chinese',p:'chicken',co:['dinner'],ef:1,tm:30,kc:480,ev:false,needs:['noodles','chicken','capsicum','soy'],onepot:true,
  ing:[['Noodles','नूडल्स','400 g','pantry'],['Chicken (thin strips)','चिकन (पतली पट्टियाँ)','400 g','meat'],['Cabbage, carrot, capsicum, spring onion','पत्तागोभी, गाजर, शिमला, हरा प्याज़','','veg'],['Soy, vinegar, chilli oil','सोया, सिरका, चिली ऑयल','','pantry']],
  st:[['Boil noodles, rinse cold.','नूडल्स उबालकर ठंडे पानी से धोएँ।'],['Sear chicken; keep veg crunchy.','चिकन तेज़ आँच पर; सब्ज़ी करारी रखें।'],['Toss noodles + sauces on high heat.','नूडल्स + सॉस तेज़ आँच पर मिलाएँ।'],['The hotter the wok, the better.','कड़ाही जितनी गरम, उतना अच्छा।']]},
-{id:'d13',n:['Thai Green Curry + Rice','थाई ग्रीन करी + चावल'],cz:'Thai',p:'chicken',co:['dinner'],ef:2,tm:40,kc:520,ev:false,needs:['chicken','coconut-milk','curry-paste','rice'],onepot:true,
+{id:'d13',n:['Thai Green Curry + Rice','थाई ग्रीन करी + चावल'],cz:'Thai',p:'chicken',co:['dinner'],ef:2,tm:40,kc:520,ev:false,fest:true,needs:['chicken','coconut-milk','curry-paste','rice'],onepot:true,
  ing:[['Boneless chicken','बोनलेस चिकन','600 g','meat'],['Green curry paste','ग्रीन करी पेस्ट','3 tbsp','pantry'],['Coconut milk','नारियल दूध','400 ml','pantry'],['Eggplant/beans/basil','बैंगन/बीन्स/बेसिल','','veg'],['Fish sauce, sugar','फिश सॉस, चीनी','','pantry'],['Jasmine/normal rice','चावल','2 cups','pantry']],
  st:[['Fry the paste in the thick part of the coconut milk.','पेस्ट को नारियल दूध के गाढ़े हिस्से में भूनें।'],['Chicken, then the rest of the coconut milk, vegetables.','चिकन, फिर बाकी नारियल दूध, सब्ज़ियाँ।'],['Balance with fish sauce + a little sugar.','फिश सॉस + थोड़ी चीनी से संतुलन।'],['With rice. Store-bought paste is fine — we are not a restaurant.','चावल के साथ। बाज़ार का पेस्ट चलेगा — हम रेस्टोरेंट नहीं हैं।']]},
-{id:'d15',n:['Butter Chicken + Tawa Naan','बटर चिकन + तवा नान'],cz:'Indian',p:'chicken',co:['dinner'],ef:3,tm:75,kc:650,ev:false,needs:['chicken','tomatoes','cream','butter'],onepot:true,
+{id:'d15',n:['Butter Chicken + Tawa Naan','बटर चिकन + तवा नान'],cz:'Indian',p:'chicken',co:['dinner'],ef:3,tm:75,kc:650,ev:false,fest:true,needs:['chicken','tomatoes','cream','butter'],onepot:true,
  ing:[['Boneless chicken (tikka style)','बोनलेस चिकन (टिक्का स्टाइल)','700 g','meat'],['Tomatoes','टमाटर','6','veg'],['Butter','मक्खन','4 tbsp','dairy'],['Cream','क्रीम','1/2 cup','dairy'],['Kasuri methi, kashmiri chilli, honey','कसूरी मेथी, कश्मीरी मिर्च, शहद','','pantry'],['Maida/atta (naan)','मैदा/आटा (नान)','2 cups','pantry']],
  st:[['Char chicken tikka on the tawa (use the tikka marinade).','चिकन टिक्का तवे पर सेकें (टिक्का वाला मसाला)।'],['Tomato-cashew gravy, strained — it must be silky.','टमाटर-काजू ग्रेवी, छानी हुई — रेशमी होनी चाहिए।'],['Butter, kasuri methi, cream, a little honey; add chicken.','मक्खन, कसूरी मेथी, क्रीम, थोड़ा शहद; चिकन डालें।'],['Tawa naan: wet one side of the dough, stick to tawa, flip over flame.','तवा नान: लोई पर पानी लगाकर तवे पर चिपकाएँ, आँच पर उल्टा करें।']]},
-{id:'d16',n:['Chicken Biryani','चिकन बिरयानी'],cz:'Indian',p:'chicken',co:['dinner'],ef:3,tm:100,kc:600,ev:false,needs:['chicken','rice','yogurt','onions'],onepot:true,
+{id:'d16',n:['Chicken Biryani','चिकन बिरयानी'],cz:'Indian',p:'chicken',co:['dinner'],ef:3,tm:100,kc:600,ev:false,fest:true,needs:['chicken','rice','yogurt','onions'],onepot:true,
  ing:[['Chicken curry cut','चिकन करी कट','1 kg','meat'],['Basmati rice','बासमती चावल','3 cups','pantry'],['Onions (birista)','प्याज़ (बिरिस्ता)','4','veg'],['Curd, ginger-garlic, biryani masala','दही, अदरक-लहसुन, बिरयानी मसाला','','dairy'],['Saffron-milk, mint, coriander, ghee','केसर-दूध, पुदीना, धनिया, घी','','pantry']],
  st:[['Marinate chicken in curd-masala-birista, 1 hour.','चिकन दही-मसाला-बिरिस्ता में 1 घंटा रखें।'],['Boil rice to 70% with whole spices in the water.','चावल 70% उबालें, पानी में साबुत मसाले।'],['Layer: chicken below, rice above, saffron-milk, mint, ghee.','परतें: नीचे चिकन, ऊपर चावल, केसर-दूध, पुदीना, घी।'],['Dum: high 5 min, then low 25 min. Weekend project.','दम: तेज़ 5 मिनट, फिर धीमी 25 मिनट। वीकेंड का काम।']]},
 {id:'d17',n:['Palak Paneer','पालक पनीर'],cz:'Indian',p:'paneer',co:['lunch','dinner'],ef:2,tm:40,kc:380,ev:false,needs:['paneer','spinach'],
@@ -663,7 +664,7 @@ SEED.push(
  gn:['Five ingredients, fifteen minutes — garlic, olive oil, chilli flakes, prawns, spaghetti.','पाँच चीज़ें, पंद्रह मिनट — लहसुन, ऑलिव ऑयल, चिली फ्लेक्स, झींगे, स्पगेटी।'],
  ing:[['Spaghetti','स्पगेटी','400 g','pantry'],['Prawns','झींगे','400 g','meat'],['Garlic (sliced thin)','लहसुन (पतला कटा)','8 cloves','veg'],['Olive oil, chilli flakes, parsley/coriander','ऑलिव ऑयल, चिली फ्लेक्स, धनिया','','pantry'],['Lemon','नींबू','','veg']],
  st:[['Boil spaghetti; keep a cup of pasta water.','स्पगेटी उबालें; एक कप पानी बचाएँ।'],['Garlic golden (not brown) in olive oil; prawns 2 min; chilli flakes.','लहसुन सुनहरा (भूरा नहीं) करें; झींगे 2 मिनट; चिली फ्लेक्स।'],['Toss pasta + pasta water till silky; lemon to finish.','पास्ता + पानी मिलाकर रेशमी करें; नींबू से ख़त्म।']]},
-{id:'n10',n:['Murgh Malai Tikka','मुर्ग़ मलाई टिक्का'],cz:'Indian',p:'chicken',co:['lunch','dinner'],ef:2,tm:45,kc:420,ev:false,needs:['chicken-breast','cream','cheese','yogurt'],
+{id:'n10',n:['Murgh Malai Tikka','मुर्ग़ मलाई टिक्का'],cz:'Indian',p:'chicken',co:['lunch','dinner'],ef:2,tm:45,kc:420,ev:false,fest:true,needs:['chicken-breast','cream','cheese','yogurt'],
  gn:['The white tikka Delhi does best — cream, cheese and cardamom instead of red masala.','दिल्ली वाला सफ़ेद टिक्का — लाल मसाले की जगह क्रीम, चीज़ और इलायची।'],
  ing:[['Chicken (boneless cubes)','चिकन (बोनलेस टुकड़े)','700 g','meat'],['Cream + hung curd','क्रीम + गाढ़ा दही','1/2 cup','dairy'],['Processed cheese (grated)','चीज़ (कसा)','3 tbsp','dairy'],['Ginger-garlic, green chilli, cardamom powder','अदरक-लहसुन, हरी मिर्च, इलायची पाउडर','','pantry'],['Butter','मक्खन','','dairy']],
  st:[['Marinate in cream-cheese-curd mix, 2 hours minimum.','क्रीम-चीज़-दही में कम से कम 2 घंटे रखें।'],['Tawa or grill on medium — white tikka must not char dark.','तवा/ग्रिल मध्यम आँच पर — सफ़ेद टिक्का गहरा नहीं जलना चाहिए।'],['Butter baste; serve with pudina chutney.','मक्खन लगाएँ; पुदीना चटनी के साथ।']]},
@@ -689,11 +690,11 @@ SEED.push(
  gn:['Delfino\'s keeps good Goan chorizo — the sausage carries all the masala, you just add onion and potato.','डेल्फ़िनोज़ में अच्छा गोअन चोरीज़ मिलता है — सारा मसाला सॉसेज में है, बस प्याज़-आलू डालने हैं।'],
  ing:[['Goan chorizo sausages','गोअन चोरीज़ सॉसेज','300 g','meat'],['Onions','प्याज़','2','veg'],['Potato (small cubes)','आलू (छोटे टुकड़े)','2','veg'],['Buttered pav','मक्खन वाले पाव','4','bakery']],
  st:[['Crumble sausage out of its casing; render slowly till fat releases.','सॉसेज खोलकर धीमी आँच पर चर्बी निकलने तक भूनें।'],['Onion and potato in the same fat, covered till soft.','उसी चर्बी में प्याज़-आलू, ढककर गलाएँ।'],['Serve hot with buttered pav. (Weekday lunch — just us two.)','गरम पाव के साथ। (वीकडे लंच — सिर्फ़ हम दोनों।)']]},
-{id:'x2',n:['Masala Dosa','मसाला डोसा'],cz:'Indian',p:'veg',co:['breakfast','lunch'],ef:1,tm:30,kc:380,ev:false,needs:['potatoes','onions'],isDal:true,
+{id:'x2',n:['Masala Dosa','मसाला डोसा'],cz:'Indian',p:'veg',co:['breakfast','lunch'],ef:1,tm:30,kc:380,ev:false,fest:true,needs:['potatoes','onions'],isDal:true,
  gn:['Store-bought batter (any Goa supermarket) makes this a 30-minute job, not a two-day project.','बाज़ार का घोल (कोई भी सुपरमार्केट) — 30 मिनट का काम, दो दिन का प्रोजेक्ट नहीं।'],
  ing:[['Dosa batter (store-bought)','डोसा घोल (बाज़ार का)','750 ml','pantry'],['Potatoes (boiled)','आलू (उबले)','4','veg'],['Onion, mustard seeds, curry leaves, turmeric','प्याज़, राई, करी पत्ता, हल्दी','','veg'],['Coconut chutney / sambar (optional)','नारियल चटनी / सांबर (चाहें तो)','','pantry']],
  st:[['Aloo masala: temper mustard-curry leaves, add onion, then mashed potato + turmeric.','आलू मसाला: राई-करी पत्ते का तड़का, प्याज़, फिर मसला आलू + हल्दी।'],['Spread batter thin on a hot tawa, ghee at the edges.','गरम तवे पर घोल पतला फैलाएँ, किनारों पर घी।'],['Filling in, fold, serve crisp with chutney.','भरावन डालकर मोड़ें, चटनी के साथ कुरकुरा परोसें।']]},
-{id:'x3',n:['Chicken Keema Dosa','चिकन कीमा डोसा'],cz:'Indian',p:'chicken',co:['lunch'],ef:2,tm:40,kc:450,ev:false,needs:['chicken-keema','onions','tomatoes'],isDal:true,
+{id:'x3',n:['Chicken Keema Dosa','चिकन कीमा डोसा'],cz:'Indian',p:'chicken',co:['lunch'],ef:2,tm:40,kc:450,ev:false,fest:true,needs:['chicken-keema','onions','tomatoes'],isDal:true,
  gn:['Same store batter — the spiced chicken keema turns it into a full meal.','वही बाज़ार का घोल — मसालेदार चिकन कीमा इसे पूरा खाना बना देता है।'],
  ing:[['Dosa batter','डोसा घोल','750 ml','pantry'],['Chicken keema','चिकन कीमा','400 g','meat'],['Onion, tomato, ginger-garlic','प्याज़, टमाटर, अदरक-लहसुन','','veg'],['Pav bhaji or garam masala, chilli','पाव भाजी/गरम मसाला, मिर्च','','pantry'],['Cheese (optional, kids)','चीज़ (बच्चों के लिए)','','dairy']],
  st:[['Cook a dryish chicken keema masala first.','पहले सूखा-सा चिकन कीमा मसाला बनाएँ।'],['Spread dosa, keema over half, cheese if the kids vote.','डोसा फैलाएँ, आधे पर कीमा, बच्चे कहें तो चीज़।'],['Fold, press a few seconds, cut in three.','मोड़कर कुछ सेकंड दबाएँ, तीन टुकड़े करें।']]},
@@ -743,7 +744,7 @@ SEED.push(
 {id:'y8',n:['Dal Makhani','दाल मखनी'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:80,kc:420,ev:false,needs:['dal','butter','cream','tomatoes'],isDal:true,
  ing:[['Whole urad + rajma (soaked overnight)','साबुत उड़द + राजमा (रात भर भीगे)','1.5 + 0.5 cups','pantry'],['Butter','मक्खन','3 tbsp','dairy'],['Tomato puree, ginger-garlic, kashmiri chilli','टमाटर प्यूरी, अदरक-लहसुन, कश्मीरी मिर्च','','veg'],['Cream, kasuri methi','क्रीम, कसूरी मेथी','','dairy']],
  st:[['Pressure cook dals very soft (8 whistles + rest).','दालें बहुत नरम उबालें (8 सीटी + दम)।'],['Butter-tomato masala; dals in, mash some against the side.','मक्खन-टमाटर मसाला; दालें डालकर थोड़ी किनारे पर मसलें।'],['Simmer low 30 min, stirring — the slow simmer is the recipe.','धीमी आँच 30 मिनट, चलाते हुए — धीमा पकना ही असली नुस्ख़ा है।'],['Cream + kasuri methi at the end.','आख़िर में क्रीम + कसूरी मेथी।']]},
-{id:'y9',n:['Kadhi Chawal','कढ़ी चावल'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:45,kc:400,ev:false,needs:['besan','yogurt','rice'],isDal:true,onepot:true,
+{id:'y9',n:['Kadhi Chawal','कढ़ी चावल'],cz:'Indian',p:'veg',co:['lunch'],ef:2,tm:45,kc:400,ev:false,fest:true,needs:['besan','yogurt','rice'],isDal:true,onepot:true,
  ing:[['Sour curd','खट्टा दही','2 cups','dairy'],['Besan','बेसन','1/2 cup','pantry'],['Pakodi (optional): besan + onion','पकौड़ी (चाहें तो): बेसन + प्याज़','','pantry'],['Methi seeds, hing, turmeric, red chilli (tadka)','मेथी दाना, हींग, हल्दी, लाल मिर्च (तड़का)','','pantry'],['Rice','चावल','2 cups','pantry']],
  st:[['Whisk curd + besan + water — zero lumps.','दही + बेसन + पानी फेंटें — एक भी गुठली नहीं।'],['Simmer 25 min on low, stirring early so it doesn\'t split.','धीमी आँच 25 मिनट, शुरुआत में चलाते रहें ताकि फटे नहीं।'],['Pakodis in if making; double tadka on top.','पकौड़ी डालें; ऊपर दोहरा तड़का।'],['With plain rice — Delhi Sunday lunch.','सादे चावल के साथ — दिल्ली का संडे लंच।']]},
 {id:'y10',n:['Moong Dal Khichdi + Ghee','मूंग दाल खिचड़ी + घी'],cz:'Indian',p:'veg',co:['lunch'],ef:1,tm:30,kc:350,ev:false,needs:['dal','rice'],isDal:true,onepot:true,
@@ -771,6 +772,8 @@ let pantryHave = store.get('pantry',[]);
 let settings = store.get('settings',{breakfast:false, quota:{chicken:4,fish:3,beef:2,mutton:1,pork:0}, indianDinners:3, heavyDinners:2});
 if(!settings.quota) settings.quota={chicken:4,fish:3,beef:2,mutton:1,pork:0};
 if(settings.indianDinners===undefined) settings.indianDinners=3;
+if(!store.get('seed_bfw',false)){ if(settings.breakfast===false) settings.breakfast='weekend'; store.set('seed_bfw',true); store.set('settings',settings) }
+function bfOn(dateIso){ const b=settings.breakfast; if(b===true||b==='all') return true; if(b==='weekend') return isWeekend(dateIso); return false }
 if(settings.heavyDinners===undefined) settings.heavyDinners=2;
 let trashed = store.get('trashed',[]);
 let pickLog = store.get('plog',[]);
@@ -888,30 +891,39 @@ function buildTokenSchedule(dates, lockedTokens){
 }
 
 /* ================= MAIN PICKING ================= */
-function usedRecently(id,dateIso){ const last=history[id]; if(!last) return false; return Math.abs((fromIso(dateIso)-fromIso(last))/864e5)<8 }
+function usedRecently(id,dateIso,win){ const last=history[id]; if(!last) return false; return Math.abs((fromIso(dateIso)-fromIso(last))/864e5)<(win||8) }
 function mainPool(meal,dateIso,token){
-  let pool=activeRecipes().filter(r=>r.co.includes(meal));
+  const sundayLunch = meal==='lunch' && fromIso(dateIso).getDay()===0;
+  let pool=activeRecipes().filter(r=> sundayLunch ? (r.co.includes('lunch')||r.co.includes('dinner')) : r.co.includes(meal));
   if(token) pool=pool.filter(r=>TOKEN_MATCH[token].includes(r.p));
-  if(meal==='breakfast') pool=pool.filter(r=>aveerOK(r));
+  if(meal==='breakfast'){ pool=pool.filter(r=>aveerOK(r));
+    if(isWeekend(dateIso)){ const f=pool.filter(r=>r.fest||r.ef>=2); if(f.length>=2) pool=f; } }
   else if(isFamilySlot(meal,dateIso)) pool=pool.filter(r=>(zoyaOK(r)||r.zpair)&&aveerOK(r));
   return pool;
 }
 function pickMain(meal,dateIso,token,ctx){
   const pool=mainPool(meal,dateIso,token);
   const isInd = r=>['Indian','Goan'].includes(r.cz);
-  // rhythm: lunches lean Indian (red meats exempt — they come in all styles); dinners cap at 3 Indian/week
+  const dow=fromIso(dateIso).getDay();
+  const sundayLunch = meal==='lunch'&&dow===0;
+  // special slots: Friday dinner onwards — Fri/Sat/Sun dinners, Sat & Sun lunches (Sunday lunch is the centrepiece)
+  const special = (meal==='dinner'&&(dow===5||dow===6||dow===0)) || (meal==='lunch'&&(dow===6||dow===0));
+  // recency window: routine weekday lunches may repeat (3d); specials stay rare (10d); default 8d
+  const recWin = (meal==='lunch'&&dow>=1&&dow<=5) ? 3 : (special?10:8);
+  // rhythm: weekday+Saturday lunches lean Indian (red meats exempt); Sunday lunch roams free; dinners cap Indian/week
   const rhythm = r=>{
-    if(meal==='lunch') return ['beef','mutton','pork'].includes(token) || isInd(r);
+    if(meal==='lunch') return ['beef','mutton','pork'].includes(token) || sundayLunch || isInd(r);
     if(meal==='dinner') return (ctx.indianD||0)<(settings.indianDinners??3) || !isInd(r);
     return true;
   };
+  const festive = r=> !special || r.fest || r.ef>=2;
   const heavyOK = r=>!(r.ef>=3&&(ctx.dayHeavy||(meal==='dinner'&&ctx.weekHeavyD>=(settings.heavyDinners??2))));
-  const isVegLunch = token==='veg'&&meal==='lunch';
+  const isVegLunch = token==='veg'&&meal==='lunch'&&fromIso(dateIso).getDay()!==0;
   const simple1 = r=>!isVegLunch||r.ef<=1, simple2 = r=>!isVegLunch||r.ef<=2;
   const tiers=[
-    r=>rhythm(r) && simple1(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && heavyOK(r),
+    r=>rhythm(r) && festive(r) && simple1(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso,recWin) && heavyOK(r),
     r=>rhythm(r) && simple2(r) && !ctx.picked.includes(r.id) && heavyOK(r),
-    r=>simple2(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso) && heavyOK(r),
+    r=>simple2(r) && !ctx.picked.includes(r.id) && !usedRecently(r.id,dateIso,recWin) && heavyOK(r),
     r=>!ctx.picked.includes(r.id),
     r=>true
   ];
@@ -987,7 +999,7 @@ function generatePlan(){
   sideHist={};
   dates.forEach((dt,di)=>{
     const day={date:dt}; ctx.dayHeavy=false; const dayAvoid=[];
-    if(settings.breakfast){
+    if(bfOn(dt)){
       const ob=old&&old.days.find(x=>x.date===dt);
       if(ob&&ob.breakfast&&ob.breakfast.saved&&ob.breakfast.chosen&&byId(ob.breakfast.chosen[0])) day.breakfast=ob.breakfast;
       else{ const b=pickMain('breakfast',dt,null,ctx); if(b) day.breakfast={chosen:[b.id],saved:false,alts:[b.id]} }
@@ -1261,7 +1273,7 @@ function renderPlan(){
   plan.days.forEach((d,di)=>{
     html+=`<div class="day ${di===0?'today':''} ${isWeekend(d.date)?'wknd':''}">
       <div class="dayhead"><span class="dayname">${dayLabel(d.date)}</span><span class="daydate">${fmtDate(d.date)}${isWeekend(d.date)?' · '+LT('weekend'):''}</span></div>
-      ${settings.breakfast?mealRow(di,'breakfast',d.breakfast,d.date):''}
+      ${bfOn(d.date)?mealRow(di,'breakfast',d.breakfast,d.date):''}
       ${mealRow(di,'lunch',d.lunch,d.date)}
       ${mealRow(di,'dinner',d.dinner,d.date)}
     </div>`;
@@ -1311,7 +1323,7 @@ function menuText(lg){
   let t=Lx(T.menuTitle,lg)+' — '+fmtDate(plan.start,lg)+' '+Lx(T.from,lg)+'\n';
   plan.days.forEach(d=>{
     t+='\n*'+dayLabel(d.date,lg)+' ('+fmtDate(d.date,lg)+')*\n';
-    if(settings.breakfast&&d.breakfast&&byId(primary(d.breakfast))) t+='☕ '+Lx(T.breakfast,lg)+': '+Lx(byId(primary(d.breakfast)).n,lg)+'\n';
+    if(bfOn(d.date)&&d.breakfast&&byId(primary(d.breakfast))) t+='☕ '+Lx(T.breakfast,lg)+': '+Lx(byId(primary(d.breakfast)).n,lg)+'\n';
     ['lunch','dinner'].forEach(m=>{
       const sl=d[m]; if(!sl) return;
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
@@ -1611,8 +1623,10 @@ function openSettings(){
       ${trashed.length>=10?`<div class="note">${LT('trashFull').replace('{n}',trashed.length)}</div>`:''}`
     : `<div class="hint" style="font-size:12.5px;color:var(--muted)">${LT('trashEmpty')}</div>`}
   <div class="btnrow"><button class="btn ghost small" onclick="resetTaste()">${LT('resetTaste')}</button></div>
-  <div class="setrow"><div><b>${LT('bfToggle')}</b><div style="font-size:12.5px;color:var(--muted)">${LT('bfNote')}</div></div>
-    <button class="toggle ${settings.breakfast?'on':''}" onclick="toggleBreakfast(this)"></button></div>
+  <div class="setrow" style="display:block"><b>${LT('bfToggle')}</b>
+    <div class="pgrid" style="margin-top:8px">
+      ${[['off','bfOff'],['weekend','bfWknd'],['all','bfDaily']].map(([v,k])=>`<button class="pchip ${(settings.breakfast===v||(v==='all'&&settings.breakfast===true)||(v==='off'&&settings.breakfast===false))?'on':''}" onclick="setBfMode('${v}')">${LT(k)}</button>`).join('')}
+    </div></div>
   <h3>${LT('data')}</h3>
   <div class="btnrow"><button class="btn ghost small" onclick="copyPickData()">${LT('pickData')}</button></div>
   <div class="btnrow">
@@ -1645,7 +1659,7 @@ function saveQuota(){
   ['chicken','fish','beef','mutton','pork'].forEach(t=>{ q[t]=Math.max(0,Math.min(14,+document.getElementById('q-'+t).value||0)) });
   settings.quota=q; store.set('settings',settings);
 }
-function toggleBreakfast(btn){ settings.breakfast=!settings.breakfast; store.set('settings',settings); btn.classList.toggle('on',settings.breakfast); renderPlan() }
+function setBfMode(v){ settings.breakfast=(v==='off'?false:v); store.set('settings',settings); openSettings(); renderPlan() }
 function copyPickData(){
   const sum={};
   pickLog.forEach(e=>{
