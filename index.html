@@ -363,6 +363,12 @@ const T = {
   skippedWA:['eating out — nothing to cook','बाहर खाना — कुछ नहीं बनाना'],
   skippedToast:['Skipped — the cook gets the day off for this meal','स्किप — इस मील की कुक को छुट्टी'],
   noneOpt:['— none —','— नहीं —'],
+  addIdea:['＋ Add my own dish','＋ अपनी डिश जोड़ें'],
+  ideaTitle:['Your dish for','आपकी डिश —'],
+  ideaPh:['e.g. Khow Suey','जैसे खो सुए'],
+  ideaTag:['your idea','आपकी डिश'],
+  ideaNote:['Goes on the menu as-is. Claude will turn recurring ideas into full recipes at the next review.','मेनू में ऐसे ही जाएगी। अगली समीक्षा में Claude बार-बार आने वाली डिश की पूरी रेसिपी बना देगा।'],
+  addBtn:['Add','जोड़ें'],
   sidesHint:['The usual ones are pre-filled — add anything else from the other dropdowns.','आम वाले पहले से भरे हैं — बाकी ड्रॉपडाउन से जो चाहें जोड़ें।'],
   trashToast:['Removed from rotation · trash: {n}','रोटेशन से हटा · ट्रैश: {n}'],
   trashFull:['Trash has {n} dishes — copy the picks data and ask Claude for a menu re-set!','ट्रैश में {n} डिश — डेटा कॉपी कर Claude से मेनू री-सेट करवाएँ!'],
@@ -776,6 +782,7 @@ if(!store.get('seed_bfw',false)){ if(settings.breakfast===false) settings.breakf
 function bfOn(dateIso){ const b=settings.breakfast; if(b===true||b==='all') return true; if(b==='weekend') return isWeekend(dateIso); return false }
 if(settings.heavyDinners===undefined) settings.heavyDinners=2;
 let trashed = store.get('trashed',[]);
+let ideasLog = store.get('ideas',[]);
 let pickLog = store.get('plog',[]);
 function logEvent(e){ pickLog.push(Object.assign({t:Date.now()},e)); if(pickLog.length>600) pickLog=pickLog.slice(-600); store.set('plog',pickLog) }
 let taste = store.get('taste',{scores:{},stars:{}});
@@ -1096,6 +1103,29 @@ function refreshOption(di,meal,id){
   if(!slot.chosen.length) slot.chosen=[slot.alts[0]];
   store.set('plan',plan); renderPlan();
 }
+function openIdeaSheet(di,meal){
+  const day=plan.days[di];
+  openSheetHtml(`<h2>${LT('ideaTitle')} ${dayLabel(day.date)} ${LT(meal)}</h2>
+  <div class="hint" style="font-size:12.5px;color:var(--muted);margin:6px 0 10px">${LT('ideaNote')}</div>
+  <div class="addrow"><input type="text" id="idea-in" placeholder="${LT('ideaPh')}">
+  <button class="btn primary small" onclick="addIdea(${di},'${meal}')">${LT('addBtn')}</button></div>`);
+  setTimeout(()=>{const el=document.getElementById('idea-in'); if(el) el.focus()},250);
+}
+function addIdea(di,meal){
+  const v=(document.getElementById('idea-in').value||'').trim();
+  if(!v) return;
+  const slot=plan.days[di][meal];
+  slot.ideas=slot.ideas||[]; slot.ideas.push(v);
+  ideasLog.push({t:Date.now(), d:plan.days[di].date, m:meal, x:v});
+  if(ideasLog.length>300) ideasLog=ideasLog.slice(-300);
+  store.set('ideas',ideasLog); store.set('plan',plan);
+  closeSheet(); renderPlan();
+}
+function removeIdea(di,meal,i){
+  const slot=plan.days[di][meal];
+  if(slot.ideas) slot.ideas.splice(i,1);
+  store.set('plan',plan); renderPlan();
+}
 function toggleDish(di,meal,id){
   const slot=plan.days[di][meal]; if(!slot||slot.saved) return;
   const i=slot.chosen.indexOf(id);
@@ -1104,12 +1134,13 @@ function toggleDish(di,meal,id){
 }
 function saveMeal(di,meal){
   const day=plan.days[di], slot=day[meal]; if(!slot) return;
-  if(!slot.chosen.length){ toast(LT('pickOne')); return }
+  if(!slot.chosen.length && !(slot.ideas||[]).length){ toast(LT('pickOne')); return }
   slot.saved=true;
   const notes=[];
   const dayAvoid=Object.values((day.lunch&&day.lunch.sides)||{}).concat(Object.values((day.dinner&&day.dinner.sides)||{}));
-  slot.sides=assignSides(byId(slot.chosen[0]),meal,dayAvoid);
-  logEvent({k:'pick',d:day.date,m:meal,c:slot.chosen.slice(),o:(slot.alts||[]).slice()});
+  if(slot.chosen.length) slot.sides=assignSides(byId(slot.chosen[0]),meal,dayAvoid);
+  else slot.sides=slot.sides||{salad:pickSide('salad',dayAvoid)};
+  logEvent({k:'pick',d:day.date,m:meal,c:slot.chosen.slice(),o:(slot.alts||[]).slice(),i:(slot.ideas||[]).slice()});
   slot.chosen.forEach(id=>{
     bumpTaste(id,2);
     const last=history[id];
@@ -1229,12 +1260,14 @@ function mealRow(di,meal,slot,dateIso){
         </div>
       </div>`;
     }).join('');
+    const ideaRows=(slot.ideas||[]).map(x=>`<div class="savedrow"><div style="flex:1"><div class="oname">✱ ${esc(x)}</div>
+      <div class="ometa"><span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('ideaTag')}</span></div></div></div>`).join('');
     const sideNames=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
     const sidesBar=`<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${sideNames.length?sideNames.join(' · '):'<span style="opacity:.6">+ '+LT('sdal')+' / '+LT('ssabzi')+' / '+LT('sstaple')+' …</span>'}</div>`;
     return `<div class="mealblock">
       <div class="mealhead"><span>${lab}</span><small>${who}</small>
         <a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a></div>
-      ${rows}${sidesBar}</div>`;
+      ${rows}${ideaRows}${sidesBar}</div>`;
   }
   // selection mode: bubbles
   const bubbles=(slot.alts||[]).slice(0,3).map(id=>{
@@ -1253,10 +1286,17 @@ function mealRow(di,meal,slot,dateIso){
       <button class="infobtn" style="color:var(--muted);font-size:14px" onclick="event.stopPropagation();trashDish('${id}')">🗑</button>
     </div>`;
   }).join('');
+  const ideaBubs=(slot.ideas||[]).map((x,i)=>`<div class="dishbub on" style="border-style:dashed">
+      <div class="tickc">✱</div>
+      <div style="flex:1;min-width:0"><div class="oname">${esc(x)}</div>
+      <div class="ometa"><span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('ideaTag')}</span></div></div>
+      <button class="infobtn" onclick="event.stopPropagation();removeIdea(${di},'${meal}',${i})">✕</button>
+    </div>`).join('');
   return `<div class="mealblock">
     <div class="mealhead"><span>${lab}</span><small>${who}</small></div>
     <div class="pickhint">${LT('pickHint')}</div>
-    ${bubbles}
+    ${bubbles}${ideaBubs}
+    <div style="padding:0 16px 6px"><span style="font-size:12.5px;color:var(--steel);text-decoration:underline;cursor:pointer;font-family:var(--disp);font-weight:700" onclick="openIdeaSheet(${di},'${meal}')">${LT('addIdea')}</span></div>
     <div class="saverow">
       <button class="btn primary small" onclick="saveMeal(${di},'${meal}')">💾 ${LT('save')}</button>
       <button class="btn ghost small" onclick="swapSlot(${di},'${meal}')">${LT('newOpts')}</button>
@@ -1329,7 +1369,8 @@ function menuText(lg){
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
       if(sl.skipped){ t+=pre+Lx(T.skippedWA,lg)+'\n'; return }
       if(!sl.saved||!sl.chosen.length){ t+=pre+Lx(T.notDecided,lg)+'\n'; return }
-      const names=sl.chosen.map(id=>byId(id)?Lx(byId(id).n,lg):'').filter(Boolean);
+      const names=sl.chosen.map(id=>byId(id)?Lx(byId(id).n,lg):'').filter(Boolean)
+        .concat((sl.ideas||[]).map(x=>'✱ '+x));
       const flags=[];
       sl.chosen.forEach(id=>{
         const r=byId(id); if(!r) return;
@@ -1676,11 +1717,12 @@ function copyPickData(){
     trashed:trashed.map(id=>byId(id)?byId(id).n[0]:id),
     liked:Object.keys(taste.stars).filter(id=>taste.stars[id]==='more').map(id=>byId(id)?byId(id).n[0]:id),
     rarely:Object.keys(taste.stars).filter(id=>taste.stars[id]==='less').map(id=>byId(id)?byId(id).n[0]:id),
+    my_ideas:(function(){ const agg={}; ideasLog.forEach(e=>{ const k=e.x.toLowerCase(); agg[k]=agg[k]||{dish:e.x,times:0,meals:[]}; agg[k].times++; if(!agg[k].meals.includes(e.m)) agg[k].meals.push(e.m) }); return Object.values(agg) })(),
     summary, recent_events:pickLog.slice(-120)};
   navigator.clipboard.writeText(JSON.stringify(payload,null,1)).then(()=>toast(LT('pickCopied')));
 }
 function backup(){
-  const data={custom,hidden,plan,grocery,pantry:pantryHave,settings,history,taste,pickLog,trashed};
+  const data={custom,hidden,plan,grocery,pantry:pantryHave,settings,history,taste,pickLog,trashed,ideasLog};
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
   a.download='ghar-ka-menu-backup.json'; a.click();
@@ -1700,7 +1742,7 @@ function restore(inp){
     if(d.taste) {taste=d.taste; if(!taste.scores)taste.scores={}; if(!taste.stars)taste.stars={}; store.set('taste',taste)}
     if(d.pickLog) {pickLog=d.pickLog; store.set('plog',pickLog)}
     if(d.trashed) {trashed=d.trashed; store.set('trashed',trashed)}
-    if(d.trashed) {trashed=d.trashed; store.set('trashed',trashed)}
+    if(d.ideasLog) {ideasLog=d.ideasLog; store.set('ideas',ideasLog)}
     normalizePlan(); renderAll(); closeSheet(); toast(LT('restored'));
   }catch(e){ toast(LT('badFile')) } };
   rd.readAsText(f);
