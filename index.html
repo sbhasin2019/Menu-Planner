@@ -494,6 +494,13 @@ const SEED = [
 {id:'b8',n:['Fruit + Curd + Granola Bowl','फल + दही + ग्रनोला बाउल'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:5,kc:320,ev:false,needs:['yogurt','fruit'],
  ing:[['Thick curd / Greek yogurt','गाढ़ा दही','2 cups','dairy'],['Seasonal fruit','मौसमी फल','','veg'],['Granola / muesli','ग्रनोला / म्यूसली','1 cup','pantry'],['Honey','शहद','','pantry']],
  st:[['Curd in a bowl, fruit and granola on top, drizzle honey.','कटोरे में दही, ऊपर फल-ग्रनोला, शहद डालें।'],['Fastest option before school.','स्कूल से पहले सबसे तेज़ विकल्प।']]},
+{id:'b10',n:['Waffles','वैफ़ल'],cz:'Western',p:'egg',co:['breakfast'],ef:2,tm:25,kc:430,ev:false,fest:true,needs:['maida','eggs','milk','butter'],
+ ing:[['Maida','मैदा','1.5 cups','pantry'],['Eggs (in batter — Aveer OK)','अंडे (घोल में — अवीर खाएगा)','2','dairy'],['Milk + melted butter','दूध + पिघला मक्खन','1.25 cups','dairy'],['Baking powder, sugar, vanilla','बेकिंग पाउडर, चीनी, वनीला','','pantry'],['Honey/maple, fruit','शहद/मेपल, फल','','pantry']],
+ st:[['Whisk wet into dry — small lumps are fine.','गीला सामान सूखे में मिलाएँ — हल्की गुठलियाँ ठीक हैं।'],['Hot greased waffle iron, 3-4 min till deep golden.','गरम वैफ़ल आयरन में 3-4 मिनट, गहरा सुनहरा होने तक।'],['Butter, honey, fruit on top.','ऊपर मक्खन, शहद, फल।']]},
+{id:'b11',n:['Avocado & Cream Cheese Toast','एवोकाडो क्रीम चीज़ टोस्ट'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:12,kc:340,ev:false,needs:['bread','butter'],
+ gn:['Avocados show up at Delfino\'s and the Mapusa market most of the year — pick slightly soft ones.','एवोकाडो साल के ज़्यादातर समय डेल्फ़िनोज़ और मापुसा बाज़ार में मिलते हैं — हल्के नरम चुनें।'],
+ ing:[['Good bread (sourdough/multigrain)','अच्छी ब्रेड','6 slices','bakery'],['Ripe avocados','पके एवोकाडो','2','veg'],['Cream cheese / hung curd','क्रीम चीज़ / गाढ़ा दही','4 tbsp','dairy'],['Lemon, chilli flakes, salt, olive oil','नींबू, चिली फ्लेक्स, नमक, ऑलिव ऑयल','','pantry']],
+ st:[['Toast the bread well; spread cream cheese.','ब्रेड अच्छी सेकें; क्रीम चीज़ लगाएँ।'],['Mash avocado with lemon-salt; pile on.','एवोकाडो नींबू-नमक से मसलें; ऊपर रखें।'],['Chilli flakes + olive oil. Protein-friendly, no cooking.','चिली फ्लेक्स + ऑलिव ऑयल। हेल्दी, बिना पकाए।']]},
 {id:'b9',n:['Grilled Cheese Sandwich','ग्रिल्ड चीज़ सैंडविच'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:10,kc:400,ev:false,needs:['bread','cheese','butter'],
  ing:[['Bread','ब्रेड','8 slices','bakery'],['Cheese','चीज़','1 cup grated','dairy'],['Butter','मक्खन','','dairy']],
  st:[['Butter outside, cheese inside.','बाहर मक्खन, अंदर चीज़।'],['Cook covered on tawa till golden both sides.','तवे पर ढककर दोनों तरफ़ सुनहरा करें।'],['Serve with ketchup.','केचप के साथ दें।']]},
@@ -904,6 +911,7 @@ function mainPool(meal,dateIso,token){
   let pool=activeRecipes().filter(r=> sundayLunch ? (r.co.includes('lunch')||r.co.includes('dinner')) : r.co.includes(meal));
   if(token) pool=pool.filter(r=>TOKEN_MATCH[token].includes(r.p));
   if(meal==='breakfast'){ pool=pool.filter(r=>aveerOK(r));
+    const west=pool.filter(r=>r.cz==='Western'); if(west.length) pool=west;
     if(isWeekend(dateIso)){ const f=pool.filter(r=>r.fest||r.ef>=2); if(f.length>=2) pool=f; } }
   else if(isFamilySlot(meal,dateIso)) pool=pool.filter(r=>(zoyaOK(r)||r.zpair)&&aveerOK(r));
   return pool;
@@ -1235,12 +1243,17 @@ function mealRow(di,meal,slot,dateIso){
   if(meal==='breakfast'){
     const r=byId(primary(slot)); if(!r) return '';
     const pm=PROTEIN_META[r.p];
+    const bIdeas=(slot.ideas||[]).map((x,i)=>`<div class="savedrow"><div style="flex:1"><div class="oname">✱ ${esc(x)}</div>
+      <div class="ometa"><span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('ideaTag')}</span></div></div>
+      <button class="infobtn" onclick="event.stopPropagation();removeIdea(${di},'breakfast',${i})">✕</button></div>`).join('');
     return `<div class="mealblock"><div class="mealhead"><span>${lab}</span></div>
       <div class="savedrow" onclick="openRecipe('${r.id}')">
         <div style="flex:1;min-width:0"><div class="oname">${esc(L(r.n))}</div>
         <div class="ometa"><span class="pdot" style="background:${pm[1]}"></span>${r.tm}${LT('min')} · ${'🧑‍🍳'.repeat(r.ef)}${r.kc?` · ~${r.kc} kcal`:''}</div></div>
         <button class="iconbtn" onclick="event.stopPropagation();swapSlot(${di},'breakfast')">↻</button>
-      </div></div>`;
+      </div>${bIdeas}
+      <div style="padding:0 16px 4px"><span style="font-size:12.5px;color:var(--steel);text-decoration:underline;cursor:pointer;font-family:var(--disp);font-weight:700" onclick="openIdeaSheet(${di},'breakfast')">${LT('addIdea')}</span></div>
+    </div>`;
   }
   if(slot.skipped){
     return `<div class="mealblock">
@@ -1363,7 +1376,10 @@ function menuText(lg){
   let t=Lx(T.menuTitle,lg)+' — '+fmtDate(plan.start,lg)+' '+Lx(T.from,lg)+'\n';
   plan.days.forEach(d=>{
     t+='\n*'+dayLabel(d.date,lg)+' ('+fmtDate(d.date,lg)+')*\n';
-    if(bfOn(d.date)&&d.breakfast&&byId(primary(d.breakfast))) t+='☕ '+Lx(T.breakfast,lg)+': '+Lx(byId(primary(d.breakfast)).n,lg)+'\n';
+    if(bfOn(d.date)&&d.breakfast&&byId(primary(d.breakfast))){
+      const bn=[Lx(byId(primary(d.breakfast)).n,lg)].concat((d.breakfast.ideas||[]).map(x=>'✱ '+x));
+      t+='☕ '+Lx(T.breakfast,lg)+': '+bn.join(' + ')+'\n';
+    }
     ['lunch','dinner'].forEach(m=>{
       const sl=d[m]; if(!sl) return;
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
