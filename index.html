@@ -361,6 +361,8 @@ const T = {
   skippedLabel:['🍽️ Eating out / ordering in','🍽️ बाहर खाना / ऑर्डर इन'],
   skippedWA:['eating out — nothing to cook','बाहर खाना — कुछ नहीं बनाना'],
   skippedToast:['Skipped — the cook gets the day off for this meal','स्किप — इस मील की कुक को छुट्टी'],
+  noneOpt:['— none —','— नहीं —'],
+  sidesHint:['The usual ones are pre-filled — add anything else from the other dropdowns.','आम वाले पहले से भरे हैं — बाकी ड्रॉपडाउन से जो चाहें जोड़ें।'],
   trashToast:['Removed from rotation · trash: {n}','रोटेशन से हटा · ट्रैश: {n}'],
   trashFull:['Trash has {n} dishes — copy the picks data and ask Claude for a menu re-set!','ट्रैश में {n} डिश — डेटा कॉपी कर Claude से मेनू री-सेट करवाएँ!'],
   trashEmpty:['Trash is empty.','ट्रैश खाली है।'],
@@ -1215,8 +1217,8 @@ function mealRow(di,meal,slot,dateIso){
         </div>
       </div>`;
     }).join('');
-    const sidesBar = slot.sides && Object.keys(slot.sides).length
-      ? `<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${Object.values(slot.sides).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean).join(' · ')}</div>` : '';
+    const sideNames=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
+    const sidesBar=`<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${sideNames.length?sideNames.join(' · '):'<span style="opacity:.6">+ '+LT('sdal')+' / '+LT('ssabzi')+' / '+LT('sstaple')+' …</span>'}</div>`;
     return `<div class="mealblock">
       <div class="mealhead"><span>${lab}</span><small>${who}</small>
         <a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a></div>
@@ -1270,13 +1272,17 @@ function renderPlan(){
 /* ================= SIDES EDITOR ================= */
 function openSidesEditor(di,meal){
   const day=plan.days[di], slot=day[meal]; if(!slot) return;
-  const main=byId(slot.main.id);
+  const main=byId(primary(slot)); if(!main) return;
   let h=`<h2>${LT('sidesFor')} ${dayLabel(day.date)} ${LT(meal)}</h2>
-  <div class="note">${esc(L(main.n))}</div>`;
-  sideSlotsFor(main,meal).forEach(type=>{
-    const cur=slot.sides[type]; const curSide=sideById(cur);
-    h+=`<div class="siderow"><div class="lab">${LT(SIDE_TYPE_LABEL[type])}</div>
+  <div class="note">${esc(L(main.n))}</div>
+  <div class="hint" style="font-size:12px;color:var(--muted);margin:4px 0 10px">${LT('sidesHint')}</div>`;
+  const templ=sideSlotsFor(main,meal);
+  SIDE_TYPES.forEach(type=>{
+    const cur=slot.sides[type]||''; const curSide=sideById(cur);
+    const inTempl=templ.includes(type);
+    h+=`<div class="siderow" style="${!inTempl&&!cur?'opacity:.85':''}"><div class="lab">${LT(SIDE_TYPE_LABEL[type])}</div>
       <select onchange="setSide(${di},'${meal}','${type}',this.value)">
+        <option value="" ${cur?'':'selected'}>${LT('noneOpt')}</option>
         ${sidesOf(type).map(s=>`<option value="${s.id}" ${s.id===cur?'selected':''}>${esc(L(s.n))}</option>`).join('')}
       </select>
       ${curSide?`<div class="snote">${esc(L(curSide.note))}</div><span class="slink" onclick="openSideRecipe('${curSide.id}',${di},'${meal}')">${LT('viewRecipe')}</span>`:''}
@@ -1285,7 +1291,8 @@ function openSidesEditor(di,meal){
   openSheetHtml(h);
 }
 function setSide(di,meal,type,id){
-  plan.days[di][meal].sides[type]=id;
+  if(!plan.days[di][meal].sides) plan.days[di][meal].sides={};
+  if(id) plan.days[di][meal].sides[type]=id; else delete plan.days[di][meal].sides[type];
   store.set('plan',plan); renderPlan(); openSidesEditor(di,meal);
 }
 function openSideRecipe(id,di,meal){
