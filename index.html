@@ -97,7 +97,8 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .dishbub.on{border-color:var(--ink); background:var(--haldi-soft); box-shadow:2px 2px 0 var(--ink)}
 .dishbub .tickc{width:22px; height:22px; border-radius:50%; border:2px solid var(--line); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#fff; background:var(--card)}
 .dishbub.on .tickc{background:var(--dhaniya); border-color:var(--ink)}
-.dishbub .infobtn{border:none; background:none; font-size:17px; color:var(--steel); cursor:pointer; padding:4px; flex-shrink:0}
+.dishbub .infobtn{border:none; background:none; font-size:15px; color:var(--steel); cursor:pointer; padding:3px 2px; flex-shrink:0; filter:grayscale(1) opacity(.5)}
+.dishbub .infobtn.liked{filter:none; opacity:1; transform:scale(1.15)}
 .oname{font-family:var(--disp); font-weight:700; font-size:15px; line-height:1.25}
 .ometa{font-size:11.5px; color:var(--muted); display:flex; gap:5px; align-items:center; flex-wrap:wrap; margin-top:1px}
 .saverow{display:flex; gap:8px; padding:4px 16px 2px}
@@ -356,6 +357,10 @@ const T = {
   trash:['🗑 Trash','🗑 ट्रैश'],
   restoreDish:['↩️ Restore','↩️ वापस लाएँ'],
   trashHead:['Trash','ट्रैश'],
+  skip:['⏭ Skip — eating out','⏭ स्किप — बाहर खाना'],
+  skippedLabel:['🍽️ Eating out / ordering in','🍽️ बाहर खाना / ऑर्डर इन'],
+  skippedWA:['eating out — nothing to cook','बाहर खाना — कुछ नहीं बनाना'],
+  skippedToast:['Skipped — the cook gets the day off for this meal','स्किप — इस मील की कुक को छुट्टी'],
   trashToast:['Removed from rotation · trash: {n}','रोटेशन से हटा · ट्रैश: {n}'],
   trashFull:['Trash has {n} dishes — copy the picks data and ask Claude for a menu re-set!','ट्रैश में {n} डिश — डेटा कॉपी कर Claude से मेनू री-सेट करवाएँ!'],
   trashEmpty:['Trash is empty.','ट्रैश खाली है।'],
@@ -698,7 +703,7 @@ SEED.push(
  gn:['Soy, dark soy (or soy + jaggery), garlic, spring onion — kirana-shelf simple.','सोया, डार्क सोया (या सोया + गुड़), लहसुन, हरा प्याज़ — किराने की शेल्फ़ जितना आसान।'],
  ing:[['Chicken (thin slices)','चिकन (पतली स्लाइस)','600 g','meat'],['Cornflour','कॉर्नफ्लोर','1/2 cup','pantry'],['Soy + jaggery/brown sugar + garlic-ginger (sauce)','सोया + गुड़ + लहसुन-अदरक (सॉस)','','pantry'],['Spring onion (lots, in batons)','हरा प्याज़ (खूब, लंबा कटा)','','veg'],['Rice','चावल','2 cups','pantry']],
  st:[['Dust chicken in cornflour; fry crisp.','चिकन कॉर्नफ्लोर में लपेटकर कुरकुरा तलें।'],['Bubble the sauce 2 min till sticky.','सॉस 2 मिनट उबालकर चिपचिपी करें।'],['Chicken back + spring onion batons; toss and serve on rice.','चिकन वापस + हरा प्याज़; मिलाकर चावल पर।']]},
-{id:'x6',n:['Mongolian Beef','मंगोलियन बीफ़'],cz:'Chinese',p:'beef',co:['lunch'],ef:2,tm:35,kc:420,ev:false,needs:['beef','soy','rice','onions'],onepot:true,
+{id:'x6',n:['Mongolian Beef','मंगोलियन बीफ़'],cz:'Chinese',p:'beef',co:['lunch','dinner'],ef:2,tm:35,kc:420,ev:false,needs:['beef','soy','rice','onions'],onepot:true,zpair:true,
  gn:['Same sauce as the chicken version — undercut strips, sliced thin against the grain.','चिकन वाली सॉस ही — अंडरकट की पतली पट्टियाँ, रेशे के आर-पार कटी।'],
  ing:[['Beef (thin strips, undercut/striploin)','बीफ़ (पतली पट्टियाँ)','500 g','meat'],['Cornflour','कॉर्नफ्लोर','1/2 cup','pantry'],['Soy + jaggery + garlic-ginger','सोया + गुड़ + लहसुन-अदरक','','pantry'],['Spring onion','हरा प्याज़','','veg'],['Rice','चावल','2 cups','pantry']],
  st:[['Velvet the beef: cornflour coat, flash-fry, remove.','बीफ़ कॉर्नफ्लोर में लपेटकर तेज़ तलें, निकालें।'],['Sticky sauce; beef back 1 min only — it must stay tender.','चिपचिपी सॉस; बीफ़ वापस सिर्फ़ 1 मिनट — नरम रहना चाहिए।'],['Spring onion; over rice. (Weekday lunch — just us two.)','हरा प्याज़; चावल पर। (वीकडे लंच — सिर्फ़ हम दोनों।)']]},
@@ -965,7 +970,10 @@ function generatePlan(){
     const od=old.days.find(x=>x.date===dt); if(!od) return;
     ['lunch','dinner'].forEach(m=>{
       const sl=od[m];
-      if(sl&&sl.saved&&sl.chosen&&sl.chosen.length&&byId(sl.chosen[0])){
+      if(sl&&sl.saved&&sl.skipped){
+        lockedTokens[di+'-'+m]='veg'; // consumes nothing meaningful; slot preserved
+        lockedData[di+'-'+m]=sl;
+      } else if(sl&&sl.saved&&sl.chosen&&sl.chosen.length&&byId(sl.chosen[0])){
         lockedTokens[di+'-'+m]=tokenOf(byId(sl.chosen[0]).p);
         lockedData[di+'-'+m]=sl;
       }
@@ -1052,10 +1060,11 @@ function restoreDish(id){
   logEvent({k:'restore',r:[id]});
   closeSheet(); renderAll(); toast(LT('restored2'));
 }
-function likeDish(id){
+function likeDish(id,reopen){
   if(taste.stars[id]==='more') delete taste.stars[id]; else taste.stars[id]='more';
   logEvent({k:taste.stars[id]==='more'?'like':'unlike',r:[id]});
-  store.set('taste',taste); openRecipe(id);
+  store.set('taste',taste);
+  if(reopen) openRecipe(id);
 }
 function refreshOption(di,meal,id){
   const day=plan.days[di], slot=day[meal]; if(!slot||slot.saved) return;
@@ -1119,8 +1128,15 @@ function saveMeal(di,meal){
 }
 function changeMeal(di,meal){
   const slot=plan.days[di][meal]; if(!slot) return;
-  slot.saved=false;
+  slot.saved=false; slot.skipped=false;
+  if(!(slot.alts||[]).length){ swapSlot(di,meal); return }
   store.set('plan',plan); renderPlan();
+}
+function skipMeal(di,meal){
+  const slot=plan.days[di][meal]; if(!slot) return;
+  slot.skipped=true; slot.saved=true;
+  logEvent({k:'skip',d:plan.days[di].date,m:meal});
+  store.set('plan',plan); renderPlan(); toast(LT('skippedToast'));
 }
 
 function setSlot(dateIso,meal,id){
@@ -1143,7 +1159,7 @@ function quotaBar(){
   if(!plan){ el.style.display='none'; return }
   el.style.display='flex';
   const count={chicken:0,fish:0,beef:0,mutton:0,pork:0,veg:0};
-  plan.days.forEach(d=>['lunch','dinner'].forEach(m=>{ const p=d[m]&&primary(d[m]); if(p&&byId(p)) count[tokenOf(byId(p).p)]++ }));
+  plan.days.forEach(d=>['lunch','dinner'].forEach(m=>{ const sl=d[m]; if(!sl||sl.skipped) return; const p=primary(sl); if(p&&byId(p)) count[tokenOf(byId(p).p)]++ }));
   let h='';
   ['chicken','fish','beef','mutton','pork'].forEach(t=>{
     const tgt=settings.quota[t]||0; const c=count[t];
@@ -1181,6 +1197,13 @@ function mealRow(di,meal,slot,dateIso){
         <button class="iconbtn" onclick="event.stopPropagation();swapSlot(${di},'breakfast')">↻</button>
       </div></div>`;
   }
+  if(slot.skipped){
+    return `<div class="mealblock">
+      <div class="mealhead"><span>${lab}</span><small>${who}</small>
+        <a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a></div>
+      <div class="savedrow" style="color:var(--muted)"><div style="flex:1"><div class="oname" style="color:var(--muted)">${LT('skippedLabel')}</div></div></div>
+    </div>`;
+  }
   if(slot.saved){
     const rows=slot.chosen.map(id=>{
       const r=byId(id); if(!r) return '';
@@ -1210,6 +1233,7 @@ function mealRow(di,meal,slot,dateIso){
         <div class="oname">${esc(L(r.n))}</div>
         <div class="ometa"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)} · ${czName(r.cz)} · ${r.tm}${LT('min')} · ${'🧑‍🍳'.repeat(r.ef)}${r.kc?` · ~${r.kc} kcal`:''}${dishChips(r,meal,fam)?` · ${dishChips(r,meal,fam)}`:''}</div>
       </div>
+      <button class="infobtn ${taste.stars[id]==='more'?'liked':''}" onclick="event.stopPropagation();likeDish('${id}');renderPlan()">👍</button>
       <button class="infobtn" onclick="event.stopPropagation();openRecipe('${id}')">ⓘ</button>
       <button class="infobtn" style="color:var(--mirchi)" onclick="event.stopPropagation();refreshOption(${di},'${meal}','${id}')">↻</button>
       <button class="infobtn" style="color:var(--muted);font-size:14px" onclick="event.stopPropagation();trashDish('${id}')">🗑</button>
@@ -1222,6 +1246,7 @@ function mealRow(di,meal,slot,dateIso){
     <div class="saverow">
       <button class="btn primary small" onclick="saveMeal(${di},'${meal}')">💾 ${LT('save')}</button>
       <button class="btn ghost small" onclick="swapSlot(${di},'${meal}')">${LT('newOpts')}</button>
+      <button class="btn ghost small" style="color:var(--muted)" onclick="skipMeal(${di},'${meal}')">${LT('skip')}</button>
     </div>
   </div>`;
 }
@@ -1230,6 +1255,7 @@ function renderPlan(){
   const el=document.getElementById('plan-days');
   if(!plan){ el.innerHTML=`<div class="legend"><span class="big">🍲</span>${LT('noplan')}</div>`; return }
   let html = dayDiff(plan.start)<0 ? `<div class="legend">${LT('stale')}</div>` : '';
+  if(trashed.length>=10) html+=`<div class="legend" style="border-color:var(--mirchi);background:var(--mirchi-soft);color:#7a2618"><b>${LT('trashFull').replace('{n}',trashed.length)}</b></div>`;
   plan.days.forEach((d,di)=>{
     html+=`<div class="day ${di===0?'today':''} ${isWeekend(d.date)?'wknd':''}">
       <div class="dayhead"><span class="dayname">${dayLabel(d.date)}</span><span class="daydate">${fmtDate(d.date)}${isWeekend(d.date)?' · '+LT('weekend'):''}</span></div>
@@ -1282,6 +1308,7 @@ function menuText(lg){
     ['lunch','dinner'].forEach(m=>{
       const sl=d[m]; if(!sl) return;
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
+      if(sl.skipped){ t+=pre+Lx(T.skippedWA,lg)+'\n'; return }
       if(!sl.saved||!sl.chosen.length){ t+=pre+Lx(T.notDecided,lg)+'\n'; return }
       const names=sl.chosen.map(id=>byId(id)?Lx(byId(id).n,lg):'').filter(Boolean);
       const flags=[];
@@ -1389,7 +1416,7 @@ function openRecipe(id){
   const st=taste.stars[r.id]||'';
   const isTrashed=trashed.includes(r.id);
   h+=`<h3>${LT('tasteHead')}</h3><div class="pgrid">
-    <button class="pchip ${st==='more'?'on':''}" onclick="likeDish('${r.id}')">${LT('like')}</button>
+    <button class="pchip ${st==='more'?'on':''}" onclick="likeDish('${r.id}',true)">${LT('like')}</button>
     <button class="pchip ${st==='less'?'on':''}" onclick="setStar('${r.id}',${JSON.stringify('less')});openRecipe('${r.id}')">👎 ${LT('likeLess')}</button>
     ${isTrashed
       ?`<button class="pchip" style="background:var(--dhaniya);color:#fff;border-color:var(--ink)" onclick="restoreDish('${r.id}')">${LT('restoreDish')}</button>`
@@ -1466,6 +1493,7 @@ function buildGrocery(){
   plan.days.forEach(d=>['breakfast','lunch','dinner'].forEach(m=>{
     const slot=d[m]; if(!slot) return;
     if(m!=='breakfast'&&!slot.saved) return; // not decided → nothing to shop yet
+    if(slot.skipped) return;
     (slot.chosen||[]).forEach(cid=>{
       const r=byId(cid); if(!r) return;
       if(m==='lunch' && tokenOf(r.p)==='veg') vegLunches++;
@@ -1476,7 +1504,7 @@ function buildGrocery(){
   if(vegLunches) addItem('Chicken boneless (tikka add-on)','बोनलेस चिकन (टिक्का के लिए)',(350*vegLunches)+' g','meat');
   let zpairs=0;
   plan.days.forEach(d=>['lunch','dinner'].forEach(m=>{
-    const slot=d[m]; if(!slot||!slot.saved) return;
+    const slot=d[m]; if(!slot||!slot.saved||slot.skipped) return;
     (slot.chosen||[]).forEach(cid=>{
       const r=byId(cid); if(!r) return;
       if((m==='dinner'||(m==='lunch'&&isWeekend(d.date))) && r.zpair && !ZOYA_PROTEINS.includes(r.p)) zpairs++;
@@ -1650,6 +1678,7 @@ function restore(inp){
     if(d.history) {history=d.history; store.set('history',history)}
     if(d.taste) {taste=d.taste; if(!taste.scores)taste.scores={}; if(!taste.stars)taste.stars={}; store.set('taste',taste)}
     if(d.pickLog) {pickLog=d.pickLog; store.set('plog',pickLog)}
+    if(d.trashed) {trashed=d.trashed; store.set('trashed',trashed)}
     if(d.trashed) {trashed=d.trashed; store.set('trashed',trashed)}
     normalizePlan(); renderAll(); closeSheet(); toast(LT('restored'));
   }catch(e){ toast(LT('badFile')) } };
