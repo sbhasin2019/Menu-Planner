@@ -195,6 +195,7 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
         <button id="lang-en" onclick="setLang('en')">EN</button>
         <button id="lang-hi" onclick="setLang('hi')">हिं</button>
       </div>
+      <span id="sync-badge" style="display:none;align-items:center;font-size:11px;font-weight:700;color:var(--dhaniya);margin-right:6px"></span>
       <button class="gear" onclick="openSettings()" aria-label="Settings">⚙︎</button>
     </div>
   </header>
@@ -373,6 +374,24 @@ const T = {
   chooseProt:['What should this meal be?','यह मील किस चीज़ की हो?'],
   protVegOpt:['Dal / Veg','दाल / वेज'],
   protNote:['Beef, mutton & pork at a family meal will show a "for Zoya" line automatically.','फैमिली मील में बीफ़/मटन/पोर्क पर "ज़ोया के लिए" लाइन अपने आप जुड़ेगी।'],
+  lockPlan:['🔒 Lock & publish week','🔒 हफ्ता लॉक करें'],
+  unlockPlan:['🔓 Unlock to edit','🔓 बदलने के लिए अनलॉक'],
+  lockedBanner:['Menu locked. The cook sees this and can\'t change it. Tap unlock to edit.','मेन्यू लॉक है। कुक इसे देख सकती है, बदल नहीं सकती। बदलने के लिए अनलॉक करें।'],
+  cookViewBanner:['This week\'s menu from the kitchen owner. Tap any dish for the recipe.','इस हफ्ते का मेन्यू। रेसिपी के लिए किसी भी डिश पर टैप करें।'],
+  lockedToast:['Week locked & sent to the cook\'s phone','हफ्ता लॉक होकर कुक के फ़ोन पर भेज दिया'],
+  unlockedToast:['Unlocked — you can edit again','अनलॉक — अब बदल सकते हैं'],
+  setPinPrompt:['Set an unlock code (you\'ll need it to edit a locked week):','अनलॉक कोड सेट करें (लॉक हफ्ता बदलने के लिए ज़रूरी):'],
+  enterPinPrompt:['Enter your unlock code:','अपना अनलॉक कोड डालें:'],
+  wrongPin:['Wrong code','गलत कोड'],
+  syncHead:['Sharing with the cook','कुक के साथ साझा'],
+  syncUrl:['Supabase URL','Supabase URL'],
+  syncKey:['Publishable key','Publishable key'],
+  syncHouse:['Household code (make one up, same on both phones)','घर का कोड (खुद बनाएँ, दोनों फ़ोन पर एक सा)'],
+  syncRole:['This phone is','यह फ़ोन है'],
+  roleOwner:['Owner (plans the menu)','मालिक (मेन्यू बनाता है)'],
+  roleCook:['Cook (view only)','कुक (सिर्फ़ देखना)'],
+  syncSave:['Save & connect','सेव और कनेक्ट'],
+  syncNote:['Leave blank to use the app on one phone only. Setup steps are in the help link below.','एक ही फ़ोन पर इस्तेमाल के लिए खाली छोड़ें।'],
   sidesHint:['The usual ones are pre-filled — add anything else from the other dropdowns.','आम वाले पहले से भरे हैं — बाकी ड्रॉपडाउन से जो चाहें जोड़ें।'],
   trashToast:['Removed from rotation · trash: {n}','रोटेशन से हटा · ट्रैश: {n}'],
   trashFull:['Trash has {n} dishes — copy the picks data and ask Claude for a menu re-set!','ट्रैश में {n} डिश — डेटा कॉपी कर Claude से मेनू री-सेट करवाएँ!'],
@@ -505,6 +524,20 @@ const SEED = [
  gn:['Avocados show up at Delfino\'s and the Mapusa market most of the year — pick slightly soft ones.','एवोकाडो साल के ज़्यादातर समय डेल्फ़िनोज़ और मापुसा बाज़ार में मिलते हैं — हल्के नरम चुनें।'],
  ing:[['Good bread (sourdough/multigrain)','अच्छी ब्रेड','6 slices','bakery'],['Ripe avocados','पके एवोकाडो','2','veg'],['Cream cheese / hung curd','क्रीम चीज़ / गाढ़ा दही','4 tbsp','dairy'],['Lemon, chilli flakes, salt, olive oil','नींबू, चिली फ्लेक्स, नमक, ऑलिव ऑयल','','pantry']],
  st:[['Toast the bread well; spread cream cheese.','ब्रेड अच्छी सेकें; क्रीम चीज़ लगाएँ।'],['Mash avocado with lemon-salt; pile on.','एवोकाडो नींबू-नमक से मसलें; ऊपर रखें।'],['Chilli flakes + olive oil. Protein-friendly, no cooking.','चिली फ्लेक्स + ऑलिव ऑयल। हेल्दी, बिना पकाए।']]},
+{id:'b12',n:['Overnight Oats (honey-banana)','ओवरनाइट ओट्स'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:10,kc:310,ev:false,needs:['milk'],
+ gn:['Assembled the night before — zero morning work. The healthiest thing in the rotation.','रात को बनाकर रखें — सुबह कोई काम नहीं। रोटेशन की सबसे हेल्दी चीज़।'],
+ ing:[['Rolled oats','ओट्स','1.5 cups','pantry'],['Milk / curd','दूध / दही','2 cups','dairy'],['Honey, banana, nuts/seeds','शहद, केला, मेवे/बीज','','pantry'],['Chia (optional)','चिया (चाहें तो)','1 tbsp','pantry']],
+ st:[['Mix oats + milk + honey in jars; fridge overnight.','ओट्स + दूध + शहद जार में; रात भर फ्रिज में।'],['Morning: banana, nuts, a little more honey on top.','सुबह: ऊपर केला, मेवे, थोड़ा और शहद।']]},
+{id:'b13',n:['Hash Browns + Beans on Toast','हैश ब्राउन + बीन्स टोस्ट'],cz:'Western',p:'veg',co:['breakfast'],ef:2,tm:30,kc:440,ev:false,fest:true,needs:['potatoes','bread','butter'],
+ gn:['The lazy-Sunday English breakfast, minus the fry-up. Zoya gets her potatoes.','आराम वाले संडे का अंग्रेज़ी नाश्ता। ज़ोया को उसके आलू मिल जाते हैं।'],
+ ing:[['Potatoes (grated, squeezed dry)','आलू (कद्दूकस, निचोड़े)','4','veg'],['Baked beans tin','बेक्ड बीन्स का डिब्बा','1','pantry'],['Good bread, butter','अच्छी ब्रेड, मक्खन','','bakery'],['Cheese (optional, over beans)','चीज़ (बीन्स पर, चाहें तो)','','dairy']],
+ st:[['Squeeze grated potato bone-dry; salt-pepper; shallow-fry pressed patties till deep golden.','कद्दूकस आलू कसकर निचोड़ें; नमक-मिर्च; दबाकर सुनहरा तलें।'],['Warm beans with a knob of butter.','बीन्स मक्खन के साथ गरम करें।'],['Buttered toast, beans over, hash browns alongside.','मक्खन टोस्ट, ऊपर बीन्स, साथ हैश ब्राउन।']]},
+{id:'b14',n:['Mushroom & Cheese Toast','मशरूम चीज़ टोस्ट'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:20,kc:380,ev:false,needs:['bread','butter','cheese'],
+ ing:[['Mushrooms (sliced)','मशरूम (कटे)','400 g','veg'],['Butter, garlic, thyme/oregano','मक्खन, लहसुन, हर्ब्स','','pantry'],['Bread','ब्रेड','6 slices','bakery'],['Cheese (grated)','चीज़ (कद्दूकस)','1 cup','dairy']],
+ st:[['Sauté mushrooms hot and fast in garlic butter till brown, not soggy.','मशरूम लहसुन-मक्खन में तेज़ आँच पर भूनें — भूरे, गीले नहीं।'],['Pile on toast, cheese on top, grill/airfry 3 min till bubbling.','टोस्ट पर रखें, ऊपर चीज़, 3 मिनट ग्रिल — चीज़ पिघलने तक।']]},
+{id:'b15',n:['Honey-Banana Porridge','शहद-केला दलिया (ओट्स)'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:15,kc:330,ev:false,needs:['milk'],
+ ing:[['Oats','ओट्स','1.5 cups','pantry'],['Milk','दूध','3 cups','dairy'],['Banana, honey, cinnamon','केला, शहद, दालचीनी','','pantry'],['Nuts','मेवे','','pantry']],
+ st:[['Simmer oats in milk 5-6 min, stirring.','ओट्स दूध में 5-6 मिनट, चलाते हुए।'],['Sliced banana + honey + cinnamon; nuts for crunch.','कटा केला + शहद + दालचीनी; ऊपर मेवे।']]},
 {id:'b9',n:['Grilled Cheese Sandwich','ग्रिल्ड चीज़ सैंडविच'],cz:'Western',p:'veg',co:['breakfast'],ef:1,tm:10,kc:400,ev:false,needs:['bread','cheese','butter'],
  ing:[['Bread','ब्रेड','8 slices','bakery'],['Cheese','चीज़','1 cup grated','dairy'],['Butter','मक्खन','','dairy']],
  st:[['Butter outside, cheese inside.','बाहर मक्खन, अंदर चीज़।'],['Cook covered on tawa till golden both sides.','तवे पर ढककर दोनों तरफ़ सुनहरा करें।'],['Serve with ketchup.','केचप के साथ दें।']]},
@@ -781,6 +814,91 @@ const store = {
   get(k,d){ try{ const v=localStorage.getItem('gm_'+k); return v?JSON.parse(v):d }catch(e){ return d } },
   set(k,v){ try{ localStorage.setItem('gm_'+k, JSON.stringify(v)) }catch(e){} }
 };
+
+/* ===== Cloud delivery (Supabase). Owner publishes a locked menu; cook's phone polls it. ===== */
+/* Two tables, scoped by household code. Grocery is shared read/write; menu is owner-write, all-read. */
+const SYNC = store.get('sync', { url:'', key:'', house:'', role:'owner' });   // role: 'owner' | 'cook'
+let planLocked = store.get('planLocked', false);
+let ownerPin = store.get('ownerPin', '');
+let sb=null, sbReady=false, pulling=false, pushBusy=false, lastGroceryStamp=0, lastMenuStamp=0;
+function syncOn(){ return !!(SYNC.url && SYNC.key && SYNC.house) }
+function isCook(){ return SYNC.role==='cook' }
+function isOwner(){ return !isCook() }
+
+function savePlan(){
+  store.set('plan', plan);
+  if(syncOn() && isOwner() && planLocked) schedulePublish();   // only a locked menu is pushed
+}
+let pubTimer=null;
+function schedulePublish(){ clearTimeout(pubTimer); pubTimer=setTimeout(publishMenu,500); }
+async function publishMenu(){
+  if(!sbReady || !plan || isCook()) return;
+  try{ pushBusy=true;
+    await sb.from('menu').upsert({ house:SYNC.house, plan:plan, locked:planLocked, updated_at:new Date().toISOString() },{onConflict:'house'});
+  }catch(e){ console.warn('publish failed',e) } finally{ pushBusy=false; }
+}
+async function pushGrocery(){
+  if(!sbReady) return;
+  try{ pushBusy=true;
+    await sb.from('grocery').upsert({ house:SYNC.house, items:grocery, updated_at:new Date().toISOString() },{onConflict:'house'});
+    lastGroceryStamp=Date.now();
+  }catch(e){ console.warn('grocery push failed',e) } finally{ pushBusy=false; }
+}
+function saveGrocery(){ store.set('grocery',grocery); if(syncOn()) { clearTimeout(grocTimer); grocTimer=setTimeout(pushGrocery,500); } }
+let grocTimer=null;
+
+async function pullOnce(){
+  if(!sbReady || pulling || pushBusy) return;
+  pulling=true;
+  try{
+    // cook pulls the menu; everyone pulls grocery
+    if(isCook()){
+      const { data } = await sb.from('menu').select('plan,locked,updated_at').eq('house',SYNC.house).maybeSingle();
+      if(data && data.plan){
+        const st=+new Date(data.updated_at||0);
+        if(st!==lastMenuStamp){ lastMenuStamp=st; plan=data.plan; planLocked=!!data.locked; store.set('plan',plan); store.set('planLocked',planLocked); renderPlan(); renderMatches(); }
+      }
+    }
+    const g = await sb.from('grocery').select('items,updated_at').eq('house',SYNC.house).maybeSingle();
+    if(g.data && g.data.items){
+      const st=+new Date(g.data.updated_at||0);
+      if(st!==lastGroceryStamp){ lastGroceryStamp=st; grocery=g.data.items; store.set('grocery',grocery); renderGrocery(); }
+    }
+  }catch(e){ /* offline tolerance */ } finally{ pulling=false; }
+}
+async function initSync(){
+  if(!syncOn()) return;
+  try{
+    await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+    sb = supabase.createClient(SYNC.url, SYNC.key);
+    sbReady=true; setSyncBadge(true);
+    await pullOnce();
+    if(isOwner() && plan && planLocked) publishMenu();   // make sure cloud has my latest locked menu
+    setInterval(pullOnce, 5000);                          // her phone (and yours) checks every 5s
+  }catch(e){ console.warn('sync init failed',e); setSyncBadge(false); }
+}
+function loadScript(src){ return new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=src; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); }
+function setSyncBadge(ok){ const el=document.getElementById('sync-badge'); if(el){ el.style.display=ok?'inline-flex':'none'; el.textContent = ok ? (isCook()?'🔗 '+LT('roleCook'):'🔗 '+LT('roleOwner')) : ''; } }
+
+/* lock / unlock */
+function lockPlan(){
+  // require at least the saved meals to exist; lock and publish
+  planLocked=true; store.set('planLocked',true);
+  if(syncOn()&&isOwner()) publishMenu();
+  renderPlan(); toast(LT('lockedToast'));
+}
+function requestUnlock(){
+  if(!ownerPin){ // first time: set a pin
+    const p=(prompt(LT('setPinPrompt'))||'').trim();
+    if(!p) return;
+    ownerPin=p; store.set('ownerPin',ownerPin);
+    planLocked=false; store.set('planLocked',false); renderPlan(); toast(LT('unlockedToast')); return;
+  }
+  const a=(prompt(LT('enterPinPrompt'))||'').trim();
+  if(a===ownerPin){ planLocked=false; store.set('planLocked',false); renderPlan(); toast(LT('unlockedToast')); }
+  else toast(LT('wrongPin'));
+}
+function planEditable(){ return isOwner() && !planLocked; }
 let custom = store.get('custom',[]);
 let hidden = store.get('hidden',[]);
 let plan = store.get('plan',null);
@@ -915,8 +1033,7 @@ function mainPool(meal,dateIso,token,ovr){
   let pool=activeRecipes().filter(r=> sundayLunch ? (r.co.includes('lunch')||r.co.includes('dinner')) : r.co.includes(meal));
   if(token) pool=pool.filter(r=>TOKEN_MATCH[token].includes(r.p));
   if(meal==='breakfast'){ pool=pool.filter(r=>aveerOK(r));
-    const west=pool.filter(r=>r.cz==='Western'); if(west.length) pool=west;
-    if(isWeekend(dateIso)){ const f=pool.filter(r=>r.fest||r.ef>=2); if(f.length>=2) pool=f; } }
+    const west=pool.filter(r=>r.cz==='Western'); if(west.length) pool=west; }
   else if(isFamilySlot(meal,dateIso)) pool=pool.filter(r=> ovr ? aveerOK(r) : (zoyaOK(r)||r.zpair)&&aveerOK(r));
   return pool;
 }
@@ -1043,7 +1160,7 @@ function generatePlan(){
     days.push(day);
   });
   plan={start:iso(start),days};
-  store.set('plan',plan); store.set('sideHist',sideHist);
+  savePlan(); store.set('sideHist',sideHist);
   days.forEach(d=>['breakfast','lunch','dinner'].forEach(m=>{ if(d[m]&&primary(d[m])) history[primary(d[m])]=d.date }));
   store.set('history',history);
   renderPlan(); toast(LT('planReady'));
@@ -1069,7 +1186,7 @@ function swapSlot(di,meal){
   day[meal]= meal==='breakfast'
     ? {chosen:[r.id],saved:false,alts:pickAlternates('breakfast',day.date,null,ctx,r.id),ideas:ideasKeep}
     : {chosen:[r.id], saved:false, token:tok, ovr:slot.ovr, sides:assignSides(r,meal,dayAvoid), alts:pickAlternates(meal,day.date,tok,ctx,r.id), ideas:ideasKeep};
-  store.set('plan',plan); store.set('sideHist',sideHist); renderPlan();
+  savePlan(); store.set('sideHist',sideHist); renderPlan();
 }
 function openProteinSheet(di,meal){
   const day=plan.days[di];
@@ -1094,7 +1211,7 @@ function setProtein(di,meal,tok){
   slot.alts=pickAlternates(meal,day.date,tok,ctx,r.id);
   slot.sides=assignSides(r,meal,dayAvoid);
   logEvent({k:'prot',d:day.date,m:meal,p:tok});
-  closeSheet(); store.set('plan',plan); store.set('sideHist',sideHist); renderPlan();
+  closeSheet(); savePlan(); store.set('sideHist',sideHist); renderPlan();
 }
 function refreshSidesForLead(di,meal){
   const day=plan.days[di], slot=day[meal];
@@ -1122,7 +1239,7 @@ function trashDish(id){
       if(!sl.chosen.length&&sl.alts.length) sl.chosen=[sl.alts[0]];
     }
   }));
-  store.set('plan',plan);
+  savePlan();
   closeSheet(); renderAll();
   toast(trashed.length>=10 ? LT('trashFull').replace('{n}',trashed.length) : LT('trashToast').replace('{n}',trashed.length));
 }
@@ -1152,7 +1269,7 @@ function refreshOption(di,meal,id){
   if(ci>=0) slot.chosen.splice(ci,1);
   if(!slot.chosen.length) slot.chosen=[slot.alts[0]];
   refreshSidesForLead(di,meal);
-  store.set('plan',plan); renderPlan();
+  savePlan(); renderPlan();
 }
 function openIdeaSheet(di,meal){
   const day=plan.days[di];
@@ -1169,20 +1286,20 @@ function addIdea(di,meal){
   slot.ideas=slot.ideas||[]; slot.ideas.push(v);
   ideasLog.push({t:Date.now(), d:plan.days[di].date, m:meal, x:v});
   if(ideasLog.length>300) ideasLog=ideasLog.slice(-300);
-  store.set('ideas',ideasLog); store.set('plan',plan);
+  store.set('ideas',ideasLog); savePlan();
   closeSheet(); renderPlan();
 }
 function removeIdea(di,meal,i){
   const slot=plan.days[di][meal];
   if(slot.ideas) slot.ideas.splice(i,1);
-  store.set('plan',plan); renderPlan();
+  savePlan(); renderPlan();
 }
 function toggleDish(di,meal,id){
   const slot=plan.days[di][meal]; if(!slot||slot.saved) return;
   const i=slot.chosen.indexOf(id);
   if(i>=0) slot.chosen.splice(i,1); else slot.chosen.push(id);
   refreshSidesForLead(di,meal);
-  store.set('plan',plan); renderPlan();
+  savePlan(); renderPlan();
 }
 function saveMeal(di,meal){
   const day=plan.days[di], slot=day[meal]; if(!slot) return;
@@ -1221,20 +1338,20 @@ function saveMeal(di,meal){
   }));
   if(moved) notes.push(LT('movedDup'));
   toast(notes.length?notes.join(' · '):LT('mealSaved'));
-  store.set('plan',plan); store.set('history',history); store.set('sideHist',sideHist);
+  savePlan(); store.set('history',history); store.set('sideHist',sideHist);
   renderPlan();
 }
 function changeMeal(di,meal){
   const slot=plan.days[di][meal]; if(!slot) return;
   slot.saved=false; slot.skipped=false;
   if(!(slot.alts||[]).length){ swapSlot(di,meal); return }
-  store.set('plan',plan); renderPlan();
+  savePlan(); renderPlan();
 }
 function skipMeal(di,meal){
   const slot=plan.days[di][meal]; if(!slot) return;
   slot.skipped=true; slot.saved=true;
   logEvent({k:'skip',d:plan.days[di].date,m:meal});
-  store.set('plan',plan); renderPlan(); toast(LT('skippedToast'));
+  savePlan(); renderPlan(); toast(LT('skippedToast'));
 }
 
 function setSlot(dateIso,meal,id){
@@ -1246,7 +1363,7 @@ function setSlot(dateIso,meal,id){
   const ctxS=slotCtx(day,meal);
   day[meal]= meal==='breakfast' ? {chosen:[id],saved:true,alts:[id]} : {chosen:[id], saved:true, token:tokenOf(r.p), sides:assignSides(r,meal,dayAvoid), alts:pickAlternates(meal,day.date,tokenOf(r.p),ctxS,id)};
   bumpTaste(id,3); history[id]=day.date; store.set('history',history);
-  store.set('plan',plan); store.set('sideHist',sideHist); renderPlan(); closeSheet();
+  savePlan(); store.set('sideHist',sideHist); renderPlan(); closeSheet();
   goTab('plan',document.querySelector('[data-page=plan]'));
   toast(L(r.n)+' '+LT('setDone'));
 }
@@ -1281,6 +1398,7 @@ function dishChips(r,meal,fam){
 function mealRow(di,meal,slot,dateIso){
   const who = meal==='breakfast'?'':(isFamilySlot(meal,dateIso)?LT('everyone'):LT('usTwo'));
   const lab = LT(meal);
+  const ro = !planEditable();   // read-only: cook, or owner with a locked week
   if(!slot||!(slot.alts||[]).length){
     return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div><div class="empty-slot" style="padding:8px 16px">—</div></div>`;
   }
@@ -1288,7 +1406,7 @@ function mealRow(di,meal,slot,dateIso){
   if(slot.skipped){
     return `<div class="mealblock">
       <div class="mealhead"><span>${lab}</span><small>${who}</small>
-        <a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a></div>
+        ${ro?'':`<a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a>`}</div>
       <div class="savedrow" style="color:var(--muted)"><div style="flex:1"><div class="oname" style="color:var(--muted)">${LT('skippedLabel')}</div></div></div>
     </div>`;
   }
@@ -1309,8 +1427,20 @@ function mealRow(di,meal,slot,dateIso){
     const sidesBar=`<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${sideNames.length?sideNames.join(' · '):'<span style="opacity:.6">+ '+LT('sdal')+' / '+LT('ssabzi')+' / '+LT('sstaple')+' …</span>'}</div>`;
     return `<div class="mealblock">
       <div class="mealhead"><span>${lab}</span><small>${who}</small>
-        <a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a></div>
+        ${ro?'':`<a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a>`}</div>
       ${rows}${ideaRows}${sidesBar}</div>`;
+  }
+  if(ro){
+    // read-only view of an unsaved meal (cook side, owner hasn't decided yet)
+    if((slot.chosen||[]).length||(slot.ideas||[]).length){
+      const names=(slot.chosen||[]).map(id=>byId(id)?esc(L(byId(id).n)):'').filter(Boolean).concat((slot.ideas||[]).map(x=>'✱ '+esc(x)));
+      const sb2=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
+      return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div>
+        ${names.map(n=>`<div class="savedrow" onclick="${slot.chosen&&slot.chosen[0]?`openRecipe('${slot.chosen[0]}')`:''}"><div style="flex:1"><div class="oname">${n}</div></div></div>`).join('')}
+        ${sb2.length?`<div class="sides"><b>${LT('withSides')}:</b> ${sb2.join(' · ')}</div>`:''}</div>`;
+    }
+    return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div>
+      <div class="savedrow" style="color:var(--muted)"><div style="flex:1"><div class="oname" style="color:var(--muted)">${LT('notDecided')}</div></div></div></div>`;
   }
   // selection mode: bubbles
   const bubbles=(slot.alts||[]).slice(0,3).map(id=>{
@@ -1358,8 +1488,16 @@ function renderPlan(){
   quotaBar();
   const el=document.getElementById('plan-days');
   if(!plan){ el.innerHTML=`<div class="legend"><span class="big">🍲</span>${LT('noplan')}</div>`; return }
-  let html = dayDiff(plan.start)<0 ? `<div class="legend">${LT('stale')}</div>` : '';
-  if(trashed.length>=10) html+=`<div class="legend" style="border-color:var(--mirchi);background:var(--mirchi-soft);color:#7a2618"><b>${LT('trashFull').replace('{n}',trashed.length)}</b></div>`;
+  let html='';
+  if(isCook()){
+    html+=`<div class="legend" style="border-color:var(--dhaniya);background:#e9f3ec;color:#1f5135">${LT('cookViewBanner')}</div>`;
+  } else if(planLocked){
+    html+=`<div class="legend" style="border-color:var(--haldi);background:var(--haldi-soft)"><b>🔒 ${LT('lockedBanner')}</b><br><button class="btn ghost small" style="margin-top:8px" onclick="requestUnlock()">${LT('unlockPlan')}</button></div>`;
+  } else {
+    if(dayDiff(plan.start)<0) html+=`<div class="legend">${LT('stale')}</div>`;
+    if(trashed.length>=10) html+=`<div class="legend" style="border-color:var(--mirchi);background:var(--mirchi-soft);color:#7a2618"><b>${LT('trashFull').replace('{n}',trashed.length)}</b></div>`;
+    html+=`<div style="padding:4px 4px 10px"><button class="btn primary" style="width:100%" onclick="lockPlan()">${LT('lockPlan')}</button></div>`;
+  }
   plan.days.forEach((d,di)=>{
     html+=`<div class="day ${di===0?'today':''} ${isWeekend(d.date)?'wknd':''}">
       <div class="dayhead"><span class="dayname">${dayLabel(d.date)}</span><span class="daydate">${fmtDate(d.date)}${isWeekend(d.date)?' · '+LT('weekend'):''}</span></div>
@@ -1396,7 +1534,7 @@ function setSide(di,meal,type,id){
   plan.days[di][meal].sidesEdited=true;
   if(!plan.days[di][meal].sides) plan.days[di][meal].sides={};
   if(id) plan.days[di][meal].sides[type]=id; else delete plan.days[di][meal].sides[type];
-  store.set('plan',plan); renderPlan(); openSidesEditor(di,meal);
+  savePlan(); renderPlan(); openSidesEditor(di,meal);
 }
 function openSideRecipe(id,di,meal){
   const s=sideById(id); if(!s) return;
@@ -1632,7 +1770,7 @@ function buildGrocery(){
   if(zpairs) addItem('Chicken breast / fish fillet (for Zoya)','चिकन ब्रेस्ट / मछली (ज़ोया के लिए)',(250*zpairs)+' g','meat');
   const manual=grocery.items.filter(i=>i.manual&&!i.checked);
   grocery={items:Object.values(map).map(i=>({en:i.en,hi:i.hi,q:[...new Set(i.q)].join(' + '),c:i.c,checked:false})).concat(manual)};
-  store.set('grocery',grocery); renderGrocery(); toast(LT('listReady'));
+  saveGrocery(); renderGrocery(); toast(LT('listReady'));
 }
 function renderGrocery(){
   const el=document.getElementById('glist');
@@ -1646,11 +1784,11 @@ function renderGrocery(){
   });
   el.innerHTML=h;
 }
-function toggleG(i){ grocery.items[i].checked=!grocery.items[i].checked; store.set('grocery',grocery); renderGrocery() }
+function toggleG(i){ grocery.items[i].checked=!grocery.items[i].checked; saveGrocery(); renderGrocery() }
 function addGroceryItem(){
   const inp=document.getElementById('gadd'); const v=inp.value.trim(); if(!v) return;
   grocery.items.push({en:v,hi:v,q:'',c:'pantry',checked:false,manual:true});
-  store.set('grocery',grocery); inp.value=''; renderGrocery();
+  saveGrocery(); inp.value=''; renderGrocery();
 }
 function groceryText(lg){
   const left=grocery.items.filter(i=>!i.checked);
@@ -1727,6 +1865,19 @@ function openSettings(){
     <div class="pgrid" style="margin-top:8px">
       ${[['off','bfOff'],['weekend','bfWknd'],['all','bfDaily']].map(([v,k])=>`<button class="pchip ${(settings.breakfast===v||(v==='all'&&settings.breakfast===true)||(v==='off'&&settings.breakfast===false))?'on':''}" onclick="setBfMode('${v}')">${LT(k)}</button>`).join('')}
     </div></div>
+  <h3>${LT('syncHead')}</h3>
+  <div class="frm">
+    <label>${LT('syncRole')}</label>
+    <div class="pgrid" style="margin-bottom:8px">
+      <button class="pchip ${isOwner()?'on':''}" onclick="setRole('owner')">${LT('roleOwner')}</button>
+      <button class="pchip ${isCook()?'on':''}" onclick="setRole('cook')">${LT('roleCook')}</button>
+    </div>
+    <label>${LT('syncUrl')}</label><input type="text" id="sy-url" value="${esc(SYNC.url||'')}" placeholder="https://xxxx.supabase.co">
+    <label>${LT('syncKey')}</label><input type="text" id="sy-key" value="${esc(SYNC.key||'')}" placeholder="sb_publishable_… or anon key">
+    <label>${LT('syncHouse')}</label><input type="text" id="sy-house" value="${esc(SYNC.house||'')}" placeholder="bhasin-kitchen">
+    <div class="btnrow"><button class="btn primary small" onclick="saveSync()">${LT('syncSave')}</button></div>
+    <div class="hint" style="font-size:12px;color:var(--muted)">${LT('syncNote')}</div>
+  </div>
   <h3>${LT('data')}</h3>
   <div class="btnrow"><button class="btn ghost small" onclick="copyPickData()">${LT('pickData')}</button></div>
   <div class="btnrow">
@@ -1760,6 +1911,16 @@ function saveQuota(){
   settings.quota=q; store.set('settings',settings);
 }
 function setBfMode(v){ settings.breakfast=(v==='off'?false:v); store.set('settings',settings); openSettings(); renderPlan() }
+function setRole(r){ SYNC.role=r; store.set('sync',SYNC); openSettings(); }
+function saveSync(){
+  SYNC.url=(document.getElementById('sy-url').value||'').trim().replace(/\/$/,'');
+  SYNC.key=(document.getElementById('sy-key').value||'').trim();
+  SYNC.house=(document.getElementById('sy-house').value||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  store.set('sync',SYNC);
+  closeSheet();
+  if(syncOn()){ toast(LT('syncSave')); initSync(); } 
+  renderPlan();
+}
 function copyPickData(){
   const sum={};
   pickLog.forEach(e=>{
@@ -1793,7 +1954,7 @@ function restore(inp){
     const d=JSON.parse(rd.result);
     if(d.custom) {custom=d.custom; store.set('custom',custom)}
     if(d.hidden) {hidden=d.hidden; store.set('hidden',hidden)}
-    if(d.plan!==undefined) {plan=d.plan; store.set('plan',plan)}
+    if(d.plan!==undefined) {plan=d.plan; savePlan()}
     if(d.grocery) {grocery=d.grocery; store.set('grocery',grocery)}
     if(d.pantry) {pantryHave=d.pantry; store.set('pantry',pantryHave)}
     if(d.settings) {settings=d.settings; if(!settings.quota) settings.quota={chicken:5,fish:4,beef:2,mutton:1,pork:1}; store.set('settings',settings)}
@@ -1850,6 +2011,7 @@ function toast(msg){
 function renderAll(){ applyLang(); renderPlan(); renderFilters(); renderRecipes(); renderGrocery(); renderPantry(); renderMatches() }
 normalizePlan();
 renderAll();
+initSync();
 </script>
 </body>
 </html>
