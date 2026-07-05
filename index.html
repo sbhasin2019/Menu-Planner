@@ -12,23 +12,43 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Ghar Menu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Karla:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --aam:#FAEDD4; --card:#FFFAF0; --ink:#20242F; --muted:#6B6353; --line:#E4D6B8;
-  --mirchi:#D6452C; --mirchi-soft:#F9DFD6;
-  --haldi:#EFA51E; --haldi-soft:#FBEAC4;
-  --dhaniya:#2E7D4F; --dhaniya-soft:#DDEDD9;
-  --steel:#2B5C8A; --steel-soft:#DCE7F2;
-  --r:16px;
-  --disp:'Baloo 2','Noto Sans Devanagari',system-ui,sans-serif;
-  --body-font:Karla,'Noto Sans Devanagari',system-ui,sans-serif;
+  /* ---- surfaces ---- */
+  --paper:#F6EDD8; --grain:rgba(51,41,28,0.055);
+  --card:#FCF7EA; --card-active:#FFFDF6;
+  --saved-fill:#EFF1DA; --thali-bg:#FBF2DC; --warn-bg:#F6E7BC;
+  --ink-surface:#33291C;
+  /* ---- ink ---- */
+  --ink:#33291C; --ink-muted:#7A6B52; --ink-faint:#A0906F; --ink-label:#8A7A5E; --ink-on-dark:#FCF7EA;
+  /* ---- lines ---- */
+  --c-line-strong:#33291C; --c-line-mid:#DCCBA6; --c-line-soft:#EAE0C6; --c-line-skip:#C6B48D;
+  /* ---- state & action ---- */
+  --mirchi:#BE3D2A; --dhaniya:#477C43; --saved-border:#A4BC92;
+  --haldi:#D99A1F; --haldi-deep:#A07617; --warn-border:#E4CB84; --warn-text:#7C5A10;
+  /* ---- protein dots ---- */
+  --p-veg:#477C43; --p-egg:#D99A1F; --p-chicken:#B26A2B; --p-fish:#44688A; --p-mutton:#8A3B33; --p-pork:#A66A5A;
+  /* ---- radius ---- */
+  --r-frame:24px; --r-ticket:18px; --r-ticket-sm:16px; --r-bubble:14px; --r-strip:10px; --r-chip:999px; --r:16px;
+  /* ---- shadow ---- */
+  --shadow-print:0 1px 0 rgba(51,41,28,0.10); --shadow-button:0 1px 0 rgba(51,41,28,0.25);
+  /* ---- fonts ---- */
+  --font-display:'Baloo 2','Mukta','Noto Sans Devanagari',system-ui,sans-serif;
+  --font-text:'Mukta','Noto Sans Devanagari',-apple-system,'Segoe UI',sans-serif;
+  --disp:var(--font-display);
+  --body-font:var(--font-text);
+  /* ---- legacy aliases (migrating incrementally) ---- */
+  --aam:var(--paper); --muted:var(--ink-muted); --line:var(--c-line-mid);
+  --mirchi-soft:#F9DFD6; --haldi-soft:var(--warn-bg); --dhaniya-soft:var(--saved-fill);
+  --steel:#44688A; --steel-soft:#DCE7F2;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
-body{background:var(--aam); background-image:radial-gradient(rgba(32,36,47,.045) 1px, transparent 1.1px); background-size:22px 22px;
-  color:var(--ink); font-family:var(--body-font); font-size:16px; line-height:1.45; padding-bottom:92px}
-body.hi{font-family:'Noto Sans Devanagari',Karla,system-ui,sans-serif}
+body{background:var(--paper); background-image:radial-gradient(var(--grain) 1px, transparent 1px); background-size:14px 14px;
+  color:var(--ink); font-family:var(--font-text); font-size:16px; line-height:1.45; padding-bottom:92px}
+body.hi{font-family:var(--font-text)}
 .wrap{max-width:680px; margin:0 auto; padding:0 14px}
 header.app{padding:18px 0 8px; display:flex; align-items:center; justify-content:space-between; gap:10px}
 h1.brand{font-family:var(--disp); font-weight:800; font-size:27px; margin:0; letter-spacing:-.3px}
@@ -54,26 +74,31 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .btn.small{padding:6px 12px; font-size:13px}
 .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px}
 /* quota dabba */
-.qbar{background:var(--ink); border-radius:var(--r); padding:11px 14px; margin-bottom:16px; display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px}
-.qbar .qi{display:flex; align-items:center; gap:6px; font-weight:700; color:rgba(250,237,212,.85); font-family:var(--disp)}
-.qbar .qi .meter{display:flex; gap:2.5px; margin-left:2px}
-.qbar .qi .meter i{width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor;display:inline-block}
-.qbar .qi .meter i.f{background:currentColor}
-.qbar .qi.over{color:#FF9B85}
-.qbar .qi.met{color:var(--haldi)}
+.qbar{background:var(--card); border:1px solid var(--c-line-mid); border-radius:var(--r-ticket); padding:12px 16px 13px; margin-bottom:16px; box-shadow:var(--shadow-print)}
+.qled-head{font-family:var(--font-text); font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-label); margin-bottom:9px}
+.qled-grid{display:grid; grid-template-columns:1fr 1fr; gap:7px 18px}
+.qrow{display:flex; align-items:center; gap:8px; font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink)}
+.qrow .qname{display:flex; align-items:center; gap:6px; min-width:64px}
+.qrow .qmeter{display:flex; gap:3px; flex:1}
+.qrow .qmeter i{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--c-line-skip);display:inline-block}
+.qrow .qmeter i.f{background:var(--ink-muted);border-color:var(--ink-muted)}
+.qrow .qtag{font-size:11.5px; color:var(--ink-muted); font-weight:600; white-space:nowrap}
+.qrow.met .qtag{color:var(--dhaniya)} .qrow.met .qmeter i.f{background:var(--dhaniya);border-color:var(--dhaniya)}
+.qrow.over .qtag{color:var(--mirchi)} .qrow.over .qmeter i.f{background:var(--mirchi);border-color:var(--mirchi)}
 /* day cards = menu tickets */
-.day{background:var(--card); border:2px solid var(--ink); border-radius:var(--r); box-shadow:5px 5px 0 rgba(32,36,47,.14); margin-bottom:18px; overflow:hidden; animation:dealIn .4s cubic-bezier(.2,.7,.3,1.1) both}
-.day:nth-child(2){animation-delay:.04s}.day:nth-child(3){animation-delay:.08s}.day:nth-child(4){animation-delay:.12s}
-.day:nth-child(5){animation-delay:.16s}.day:nth-child(6){animation-delay:.2s}.day:nth-child(7){animation-delay:.24s}.day:nth-child(8){animation-delay:.28s}
-@keyframes dealIn{from{opacity:0; transform:translateY(16px) rotate(.4deg)}to{opacity:1; transform:none}}
-.day .dayhead{display:flex; align-items:baseline; gap:10px; padding:9px 16px 8px; background:var(--ink); color:var(--aam); border-bottom:2px dashed var(--line); position:relative}
-.day .dayname{font-family:var(--disp); font-weight:800; font-size:19px; color:var(--haldi); letter-spacing:.2px}
-.day .daydate{color:rgba(250,237,212,.7); font-size:12.5px; font-family:var(--disp)}
+.day{background:var(--card); border:1px solid var(--c-line-mid); border-radius:var(--r-ticket); box-shadow:var(--shadow-print); margin-bottom:16px; overflow:hidden; animation:dealIn .32s cubic-bezier(.2,.7,.3,1) both}
+.day:nth-child(2){animation-delay:.03s}.day:nth-child(3){animation-delay:.06s}.day:nth-child(4){animation-delay:.09s}
+.day:nth-child(5){animation-delay:.12s}.day:nth-child(6){animation-delay:.15s}.day:nth-child(7){animation-delay:.18s}.day:nth-child(8){animation-delay:.21s}
+@keyframes dealIn{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+.day .dayhead{display:flex; align-items:baseline; gap:10px; padding:11px 18px 10px; background:var(--ink-surface); color:var(--ink-on-dark); position:relative}
+.day .dayname{font-family:var(--font-display); font-weight:700; font-size:19px; color:var(--ink-on-dark); letter-spacing:.2px}
+.day .dayname .hi{color:var(--ink-on-dark); opacity:.92}
+.day .daydate{color:rgba(252,247,234,.72); font-size:12px; font-family:var(--font-text); font-weight:500; margin-left:auto}
 .day.today .dayhead{background:var(--mirchi)}
-.day.today .dayname{color:#FFFAF0}
-.day.today .daydate{color:rgba(255,250,240,.85)}
-.day.wknd:not(.today) .dayhead{background:var(--dhaniya)}
-.day.wknd:not(.today) .dayname{color:#FFFAF0}
+.day.today .dayname{color:#FFF}
+.day.wknd:not(.today) .dayhead{background:var(--haldi)}
+.day.wknd:not(.today) .dayname{color:var(--ink-surface)}
+.day.wknd:not(.today) .daydate{color:rgba(51,41,28,.7)}
 .slot{padding:10px 12px 10px 13px; border-bottom:1px solid var(--line); border-left:5px solid var(--rail,transparent)}
 .slot:last-child{border-bottom:none}
 .slot .top{display:flex; align-items:center; gap:10px}
@@ -87,25 +112,71 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .iconbtn{border:none;background:none;font-size:16px;cursor:pointer;padding:6px;color:var(--muted);border-radius:8px;transition:transform .1s}
 .iconbtn:active{transform:scale(1.25)}
 .iconbtn.locked{color:var(--haldi); filter:none}
-.mealblock{border-bottom:1px solid var(--line); padding-bottom:10px}
-.mealblock:last-child{border-bottom:none; padding-bottom:6px}
-.mealhead{display:flex; align-items:baseline; gap:8px; padding:10px 16px 4px; font-family:var(--disp); font-size:11px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:var(--mirchi)}
-.mealhead small{font-weight:400; text-transform:none; letter-spacing:0; font-size:10.5px; color:var(--muted)}
-.mealhead .changelink{margin-left:auto; color:var(--steel); cursor:pointer; text-transform:none; letter-spacing:0; font-size:12px; text-decoration:underline; font-weight:700}
-.pickhint{font-size:11px; color:var(--muted); padding:0 16px 7px}
-.dishbub{display:flex; align-items:center; gap:10px; margin:0 12px 7px; padding:10px 12px; border:2px solid var(--line); border-radius:13px; background:var(--card); cursor:pointer; transition:border-color .1s, background .1s, box-shadow .1s}
-.dishbub.on{border-color:var(--ink); background:var(--haldi-soft); box-shadow:2px 2px 0 var(--ink)}
-.dishbub .tickc{width:22px; height:22px; border-radius:50%; border:2px solid var(--line); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#fff; background:var(--card)}
-.dishbub.on .tickc{background:var(--dhaniya); border-color:var(--ink)}
-.dishbub .infobtn{border:none; background:none; font-size:15px; color:var(--steel); cursor:pointer; padding:3px 2px; flex-shrink:0; filter:grayscale(1) opacity(.5)}
-.dishbub .infobtn.liked{filter:none; opacity:1; transform:scale(1.15)}
+.mealblock{padding:0 0 var(--gap-meal,22px)}
+.mealblock:last-child{padding-bottom:6px}
+.mealhead{display:flex; align-items:baseline; gap:8px; padding:12px 16px 6px; font-family:var(--font-text); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-label)}
+.mealhead.open{color:var(--mirchi)}
+.mealhead small{font-weight:500; text-transform:none; letter-spacing:0; font-size:10.5px; color:var(--ink-muted)}
+.mealhead .changelink{margin-left:auto; color:var(--ink-label); cursor:pointer; text-transform:none; letter-spacing:0; font-size:13px; font-weight:600; font-family:var(--font-text)}
+.mealhead .changelink .ck{text-decoration:underline; text-underline-offset:3px}
+/* bilingual lockup */
+.lock2 .en{font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.25; color:var(--ink)}
+.lock2 .hi{font-family:var(--font-display); font-weight:600; font-size:16px; line-height:1.35; color:var(--ink)}
+.ometa{font-family:var(--font-text); font-weight:500; font-size:12.5px; line-height:1.4; color:var(--ink-muted); margin-top:2px; display:flex; gap:4px; align-items:center; flex-wrap:wrap}
+.ometa .sep{opacity:.5}
+.pdot{width:8px; height:8px; border-radius:50%; display:inline-block; flex-shrink:0}
+.eff{color:var(--haldi); letter-spacing:1px}
+/* dish bubble */
+.dishbub{display:flex; align-items:flex-start; gap:12px; margin:0 12px 10px; padding:12px 14px; border:1.5px solid var(--c-line-mid); border-radius:var(--r-bubble); background:var(--card); cursor:pointer; min-height:72px; transition:border-color .12s ease-out, background .12s ease-out, box-shadow .12s}
+.dishbub.on{border:2px solid var(--mirchi); background:var(--card-active); box-shadow:var(--shadow-print)}
+.dishbub .seal{width:24px; height:24px; border-radius:50%; border:2px solid var(--c-line-skip); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--ink-on-dark); background:var(--card-active); margin-top:1px; transition:transform .12s}
+.dishbub.on .seal{background:var(--mirchi); border-color:var(--mirchi); transform:scale(1)}
+.dishbub .body{flex:1; min-width:0}
+.dishbub .liked-heart{color:var(--mirchi); font-size:14px; flex-shrink:0; margin-top:2px}
+.dishbub .ovf{border:none; background:none; font-size:20px; line-height:1; color:var(--ink-label); cursor:pointer; flex-shrink:0; padding:6px; margin:-6px -6px 0 0; letter-spacing:1px}
+/* idea bubble */
+.dishbub.idea{border-style:dashed; background:var(--card-active)}
+.dishbub.idea .seal{background:var(--haldi); border-color:var(--haldi)}
 .oname{font-family:var(--disp); font-weight:700; font-size:15px; line-height:1.25}
 .ometa{font-size:11.5px; color:var(--muted); display:flex; gap:5px; align-items:center; flex-wrap:wrap; margin-top:1px}
-.saverow{display:flex; gap:7px; padding:4px 16px 2px; flex-wrap:wrap}
-.savedrow{display:flex; align-items:center; gap:10px; padding:7px 16px; cursor:pointer}
-.savedrow .oname{color:var(--ink)}
-.sides{margin:8px 0 0 66px; font-size:12.5px; color:#5d5443; background:var(--haldi-soft); border:1.5px dashed var(--haldi); border-radius:10px; padding:6px 10px; cursor:pointer; line-height:1.5}
-.sides b{color:var(--mirchi); font-weight:700}
+/* meal footer + primary save */
+.mealfoot{padding:2px 16px 0}
+.mealfoot .quiet{display:flex; gap:16px; margin-bottom:8px}
+.mealfoot .qlink{font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink-label); cursor:pointer}
+.saverow{display:flex; gap:10px; padding:2px 16px 2px; align-items:center; flex-wrap:wrap}
+.btn-save{font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ink-on-dark); background:var(--mirchi); border:none; border-radius:var(--r-chip); padding:11px 26px; min-height:44px; cursor:pointer; box-shadow:var(--shadow-button)}
+.skip-link{font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink-label); cursor:pointer; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; padding:6px}
+/* saved meal row */
+.savedrow{position:relative; display:flex; align-items:flex-start; gap:12px; margin:0 12px 8px; padding:12px 14px 12px 16px; border:1.5px solid var(--saved-border); border-left:6px solid var(--dhaniya); border-radius:var(--r-bubble); background:var(--saved-fill); cursor:pointer}
+.savedrow .seal{width:28px; height:28px; border-radius:50%; background:var(--dhaniya); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:var(--ink-on-dark); margin-top:1px}
+.savedrow .body{flex:1; min-width:0}
+.savedrow .edit{font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink-label); cursor:pointer; flex-shrink:0; padding:4px}
+.savedrow.idea{border-left-color:var(--haldi)}
+.savedrow.idea .seal{background:var(--haldi)}
+.thali-sum{margin-top:6px; padding-top:6px; border-top:1px dashed var(--c-line-soft); font-family:var(--font-text); font-size:12px; color:var(--haldi-deep)}
+/* skipped row */
+.skiprow{display:flex; align-items:center; gap:12px; margin:0 12px 8px; padding:12px 14px; border:1.5px dashed var(--c-line-skip); border-radius:var(--r-bubble); background:transparent}
+.skiprow .seal{width:24px; height:24px; border-radius:50%; border:1.5px dashed var(--c-line-skip); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--ink-faint)}
+.skiprow .lbl{flex:1; font-family:var(--font-display); font-weight:600; font-size:16px; color:var(--ink-faint)}
+.skiprow .undo{font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink-faint); cursor:pointer; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; padding:6px}
+/* warning chip (below row) */
+.warnchip{display:inline-flex; align-items:center; gap:4px; margin:2px 0 6px 66px; font-family:var(--font-text); font-size:12px; font-weight:600; color:var(--warn-text); background:var(--warn-bg); border:1px solid var(--warn-border); border-radius:var(--r-chip); padding:3px 10px}
+/* thali / sides strip */
+.thali{margin:-4px 12px 8px 48px; background:var(--thali-bg); border:1px solid #EAD9AE; border-left:4px solid var(--haldi); border-radius:var(--r-strip); padding:9px 12px; cursor:pointer}
+.thali .th-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px}
+.thali .th-lbl{font-family:var(--font-text); font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--haldi-deep)}
+.thali .th-change{font-family:var(--font-text); font-size:12px; font-weight:600; color:var(--haldi-deep)}
+.thali .th-chips{display:flex; gap:5px; flex-wrap:wrap}
+.thali .th-chip{background:var(--card-active); border:1px solid #EAD9AE; border-radius:var(--r-chip); font-size:12px; padding:2px 10px; color:var(--ink)}
+.thali.empty .th-chips{opacity:.65; font-style:normal}
+/* dish overflow menu */
+.ovfmenu{display:flex; flex-direction:column; gap:2px; margin-top:4px}
+.ovfmenu button{text-align:left; border:none; background:none; font-family:var(--font-text); font-size:14px; font-weight:600; color:var(--ink); padding:14px 6px; cursor:pointer; border-bottom:1px solid var(--c-line-soft); min-height:48px}
+.ovfmenu button:last-child{border-bottom:none}
+.ovfmenu button.danger{color:var(--mirchi)}
+/* protein-change pill */
+.protpill{display:inline-flex; align-items:center; gap:5px; background:var(--card-active); border:1.5px solid var(--c-line-mid); border-radius:var(--r-chip); padding:5px 12px; font-family:var(--font-text); font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer; margin-left:auto}
+.protpill .car{font-size:10px; color:var(--ink-label)}
 .empty-slot{color:var(--muted); font-style:italic; font-size:14px}
 .chip{display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; background:var(--dhaniya-soft); color:var(--dhaniya)}
 .chip.cuisine{background:var(--steel-soft); color:var(--steel)}
@@ -371,6 +442,13 @@ const T = {
   ideaNote:['Goes on the menu as-is. Claude will turn recurring ideas into full recipes at the next review.','मेनू में ऐसे ही जाएगी। अगली समीक्षा में Claude बार-बार आने वाली डिश की पूरी रेसिपी बना देगा।'],
   addBtn:['Add','जोड़ें'],
   changeProt:['Protein','प्रोटीन'],
+  thaliLabel:['THALI · साथ में','थाली · साथ में'],
+  changeSides:['Change sides ›','साइड बदलें ›'],
+  qHead:['This week\u2019s proteins','हफ़्ते का हिसाब'],
+  qLeft:['left','बाकी'], qDone:['done','पूरा'], qOver:['over','ज़्यादा'], qPlanned:['planned','तय'],
+  replaceOpt:['Replace this option','यह विकल्प बदलें'],
+  removeDish:['Remove','हटाएँ'],
+  unlike:['Remove like','पसंद हटाएँ'],
   chooseProt:['What should this meal be?','यह मील किस चीज़ की हो?'],
   protVegOpt:['Dal / Veg','दाल / वेज'],
   protNote:['Beef, mutton & pork at a family meal will show a "for Zoya" line automatically.','फैमिली मील में बीफ़/मटन/पोर्क पर "ज़ोया के लिए" लाइन अपने आप जुड़ेगी।'],
@@ -806,6 +884,100 @@ SEED.push(
 {id:'y12',n:['Home-style Beef Curry','घर वाली बीफ़ करी'],cz:'Indian',p:'beef',co:['lunch'],ef:2,tm:70,kc:430,ev:false,needs:['beef','onions','tomatoes'],
  ing:[['Beef (curry cut)','बीफ़ (करी कट)','700 g','meat'],['Onions','प्याज़','3','veg'],['Tomatoes, ginger-garlic','टमाटर, अदरक-लहसुन','','veg'],['Garam masala, black pepper, curry leaves','गरम मसाला, काली मिर्च, करी पत्ता','','pantry'],['Potatoes (optional)','आलू (चाहें तो)','2','veg']],
  st:[['Deep-brown the onions; masala base as usual.','प्याज़ गहरा भूनें; हमेशा वाला मसाला बेस।'],['Beef + potato; pressure cook 5-6 whistles.','बीफ़ + आलू; 5-6 सीटी।'],['Reduce open till the gravy coats; pepper to finish.','खुला गाढ़ा करें; आख़िर में काली मिर्च। (वीकडे लंच।)']]}
+);
+
+SEED.push(
+{"id":"z1","n":["Chicken Shawarma Bowl","चिकन शवरमा बाउल"],"cz":"Other","p":"chicken","co":["dinner","lunch"],"ef":2,"tm":45,"kc":480,"ev":false,"fest":true,"needs":["chicken","yogurt","garlic"],"gn":["Marinate ahead; the toum (garlic sauce) is what makes it.","पहले से मैरिनेट करें; असली बात है टूम (लहसुन सॉस)।"],"ing":[["Chicken thigh (boneless)","चिकन थाई (बोनलेस)","700 g","meat"],["Yogurt, lemon, garlic, cumin, paprika","दही, नींबू, लहसुन, जीरा, पैपरिका","","dairy"],["Rice or pita","चावल या पीटा","","pantry"],["Garlic-toum + pickles + salad","लहसुन टूम + अचार + सलाद","","veg"]],"st":[["Marinate chicken in yogurt-spice 2 hrs+.","चिकन दही-मसाले में 2 घंटे+।"],["Sear hot, slice thin.","तेज़ आँच पर सेंककर पतला काटें।"],["Bowl: rice, chicken, salad, garlic sauce, pickle.","बाउल: चावल, चिकन, सलाद, लहसुन सॉस, अचार।"]]},
+{"id":"z2","n":["Lamb Kofta (Med spiced)","लैम्ब कोफ्ता"],"cz":"Other","p":"mutton","co":["lunch"],"ef":2,"tm":50,"kc":520,"ev":false,"needs":["mutton-keema","onions"],"ing":[["Mutton keema","मटन कीमा","600 g","meat"],["Onion, garlic, parsley, mint","प्याज़, लहसुन, अजमोद, पुदीना","","veg"],["Cumin, coriander, cinnamon, allspice","जीरा, धनिया, दालचीनी","","pantry"]],"st":[["Knead keema with grated onion, herbs, spices.","कीमा कद्दूकस प्याज़, जड़ी-बूटी, मसालों से गूंधें।"],["Shape on skewers or as fingers.","सीख पर या उँगली जैसे आकार दें।"],["Grill/pan-sear; serve with rice + salad.","ग्रिल करें; चावल + सलाद के साथ।"]]},
+{"id":"z3","n":["Falafel & Tahini Plate","फलाफल प्लेट"],"cz":"Other","p":"veg","co":["lunch"],"ef":2,"tm":45,"kc":420,"ev":false,"isDal":true,"needs":["chole"],"gn":["Soak chana overnight — do NOT use boiled, the texture goes wrong.","चना रात भर भिगोएँ — उबला नहीं, बनावट बिगड़ जाती है।"],"ing":[["Dried chickpeas (soaked, not cooked)","सूखे चने (भीगे, उबले नहीं)","2 cups","pantry"],["Garlic, parsley, coriander, cumin","लहसुन, अजमोद, धनिया, जीरा","","veg"],["Tahini, lemon","ताहिनी, नींबू","","pantry"],["Pita, salad","पीटा, सलाद","","bakery"]],"st":[["Blitz soaked chana + herbs + spices to coarse paste.","भीगे चने + जड़ी-बूटी + मसाले दरदरा पीसें।"],["Shape balls, rest 20 min, fry crisp.","गोले बनाएँ, 20 मिनट रखें, कुरकुरा तलें।"],["Pita, salad, lashings of tahini.","पीटा, सलाद, खूब ताहिनी।"]]},
+{"id":"z4","n":["Greek Lemon Chicken & Potatoes","ग्रीक लेमन चिकन व आलू"],"cz":"Other","p":"chicken","co":["dinner"],"ef":1,"tm":60,"kc":520,"ev":false,"fest":true,"onepot":true,"needs":["chicken","potatoes","lemon"],"ing":[["Chicken (whole legs/thighs)","चिकन (टांगें)","800 g","meat"],["Potatoes (wedges)","आलू (फाँकें)","5","veg"],["Lemon, garlic, oregano, olive oil","नींबू, लहसुन, ऑरिगैनो, ऑलिव ऑयल","","pantry"]],"st":[["Toss everything in lemon-garlic-oregano-oil.","सब कुछ नींबू-लहसुन-ऑरिगैनो-तेल में मिलाएँ।"],["One tray, 200°C, 50 min, turning once.","एक ट्रे, 200°C, 50 मिनट, एक बार पलटें।"],["Crispy potatoes soak the lemon juices.","कुरकुरे आलू नींबू का रस सोख लेते हैं।"]]},
+{"id":"z5","n":["Shish Tawook (garlic chicken skewers)","शिश तावूक"],"cz":"Other","p":"chicken","co":["dinner"],"ef":2,"tm":45,"kc":430,"ev":false,"fest":true,"needs":["chicken","yogurt"],"ing":[["Chicken breast (cubed)","चिकन ब्रेस्ट (टुकड़े)","700 g","meat"],["Yogurt, garlic, lemon, tomato paste","दही, लहसुन, नींबू, टमाटर पेस्ट","","dairy"],["Rice/pita, garlic sauce","चावल/पीटा, लहसुन सॉस","","pantry"]],"st":[["Marinate cubes in yogurt-garlic-lemon 3 hrs.","टुकड़े दही-लहसुन-नींबू में 3 घंटे।"],["Skewer, grill till charred at edges.","सीख पर, किनारे जलने तक ग्रिल।"],["With rice or pita and garlic sauce.","चावल/पीटा और लहसुन सॉस के साथ।"]]},
+{"id":"z6","n":["Baked Falafel-spiced Fish","बेक्ड मछली (मेड मसाला)"],"cz":"Other","p":"fish","co":["dinner"],"ef":1,"tm":30,"kc":360,"ev":false,"needs":["fish","lemon"],"ing":[["Fish fillets","मछली फिले","600 g","meat"],["Cumin, coriander, garlic, lemon, olive oil","जीरा, धनिया, लहसुन, नींबू, तेल","","pantry"],["Salad, pita","सलाद, पीटा","","bakery"]],"st":[["Rub fish with the spice-lemon-oil.","मछली पर मसाला-नींबू-तेल मलें।"],["Bake 200°C 12-14 min.","200°C पर 12-14 मिनट बेक करें।"],["Salad + pita on the side.","साथ सलाद + पीटा।"]]},
+{"id":"z7","n":["Shakshuka","शक्शूका"],"cz":"Other","p":"egg","co":["breakfast","dinner"],"ef":1,"tm":30,"kc":340,"ev":true,"needs":["eggs","tomatoes"],"gn":["A dinner egg dish — for family dinners Aveer needs an egg-free alternative as eggs are visible here.","डिनर में अंडा दिखता है — फैमिली डिनर पर अवीर के लिए विकल्प चाहिए।"],"ing":[["Eggs","अंडे","6","dairy"],["Tomatoes, onion, capsicum","टमाटर, प्याज़, शिमला","","veg"],["Cumin, paprika, chilli","जीरा, पैपरिका, मिर्च","","pantry"],["Bread","ब्रेड","","bakery"]],"st":[["Simmer spiced tomato-pepper base till thick.","मसालेदार टमाटर-शिमला बेस गाढ़ा होने तक।"],["Crack eggs into wells; cover till just set.","अंडे फोड़कर डालें; ढककर सेट करें।"],["Crusty bread to scoop.","डुबाने के लिए ब्रेड।"]]},
+{"id":"z8","n":["Mujadara (lentils & rice)","मुजद्दरा (दाल-चावल)"],"cz":"Other","p":"veg","co":["lunch"],"ef":1,"tm":45,"kc":400,"ev":false,"isDal":true,"onepot":true,"needs":["dal","rice","onions"],"ing":[["Brown/green lentils","हरी दाल","1 cup","pantry"],["Rice","चावल","1 cup","pantry"],["Onions (lots, fried crisp)","प्याज़ (खूब, तले)","3","veg"],["Cumin","जीरा","","pantry"]],"st":[["Boil lentils till nearly soft.","दाल लगभग नरम उबालें।"],["Add rice + cumin + water; cook together.","चावल + जीरा + पानी; साथ पकाएँ।"],["Top with deeply fried onions.","ऊपर गहरे तले प्याज़।"]]},
+{"id":"z9","n":["Turkish Beef Pide (boat flatbread)","तुर्की बीफ़ पिडे"],"cz":"Other","p":"beef","co":["dinner"],"ef":3,"tm":75,"kc":560,"ev":false,"zpair":true,"needs":["beef-keema","maida"],"ing":[["Beef keema","बीफ़ कीमा","400 g","meat"],["Flour dough","मैदा आटा","","pantry"],["Onion, tomato, parsley, sumac","प्याज़, टमाटर, अजमोद","","veg"]],"st":[["Make a simple yeasted dough; rest.","खमीरी आटा बनाएँ; रखें।"],["Spiced keema filling; shape boats, fill.","मसालेदार कीमा; नाव आकार में भरें।"],["Bake hot 200°C till golden; for Zoya bake a chicken pide alongside.","200°C पर सुनहरा; ज़ोया के लिए चिकन पिडे साथ बनाएँ।"]]},
+{"id":"z10","n":["Harissa Roast Chicken","हरीसा रोस्ट चिकन"],"cz":"Other","p":"chicken","co":["dinner"],"ef":2,"tm":65,"kc":500,"ev":false,"fest":true,"needs":["chicken"],"ing":[["Chicken (whole cut up)","चिकन (कटा)","900 g","meat"],["Harissa / red chilli paste, honey, lemon","हरीसा/लाल मिर्च पेस्ट, शहद, नींबू","","pantry"],["Veg to roast under","नीचे भूनने की सब्ज़ी","","veg"]],"st":[["Coat chicken in harissa-honey-lemon.","चिकन हरीसा-शहद-नींबू में लपेटें।"],["Roast over veg 200°C 45 min.","सब्ज़ी पर 200°C 45 मिनट।"],["Rest, then serve with the pan juices.","रखकर, रस के साथ परोसें।"]]},
+{"id":"z11","n":["Stuffed Bell Peppers (rice & herbs)","भरवां शिमला मिर्च"],"cz":"Other","p":"veg","co":["dinner"],"ef":2,"tm":60,"kc":380,"ev":false,"needs":["rice","tomatoes"],"ing":[["Bell peppers","शिमला मिर्च","5","veg"],["Rice, onion, tomato, herbs, pine nuts/peanuts","चावल, प्याज़, टमाटर, जड़ी-बूटी, मूंगफली","","pantry"]],"st":[["Par-cook herby tomato rice.","जड़ी-बूटी वाला टमाटर चावल आधा पकाएँ।"],["Stuff peppers; bake covered 35 min.","मिर्च भरें; ढककर 35 मिनट बेक।"],["Drizzle olive oil to finish.","ऊपर ऑलिव ऑयल।"]]},
+{"id":"z12","n":["Lebanese Garlic Chicken Freekeh","फ्रीके चिकन"],"cz":"Other","p":"chicken","co":["dinner"],"ef":2,"tm":55,"kc":470,"ev":false,"onepot":true,"needs":["chicken"],"ing":[["Chicken pieces","चिकन","700 g","meat"],["Freekeh or broken wheat (dalia)","फ्रीके या दलिया","1.5 cups","pantry"],["Garlic, cinnamon, allspice, almonds","लहसुन, दालचीनी, बादाम","","pantry"]],"st":[["Brown chicken; set aside.","चिकन भूनें; अलग रखें।"],["Toast freekeh in the spices; add stock + chicken.","फ्रीके मसालों में भूनें; स्टॉक + चिकन।"],["Cook covered till grain is tender; top with almonds.","ढककर दाना नरम होने तक; ऊपर बादाम।"]]},
+{"id":"z13","n":["Spanakopita-style Spinach-Feta Bake","पालक-फेटा बेक"],"cz":"Other","p":"veg","co":["dinner"],"ef":2,"tm":55,"kc":420,"ev":false,"needs":["spinach","cheese"],"ing":[["Spinach (lots)","पालक (खूब)","3 bunches","veg"],["Feta/paneer + a little cheese","फेटा/पनीर + चीज़","200 g","dairy"],["Phyllo or thin chapati layers, butter","फिलो या पतली रोटी परतें, मक्खन","","bakery"]],"st":[["Wilt spinach, squeeze dry, mix with feta + herbs.","पालक भून-निचोड़ें, फेटा + जड़ी-बूटी मिलाएँ।"],["Layer with buttered phyllo/chapati.","मक्खन वाली परतों के साथ लगाएँ।"],["Bake 190°C till golden crisp.","190°C पर सुनहरा कुरकुरा।"]]},
+{"id":"z14","n":["Moroccan Chicken Tagine (olives & lemon)","मोरक्कन चिकन ताजीन"],"cz":"Other","p":"chicken","co":["dinner"],"ef":2,"tm":70,"kc":480,"ev":false,"fest":true,"onepot":true,"needs":["chicken","lemon"],"ing":[["Chicken pieces","चिकन","800 g","meat"],["Onion, garlic, ginger, turmeric, cinnamon","प्याज़, लहसुन, अदरक, हल्दी, दालचीनी","","veg"],["Preserved/fresh lemon, olives","नींबू, ज़ैतून","","pantry"],["Couscous or rice","कूसकूस या चावल","","pantry"]],"st":[["Spiced onion base; brown chicken in it.","मसालेदार प्याज़ बेस; चिकन भूनें।"],["Slow simmer with lemon + olives 40 min.","नींबू + ज़ैतून के साथ 40 मिनट।"],["Over couscous or rice.","कूसकूस/चावल पर।"]]},
+{"id":"z15","n":["Beef & Eggplant Moussaka","बीफ़-बैंगन मूसाका"],"cz":"Other","p":"beef","co":["dinner"],"ef":3,"tm":90,"kc":600,"ev":false,"zpair":true,"needs":["beef-keema","eggplant","milk"],"ing":[["Beef keema","बीफ़ कीमा","500 g","meat"],["Eggplant (sliced, roasted)","बैंगन (कटा, भुना)","3","veg"],["Tomato, onion, cinnamon","टमाटर, प्याज़, दालचीनी","","veg"],["White sauce (milk, butter, flour, cheese)","व्हाइट सॉस","","dairy"]],"st":[["Roast eggplant slices.","बैंगन भूनें।"],["Spiced beef-tomato ragu.","मसालेदार बीफ़-टमाटर।"],["Layer eggplant + ragu + white sauce; bake 40 min. Veg version for Zoya with lentils.","परतें लगाकर 40 मिनट; ज़ोया के लिए दाल वाला।"]]},
+{"id":"z16","n":["Chicken Chettinad","चिकन चेट्टीनाड"],"cz":"Indian","p":"chicken","co":["dinner","lunch"],"ef":2,"tm":55,"kc":490,"ev":false,"fest":true,"needs":["chicken","onions"],"ing":[["Chicken","चिकन","800 g","meat"],["Onion, tomato, coconut","प्याज़, टमाटर, नारियल","","veg"],["Chettinad masala (pepper, fennel, star anise, curry leaf)","चेट्टीनाड मसाला","","pantry"]],"st":[["Dry-roast & grind the spice blend.","मसाले भूनकर पीसें।"],["Onion-tomato-coconut base; add chicken.","प्याज़-टमाटर-नारियल बेस; चिकन।"],["Simmer in the dark masala till thick.","गहरे मसाले में गाढ़ा होने तक।"]]},
+{"id":"z17","n":["Bengali Fish Jhol","बंगाली माछेर झोल"],"cz":"Indian","p":"fish","co":["lunch"],"ef":2,"tm":40,"kc":330,"ev":false,"needs":["fish","potatoes"],"ing":[["Fish steaks (rohu/any)","मछली","600 g","meat"],["Potato, tomato","आलू, टमाटर","","veg"],["Panch phoron, turmeric, mustard oil","पांच फोरन, हल्दी, सरसों तेल","","pantry"]],"st":[["Lightly fry fish; set aside.","मछली हल्की तलें।"],["Temper panch phoron; potato + tomato + turmeric.","पांच फोरन तड़का; आलू-टमाटर-हल्दी।"],["Slip fish back into the thin curry.","पतली तरी में मछली वापस।"]]},
+{"id":"z18","n":["Hyderabadi Chicken Biryani","हैदराबादी चिकन बिरयानी"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":3,"tm":90,"kc":620,"ev":false,"fest":true,"onepot":true,"needs":["chicken","rice","yogurt"],"ing":[["Chicken","चिकन","900 g","meat"],["Basmati rice","बासमती","3 cups","pantry"],["Yogurt, fried onions, mint, saffron","दही, तले प्याज़, पुदीना, केसर","","dairy"]],"st":[["Marinate chicken in yogurt-spice-mint.","चिकन दही-मसाला-पुदीना में।"],["Layer par-boiled rice over chicken; dum 30 min.","आधे उबले चावल की परत; दम 30 मिनट।"],["Rest before opening — the steam finishes it.","खोलने से पहले रखें — भाप पूरा करती है।"]]},
+{"id":"z19","n":["Goan Prawn Curry","गोअन प्रॉन करी"],"cz":"Goan","p":"prawns","co":["dinner","lunch"],"ef":2,"tm":40,"kc":380,"ev":false,"needs":["prawns","coconut"],"ing":[["Prawns","झींगे","500 g","meat"],["Coconut, kokum/tamarind, red chilli","नारियल, कोकम, लाल मिर्च","","pantry"],["Rice","चावल","","pantry"]],"st":[["Grind coconut-chilli-spice masala.","नारियल-मिर्च मसाला पीसें।"],["Simmer masala, add prawns last 5 min.","मसाला उबालें, झींगे आख़िरी 5 मिनट।"],["Tangy with kokum; over rice.","कोकम से खट्टी; चावल पर।"]]},
+{"id":"z20","n":["Kerala Egg Roast","केरला एग रोस्ट"],"cz":"Indian","p":"egg","co":["dinner"],"ef":1,"tm":30,"kc":360,"ev":true,"needs":["eggs","onions"],"ing":[["Eggs (boiled)","अंडे (उबले)","6","dairy"],["Onion (lots), tomato","प्याज़ (खूब), टमाटर","","veg"],["Curry leaf, garam masala, coconut oil","करी पत्ता, गरम मसाला","","pantry"]],"st":[["Caramelise onions deep.","प्याज़ गहरे भूनें।"],["Tomato + masala till oil shines.","टमाटर + मसाला तेल छूटने तक।"],["Coat halved eggs; serve with appam/rice.","कटे अंडे लपेटें; अप्पम/चावल के साथ।"]]},
+{"id":"z21","n":["Amritsari Chole","अमृतसरी छोले"],"cz":"Indian","p":"veg","co":["lunch"],"ef":2,"tm":60,"kc":420,"ev":false,"isDal":true,"fest":true,"needs":["chole","onions"],"ing":[["Chickpeas (soaked)","काबुली चना (भीगे)","2 cups","pantry"],["Onion, tomato, tea bag (for colour)","प्याज़, टमाटर, चाय","","veg"],["Chole masala, anardana","छोले मसाला, अनारदाना","","pantry"]],"st":[["Pressure cook chana with a tea bag for colour.","चना चाय के साथ उबालें।"],["Dark onion-tomato masala; add chana.","गहरा प्याज़-टमाटर मसाला; चना।"],["Simmer; finish with anardana. Bhature/rice.","अनारदाना; भटूरे/चावल।"]]},
+{"id":"z22","n":["Mangalorean Ghee Roast Chicken","मंगलोरियन घी रोस्ट चिकन"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":2,"tm":50,"kc":520,"ev":false,"fest":true,"needs":["chicken"],"ing":[["Chicken","चिकन","800 g","meat"],["Kashmiri chilli, tamarind, ghee","कश्मीरी मिर्च, इमली, घी","","pantry"],["Garlic, curry leaf","लहसुन, करी पत्ता","","veg"]],"st":[["Grind roasted chilli-spice-tamarind paste.","भुनी मिर्च-इमली पेस्ट पीसें।"],["Cook chicken in generous ghee + paste.","चिकन घी + पेस्ट में पकाएँ।"],["Glossy, fiery, dry-ish. Neer dosa/rice.","चमकदार, तीखा। नीर डोसा/चावल।"]]},
+{"id":"z23","n":["Sindhi Kadhi (veg)","सिंधी कढ़ी"],"cz":"Indian","p":"veg","co":["lunch"],"ef":2,"tm":55,"kc":340,"ev":false,"isDal":true,"needs":["besan"],"ing":[["Besan, mixed veg (drumstick, okra, potato)","बेसन, मिक्स सब्ज़ी","","veg"],["Tamarind, curry leaf, tomato","इमली, करी पत्ता, टमाटर","","pantry"],["Rice","चावल","","pantry"]],"st":[["Roast besan, whisk into water — no lumps.","बेसन भूनकर पानी में घोलें।"],["Add tamarind + fried veg; simmer.","इमली + तली सब्ज़ी; उबालें।"],["Tangy, hearty; with rice.","खट्टी; चावल के साथ।"]]},
+{"id":"z24","n":["Railway Mutton Curry","रेलवे मटन करी"],"cz":"Indian","p":"mutton","co":["lunch"],"ef":2,"tm":80,"kc":470,"ev":false,"needs":["mutton","potatoes"],"ing":[["Mutton","मटन","700 g","meat"],["Potato, onion, tomato","आलू, प्याज़, टमाटर","","veg"],["Curry powder, tamarind, coconut milk","करी पाउडर, इमली, नारियल दूध","","pantry"]],"st":[["Brown mutton in spiced onion base.","मटन मसालेदार प्याज़ में भूनें।"],["Pressure cook with potato.","आलू के साथ कुकर।"],["Thin, tangy gravy — the old colonial recipe.","पतली, खट्टी तरी।"]]},
+{"id":"z25","n":["Paneer Lababdar","पनीर लबाबदार"],"cz":"Indian","p":"paneer","co":["dinner","lunch"],"ef":2,"tm":40,"kc":460,"ev":false,"fest":true,"needs":["paneer","tomatoes","cream"],"ing":[["Paneer","पनीर","400 g","dairy"],["Tomato, cashew, cream","टमाटर, काजू, क्रीम","","dairy"],["Kasuri methi, garam masala","कसूरी मेथी, गरम मसाला","","pantry"]],"st":[["Silky tomato-cashew gravy.","मलाईदार टमाटर-काजू तरी।"],["Fold in paneer cubes + crushed paneer.","पनीर टुकड़े + मसला पनीर।"],["Cream + kasuri methi finish.","क्रीम + कसूरी मेथी।"]]},
+{"id":"z26","n":["Achari Chicken","अचारी चिकन"],"cz":"Indian","p":"chicken","co":["lunch","dinner"],"ef":2,"tm":50,"kc":440,"ev":false,"needs":["chicken","yogurt"],"ing":[["Chicken","चिकन","800 g","meat"],["Pickling spices (fennel, mustard, nigella, fenugreek)","अचारी मसाले","","pantry"],["Yogurt, onion","दही, प्याज़","","dairy"]],"st":[["Temper whole pickling spices.","अचारी मसाले तड़कें।"],["Onion-yogurt masala; add chicken.","प्याज़-दही मसाला; चिकन।"],["Tangy, pickle-scented gravy.","खट्टी, अचारी ख़ुशबू।"]]},
+{"id":"z27","n":["Dahi Bhindi","दही भिंडी"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":30,"kc":240,"ev":false,"needs":["okra","yogurt"],"ing":[["Okra (bhindi)","भिंडी","500 g","veg"],["Yogurt, onion","दही, प्याज़","","dairy"],["Cumin, turmeric, chilli","जीरा, हल्दी, मिर्च","","pantry"]],"st":[["Fry bhindi crisp; set aside.","भिंडी कुरकुरी तलें।"],["Onion + whisked yogurt masala (low heat).","प्याज़ + फेंटा दही (धीमी आँच)।"],["Fold bhindi back in.","भिंडी वापस मिलाएँ।"]]},
+{"id":"z28","n":["Methi Malai Murg","मेथी मलाई मुर्ग"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":2,"tm":45,"kc":480,"ev":false,"fest":true,"needs":["chicken","cream"],"ing":[["Chicken","चिकन","700 g","meat"],["Cream, cashew, fresh fenugreek","क्रीम, काजू, मेथी","","dairy"],["Green chilli, ginger","हरी मिर्च, अदरक","","veg"]],"st":[["Mild white cashew-cream gravy.","हल्की काजू-क्रीम तरी।"],["Add chicken + fresh methi.","चिकन + ताज़ी मेथी।"],["Rich, slightly sweet, mild for kids.","मलाईदार, बच्चों के लिए हल्की।"]]},
+{"id":"z29","n":["Kosha Mangsho (Bengali mutton)","कोषा मांगशो"],"cz":"Indian","p":"mutton","co":["lunch"],"ef":3,"tm":100,"kc":520,"ev":false,"fest":true,"needs":["mutton","onions"],"ing":[["Mutton","मटन","800 g","meat"],["Onion, ginger-garlic, yogurt","प्याज़, अदरक-लहसुन, दही","","veg"],["Garam masala, mustard oil, sugar","गरम मसाला, सरसों तेल, चीनी","","pantry"]],"st":[["Marinate mutton in yogurt + spices.","मटन दही + मसालों में।"],["Slow bhuno in mustard oil — long and patient.","सरसों तेल में धीमे भूनें — धैर्य से।"],["Dark, dry-ish, intense. Luchi/rice.","गहरा, गाढ़ा। लूची/चावल।"]]},
+{"id":"z30","n":["Lemon Rice & Coconut Chutney","नींबू चावल"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":25,"kc":360,"ev":false,"onepot":true,"isDal":true,"needs":["rice"],"ing":[["Cooked rice","पका चावल","3 cups","pantry"],["Lemon, peanuts, curry leaf, chana dal","नींबू, मूंगफली, करी पत्ता","","pantry"],["Coconut chutney","नारियल चटनी","","pantry"]],"st":[["Temper peanuts, dals, curry leaf, turmeric.","मूंगफली, दाल, करी पत्ता, हल्दी तड़का।"],["Toss through rice with lemon.","चावल में नींबू सहित मिलाएँ।"],["Quick light lunch with chutney.","चटनी के साथ हल्का लंच।"]]},
+{"id":"z31","n":["Thai Green Curry Chicken","थाई ग्रीन करी चिकन"],"cz":"Thai","p":"chicken","co":["dinner"],"ef":2,"tm":40,"kc":460,"ev":false,"fest":true,"onepot":true,"needs":["chicken","coconut"],"ing":[["Chicken","चिकन","600 g","meat"],["Green curry paste, coconut milk","ग्रीन करी पेस्ट, नारियल दूध","","pantry"],["Thai basil, beans, bamboo","थाई तुलसी, बीन्स","","veg"],["Rice","चावल","","pantry"]],"st":[["Fry paste in coconut cream till fragrant.","पेस्ट नारियल क्रीम में भूनें।"],["Add chicken + coconut milk + veg.","चिकन + नारियल दूध + सब्ज़ी।"],["Basil at the end; over jasmine rice.","आख़िर में तुलसी; चावल पर।"]]},
+{"id":"z32","n":["Pad Thai (chicken/prawn)","पैड थाई"],"cz":"Thai","p":"chicken","co":["dinner"],"ef":2,"tm":35,"kc":520,"ev":false,"onepot":true,"needs":["chicken","noodles"],"ing":[["Rice noodles","राइस नूडल्स","300 g","pantry"],["Chicken/prawn","चिकन/झींगा","400 g","meat"],["Tamarind, fish sauce, jaggery, peanuts","इमली, फिश सॉस, गुड़, मूंगफली","","pantry"],["Egg, spring onion, beansprouts","अंडा, हरा प्याज़","","veg"]],"st":[["Soak noodles. Make tamarind-jaggery sauce.","नूडल्स भिगोएँ। इमली-गुड़ सॉस।"],["Stir-fry protein + egg; add noodles + sauce.","प्रोटीन + अंडा; नूडल्स + सॉस।"],["Peanuts + lime to finish.","मूंगफली + नींबू।"]]},
+{"id":"z33","n":["Kung Pao Chicken","कुंग पाओ चिकन"],"cz":"Chinese","p":"chicken","co":["dinner"],"ef":2,"tm":35,"kc":480,"ev":false,"onepot":true,"needs":["chicken"],"ing":[["Chicken (diced)","चिकन","600 g","meat"],["Dried red chillies, Sichuan pepper, peanuts","सूखी मिर्च, मूंगफली","","pantry"],["Soy, vinegar, sugar, garlic","सोया, सिरका, चीनी, लहसुन","","pantry"]],"st":[["Velvet & flash-fry chicken.","चिकन तेज़ तलें।"],["Toast chillies + peppercorns; sauce in.","मिर्च भूनें; सॉस।"],["Toss with peanuts; over rice.","मूंगफली; चावल पर।"]]},
+{"id":"z34","n":["Japanese Chicken Katsu Curry","चिकन कात्सू करी"],"cz":"Japanese","p":"chicken","co":["dinner"],"ef":2,"tm":50,"kc":580,"ev":false,"fest":true,"needs":["chicken"],"ing":[["Chicken breast","चिकन ब्रेस्ट","4","meat"],["Panko, egg, flour","पैंको, अंडा, मैदा","","pantry"],["Curry roux (onion, carrot, curry powder)","करी रू","","veg"],["Rice","चावल","","pantry"]],"st":[["Bread chicken in panko; fry crisp.","चिकन पैंको में तलें।"],["Make the mild Japanese curry sauce.","हल्की जापानी करी सॉस।"],["Slice katsu over rice; sauce alongside.","कात्सू चावल पर; सॉस साथ।"]]},
+{"id":"z35","n":["Teriyaki Salmon","टेरियाकी सैल्मन"],"cz":"Japanese","p":"fish","co":["dinner"],"ef":1,"tm":25,"kc":440,"ev":false,"fest":true,"needs":["fish","soy"],"ing":[["Salmon/any fish fillets","सैल्मन/मछली","600 g","meat"],["Soy, mirin/honey, ginger","सोया, शहद, अदरक","","pantry"],["Rice, greens","चावल, साग","","pantry"]],"st":[["Sear fish skin-side first.","मछली पहले त्वचा की तरफ़।"],["Glaze with reducing teriyaki.","टेरियाकी से ग्लेज़।"],["Spoon sauce over; rice + greens.","सॉस डालें; चावल + साग।"]]},
+{"id":"z36","n":["Korean Gochujang Chicken","कोरियन गोचुजांग चिकन"],"cz":"Korean","p":"chicken","co":["dinner"],"ef":2,"tm":40,"kc":500,"ev":false,"fest":true,"needs":["chicken"],"ing":[["Chicken thigh","चिकन थाई","700 g","meat"],["Gochujang/red chilli paste, soy, honey, garlic","गोचुजांग, सोया, शहद","","pantry"],["Sesame, spring onion, rice","तिल, हरा प्याज़, चावल","","pantry"]],"st":[["Sticky gochujang-soy-honey glaze.","चिपचिपा गोचुजांग ग्लेज़।"],["Coat seared chicken.","सिका चिकन लपेटें।"],["Sesame + spring onion; over rice.","तिल + हरा प्याज़; चावल पर।"]]},
+{"id":"z37","n":["Vietnamese Lemongrass Chicken","लेमनग्रास चिकन"],"cz":"Other","p":"chicken","co":["dinner","lunch"],"ef":2,"tm":40,"kc":430,"ev":false,"onepot":true,"needs":["chicken"],"ing":[["Chicken thigh (sliced)","चिकन थाई","600 g","meat"],["Lemongrass, garlic, fish sauce, sugar","लेमनग्रास, लहसुन, फिश सॉस","","pantry"],["Rice, herbs","चावल, जड़ी-बूटी","","pantry"]],"st":[["Marinate in lemongrass-garlic-fish sauce.","लेमनग्रास-लहसुन में मैरिनेट।"],["Sear hot till caramelised edges.","किनारे कैरमलाइज़ होने तक।"],["Over rice with fresh herbs.","चावल + ताज़ी जड़ी-बूटी।"]]},
+{"id":"z38","n":["Chilli Garlic Prawns","चिली गार्लिक प्रॉन"],"cz":"Chinese","p":"prawns","co":["dinner"],"ef":1,"tm":25,"kc":360,"ev":false,"needs":["prawns"],"ing":[["Prawns","झींगे","500 g","meat"],["Garlic (lots), red chilli, soy, spring onion","लहसुन, मिर्च, सोया","","pantry"],["Rice/noodles","चावल/नूडल्स","","pantry"]],"st":[["Flash-fry prawns; remove.","झींगे तेज़ तलें।"],["Garlic-chilli-soy sauce; prawns back.","लहसुन-मिर्च सॉस; झींगे वापस।"],["Spring onion; over rice or noodles.","हरा प्याज़; चावल/नूडल्स।"]]},
+{"id":"z39","n":["Hakka Veg Noodles","हक्का वेज नूडल्स"],"cz":"Chinese","p":"veg","co":["lunch","dinner"],"ef":1,"tm":30,"kc":420,"ev":false,"onepot":true,"needs":["noodles"],"ing":[["Noodles","नूडल्स","300 g","pantry"],["Cabbage, carrot, capsicum, beans","पत्तागोभी, गाजर, शिमला","","veg"],["Soy, vinegar, chilli, garlic","सोया, सिरका, मिर्च","","pantry"]],"st":[["Boil & oil noodles.","नूडल्स उबालकर तेल लगाएँ।"],["High-heat toss julienned veg.","तेज़ आँच पर कटी सब्ज़ी।"],["Noodles + sauces; toss fast.","नूडल्स + सॉस; तेज़ मिलाएँ।"]]},
+{"id":"z40","n":["Thai Basil Chicken (Pad Krapow)","थाई बेसिल चिकन"],"cz":"Thai","p":"chicken","co":["dinner","lunch"],"ef":1,"tm":25,"kc":440,"ev":false,"onepot":true,"needs":["chicken"],"ing":[["Chicken mince","चिकन कीमा","500 g","meat"],["Thai basil, chilli, garlic","थाई तुलसी, मिर्च, लहसुन","","veg"],["Soy, oyster sauce, sugar, rice, egg","सोया, ऑयस्टर सॉस, अंडा","","pantry"]],"st":[["Pound chilli-garlic; fry.","मिर्च-लहसुन भूनें।"],["Mince + sauces high heat.","कीमा + सॉस तेज़ आँच।"],["Basil; over rice with a fried egg.","तुलसी; चावल + तला अंडा।"]]},
+{"id":"z41","n":["Sweet & Sour Fish","स्वीट एंड सावर फिश"],"cz":"Chinese","p":"fish","co":["dinner"],"ef":2,"tm":35,"kc":450,"ev":false,"needs":["fish"],"ing":[["Fish fillets (cubed)","मछली","600 g","meat"],["Pineapple, capsicum, onion","अनानास, शिमला, प्याज़","","veg"],["Ketchup, vinegar, sugar, cornflour","केचप, सिरका, चीनी","","pantry"]],"st":[["Batter & fry fish crisp.","मछली बैटर में तलें।"],["Sweet-sour sauce with veg.","खट्टी-मीठी सॉस।"],["Toss fish through; over rice.","मछली मिलाएँ; चावल पर।"]]},
+{"id":"z42","n":["Miso Glazed Fish","मिसो फिश"],"cz":"Japanese","p":"fish","co":["dinner"],"ef":1,"tm":30,"kc":380,"ev":false,"fest":true,"needs":["fish"],"ing":[["Fish fillets","मछली","600 g","meat"],["Miso paste, mirin/honey, soy","मिसो, शहद, सोया","","pantry"],["Rice, greens","चावल, साग","","pantry"]],"st":[["Marinate fish in miso-honey 1 hr.","मछली मिसो-शहद में 1 घंटा।"],["Grill/bake till lacquered.","ग्रिल/बेक करें।"],["Rice + steamed greens.","चावल + उबले साग।"]]},
+{"id":"z43","n":["Chicken Manchurian","चिकन मंचूरियन"],"cz":"Chinese","p":"chicken","co":["dinner"],"ef":2,"tm":40,"kc":490,"ev":false,"needs":["chicken"],"ing":[["Chicken (boneless)","चिकन","600 g","meat"],["Garlic, ginger, soy, chilli, cornflour","लहसुन, अदरक, सोया, मिर्च","","pantry"],["Spring onion, capsicum","हरा प्याज़, शिमला","","veg"]],"st":[["Fry battered chicken crisp.","बैटर चिकन तलें।"],["Garlicky Manchurian sauce.","लहसुनी मंचूरियन सॉस।"],["Toss; gravy or dry. Rice/noodles.","मिलाएँ; चावल/नूडल्स।"]]},
+{"id":"z44","n":["Thai Massaman Beef","थाई मस्समन बीफ़"],"cz":"Thai","p":"beef","co":["dinner"],"ef":3,"tm":100,"kc":560,"ev":false,"fest":true,"zpair":true,"onepot":true,"needs":["beef","coconut","potatoes"],"ing":[["Beef (stewing)","बीफ़","700 g","meat"],["Massaman paste, coconut milk","मस्समन पेस्ट, नारियल दूध","","pantry"],["Potato, peanuts, tamarind","आलू, मूंगफली, इमली","","veg"]],"st":[["Brown beef; fry paste in coconut cream.","बीफ़ भूनें; पेस्ट नारियल क्रीम में।"],["Slow simmer with potato 1.5 hr.","आलू के साथ 1.5 घंटे।"],["Peanuts + tamarind. For Zoya, a chicken version.","मूंगफली + इमली; ज़ोया के लिए चिकन।"]]},
+{"id":"z45","n":["Vegetable Thai Red Curry","वेज थाई रेड करी"],"cz":"Thai","p":"veg","co":["dinner"],"ef":1,"tm":35,"kc":380,"ev":false,"onepot":true,"needs":["coconut"],"ing":[["Mixed veg + tofu/paneer","मिक्स सब्ज़ी + पनीर","","veg"],["Red curry paste, coconut milk","रेड करी पेस्ट, नारियल दूध","","pantry"],["Thai basil, rice","थाई तुलसी, चावल","","pantry"]],"st":[["Fry paste in coconut cream.","पेस्ट नारियल क्रीम में।"],["Veg + paneer + coconut milk; simmer.","सब्ज़ी + पनीर + नारियल दूध।"],["Basil; over jasmine rice.","तुलसी; चावल पर।"]]},
+{"id":"z46","n":["Chicken Parmigiana","चिकन पार्मिजाना"],"cz":"Italian","p":"chicken","co":["dinner"],"ef":2,"tm":50,"kc":600,"ev":false,"fest":true,"needs":["chicken","cheese","tomatoes"],"ing":[["Chicken breast","चिकन ब्रेस्ट","4","meat"],["Breadcrumbs, egg, flour","ब्रेडक्रंब, अंडा, मैदा","","pantry"],["Tomato sauce, mozzarella","टमाटर सॉस, मोज़ेरेला","","dairy"]],"st":[["Bread & fry chicken cutlets.","चिकन कटलेट तलें।"],["Top with tomato sauce + cheese.","टमाटर सॉस + चीज़।"],["Bake till bubbling; pasta/salad.","चीज़ पिघलने तक; पास्ता/सलाद।"]]},
+{"id":"z47","n":["Spaghetti Aglio e Olio (+ prawns)","स्पैगेटी आलियो ओलियो"],"cz":"Italian","p":"prawns","co":["dinner"],"ef":1,"tm":25,"kc":480,"ev":false,"needs":["pasta","garlic","prawns"],"ing":[["Spaghetti","स्पैगेटी","400 g","pantry"],["Garlic, chilli flakes, olive oil","लहसुन, चिली फ्लेक्स, तेल","","pantry"],["Prawns (optional), parsley","झींगे, अजमोद","","meat"]],"st":[["Gently fry sliced garlic + chilli in oil.","लहसुन + मिर्च तेल में।"],["Toss pasta with a splash of pasta water.","पास्ता + थोड़ा पानी।"],["Prawns + parsley to finish.","झींगे + अजमोद।"]]},
+{"id":"z48","n":["Mushroom Risotto","मशरूम रिसोट्टो"],"cz":"Italian","p":"veg","co":["dinner"],"ef":2,"tm":45,"kc":480,"ev":false,"needs":["rice","mushroom","cheese"],"ing":[["Arborio/short rice","रिसोट्टो चावल","1.5 cups","pantry"],["Mushrooms, onion, garlic","मशरूम, प्याज़, लहसुन","","veg"],["Stock, parmesan, butter","स्टॉक, पार्मेज़ान, मक्खन","","dairy"]],"st":[["Sauté mushrooms; set aside.","मशरूम भूनें।"],["Toast rice; add stock ladle by ladle, stirring.","चावल भूनें; स्टॉक धीरे-धीरे।"],["Mushrooms + cheese + butter to finish.","मशरूम + चीज़ + मक्खन।"]]},
+{"id":"z49","n":["Beef Lasagna","बीफ़ लज़ान्या"],"cz":"Italian","p":"beef","co":["dinner"],"ef":3,"tm":90,"kc":640,"ev":false,"zpair":true,"needs":["beef-keema","pasta","cheese","milk"],"ing":[["Beef keema","बीफ़ कीमा","500 g","meat"],["Lasagna sheets","लज़ान्या शीट","","pantry"],["Tomato, white sauce, mozzarella","टमाटर, व्हाइट सॉस, चीज़","","dairy"]],"st":[["Slow beef ragu.","धीमी बीफ़ रागू।"],["Layer ragu, white sauce, sheets, cheese.","परतें लगाएँ।"],["Bake 40 min. Veg/chicken layer for Zoya.","40 मिनट; ज़ोया के लिए विकल्प।"]]},
+{"id":"z50","n":["Margherita / Veg Pizza (homemade)","होममेड पिज़्ज़ा"],"cz":"Italian","p":"veg","co":["dinner"],"ef":2,"tm":60,"kc":560,"ev":false,"fest":true,"needs":["maida","cheese","tomatoes"],"ing":[["Pizza dough","पिज़्ज़ा आटा","","pantry"],["Tomato sauce, mozzarella, basil","टमाटर सॉस, मोज़ेरेला, तुलसी","","dairy"],["Toppings of choice","मनपसंद टॉपिंग","","veg"]],"st":[["Stretch dough thin.","आटा पतला फैलाएँ।"],["Sauce + cheese + toppings.","सॉस + चीज़ + टॉपिंग।"],["Bake as hot as the oven goes.","सबसे तेज़ आँच पर।"]]},
+{"id":"z51","n":["Chicken Fajitas","चिकन फाहिता"],"cz":"Mexican","p":"chicken","co":["dinner"],"ef":1,"tm":35,"kc":480,"ev":false,"fest":true,"needs":["chicken","bread"],"ing":[["Chicken breast (strips)","चिकन ब्रेस्ट","600 g","meat"],["Capsicum, onion","शिमला, प्याज़","","veg"],["Tortillas, cumin, paprika, lime","टॉर्टिला, जीरा, नींबू","","pantry"]],"st":[["Sear spiced chicken + peppers hot.","मसाला चिकन + शिमला तेज़।"],["Warm tortillas.","टॉर्टिला गरम करें।"],["Build at table with salsa/curd.","मेज़ पर भरें।"]]},
+{"id":"z52","n":["Beef / Rajma Enchiladas","एनचिलाडा"],"cz":"Mexican","p":"beef","co":["dinner"],"ef":2,"tm":55,"kc":560,"ev":false,"zpair":true,"needs":["beef-keema","cheese","tomatoes"],"ing":[["Beef keema or rajma","बीफ़ कीमा या राजमा","500 g","meat"],["Tortillas, cheese","टॉर्टिला, चीज़","","dairy"],["Tomato-chilli sauce","टमाटर-मिर्च सॉस","","pantry"]],"st":[["Spiced filling.","मसालेदार भरावन।"],["Roll in tortillas, sauce + cheese over.","टॉर्टिला में लपेटें, सॉस + चीज़।"],["Bake 25 min. Rajma version for Zoya.","25 मिनट; ज़ोया के लिए राजमा।"]]},
+{"id":"z53","n":["Fish Tacos","फिश टैको"],"cz":"Mexican","p":"fish","co":["dinner"],"ef":2,"tm":35,"kc":440,"ev":false,"fest":true,"needs":["fish","bread"],"ing":[["Fish fillets","मछली","600 g","meat"],["Tortillas, cabbage slaw","टॉर्टिला, पत्तागोभी","","veg"],["Lime-curd crema, chilli","नींबू-दही क्रीम, मिर्च","","dairy"]],"st":[["Spice & pan-fry fish.","मसाला मछली तलें।"],["Warm tortillas; slaw + crema.","टॉर्टिला; स्लॉ + क्रीम।"],["Flake fish in; lime over.","मछली + नींबू।"]]},
+{"id":"z54","n":["Shepherd’s / Keema Pie","कीमा पाई"],"cz":"Western","p":"mutton","co":["lunch"],"ef":2,"tm":70,"kc":560,"ev":false,"needs":["mutton-keema","potatoes"],"ing":[["Mutton keema","मटन कीमा","600 g","meat"],["Potato (mash topping)","आलू मैश","5","veg"],["Onion, carrot, peas, herbs","प्याज़, गाजर, मटर","","veg"]],"st":[["Cook keema with veg + gravy.","कीमा + सब्ज़ी + तरी।"],["Top with buttery mash.","मक्खनी मैश ऊपर।"],["Bake till the top crisps.","ऊपर कुरकुरा होने तक।"]]},
+{"id":"z55","n":["Roast Chicken Dinner","रोस्ट चिकन डिनर"],"cz":"Western","p":"chicken","co":["dinner"],"ef":2,"tm":80,"kc":540,"ev":false,"fest":true,"onepot":true,"needs":["chicken","potatoes"],"ing":[["Whole chicken / pieces","साबुत चिकन","1.2 kg","meat"],["Potato, carrot, onion","आलू, गाजर, प्याज़","","veg"],["Butter, herbs, garlic","मक्खन, जड़ी-बूटी, लहसुन","","pantry"]],"st":[["Rub chicken with herb butter.","हर्ब मक्खन मलें।"],["Roast over veg 200°C ~1 hr.","सब्ज़ी पर ~1 घंटा।"],["Rest; make quick gravy from juices.","रखें; रस से तरी।"]]},
+{"id":"z56","n":["Creamy Tuscan Chicken","टस्कन चिकन"],"cz":"Italian","p":"chicken","co":["dinner"],"ef":2,"tm":40,"kc":560,"ev":false,"fest":true,"onepot":true,"needs":["chicken","cream","spinach"],"ing":[["Chicken breast","चिकन ब्रेस्ट","4","meat"],["Cream, spinach, sundried tomato, garlic","क्रीम, पालक, टमाटर, लहसुन","","dairy"],["Pasta/bread","पास्ता/ब्रेड","","pantry"]],"st":[["Sear chicken; set aside.","चिकन सेंकें।"],["Cream-garlic-spinach-tomato sauce.","क्रीम-लहसुन-पालक सॉस।"],["Chicken back; with pasta or bread.","चिकन वापस; पास्ता/ब्रेड।"]]},
+{"id":"z57","n":["Penne Arrabbiata","पेने अराबियाता"],"cz":"Italian","p":"veg","co":["dinner","lunch"],"ef":1,"tm":30,"kc":460,"ev":false,"needs":["pasta","tomatoes"],"ing":[["Penne","पेने","400 g","pantry"],["Tomato, garlic, chilli","टमाटर, लहसुन, मिर्च","","veg"],["Olive oil, basil","ऑलिव ऑयल, तुलसी","","pantry"]],"st":[["Spicy garlic-tomato sauce.","तीखी लहसुन-टमाटर सॉस।"],["Toss with penne.","पेने मिलाएँ।"],["Basil + olive oil.","तुलसी + तेल।"]]},
+{"id":"z58","n":["Grilled Lamb Chops","ग्रिल्ड लैम्ब चॉप्स"],"cz":"Western","p":"mutton","co":["lunch"],"ef":2,"tm":45,"kc":520,"ev":false,"fest":true,"needs":["mutton"],"ing":[["Lamb chops","लैम्ब चॉप्स","700 g","meat"],["Garlic, rosemary, lemon, olive oil","लहसुन, रोज़मेरी, नींबू","","pantry"],["Potato, salad","आलू, सलाद","","veg"]],"st":[["Marinate chops in garlic-herb-lemon.","चॉप्स मैरिनेट करें।"],["Sear hard, rest pink inside.","तेज़ सेंकें, अंदर गुलाबी।"],["With potatoes + salad.","आलू + सलाद।"]]},
+{"id":"z59","n":["Beef Stroganoff","बीफ़ स्ट्रोगानॉफ"],"cz":"Western","p":"beef","co":["dinner"],"ef":2,"tm":45,"kc":560,"ev":false,"zpair":true,"needs":["beef","cream","mushroom"],"ing":[["Beef strips","बीफ़ पट्टियाँ","600 g","meat"],["Mushroom, onion, cream/curd","मशरूम, प्याज़, क्रीम","","dairy"],["Rice or pasta","चावल/पास्ता","","pantry"]],"st":[["Flash-sear beef; remove.","बीफ़ सेंकें।"],["Mushroom-onion; cream sauce.","मशरूम-प्याज़; क्रीम सॉस।"],["Beef back briefly. Chicken version for Zoya.","बीफ़ वापस; ज़ोया के लिए चिकन।"]]},
+{"id":"z60","n":["Baked Mac & Cheese","बेक्ड मैक एंड चीज़"],"cz":"Western","p":"veg","co":["dinner"],"ef":2,"tm":45,"kc":600,"ev":false,"fest":true,"needs":["pasta","cheese","milk"],"ing":[["Macaroni","मैकरोनी","400 g","pantry"],["Cheese (cheddar + mozzarella)","चीज़","","dairy"],["Milk, butter, flour","दूध, मक्खन, मैदा","","dairy"]],"st":[["Cheese sauce from roux + milk.","रू + दूध से चीज़ सॉस।"],["Mix with pasta; top with more cheese.","पास्ता मिलाएँ; ऊपर चीज़।"],["Bake till golden crust.","सुनहरा होने तक।"]]},
+{"id":"z61","n":["Panchmel Dal","पंचमेल दाल"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":45,"kc":340,"ev":false,"isDal":true,"needs":["dal"],"ing":[["Five mixed dals","पाँच मिली दालें","1.5 cups","pantry"],["Ghee, cumin, garlic, chilli","घी, जीरा, लहसुन","","pantry"],["Tomato","टमाटर","","veg"]],"st":[["Pressure cook the five dals.","पाँच दालें उबालें।"],["Ghee-cumin-garlic tadka.","घी-जीरा-लहसुन तड़का।"],["Pour sizzling over; rice/roti.","ऊपर डालें; चावल/रोटी।"]]},
+{"id":"z62","n":["Chana Masala","चना मसाला"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":45,"kc":380,"ev":false,"isDal":true,"needs":["chole","onions"],"ing":[["Chickpeas (soaked)","चना (भीगे)","2 cups","pantry"],["Onion, tomato, ginger-garlic","प्याज़, टमाटर","","veg"],["Chana masala","चना मसाला","","pantry"]],"st":[["Pressure cook chana.","चना उबालें।"],["Onion-tomato masala; add chana.","मसाला; चना।"],["Simmer; lemon to finish.","नींबू।"]]},
+{"id":"z63","n":["Baingan Bharta","बैंगन भर्ता"],"cz":"Indian","p":"veg","co":["lunch"],"ef":2,"tm":45,"kc":260,"ev":false,"needs":["eggplant"],"ing":[["Eggplant (large)","बैंगन","2","veg"],["Onion, tomato, peas","प्याज़, टमाटर, मटर","","veg"],["Cumin, chilli","जीरा, मिर्च","","pantry"]],"st":[["Roast eggplant on flame; peel, mash.","बैंगन भूनें; छीलकर मसलें।"],["Onion-tomato masala; mashed eggplant.","मसाला; बैंगन।"],["Smoky; with roti.","धुएँदार; रोटी।"]]},
+{"id":"z64","n":["Rajma Masala","राजमा मसाला"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":55,"kc":400,"ev":false,"isDal":true,"fest":true,"needs":["dal","onions"],"ing":[["Rajma (soaked)","राजमा (भीगे)","2 cups","pantry"],["Onion, tomato, ginger-garlic","प्याज़, टमाटर","","veg"],["Rajma masala","राजमा मसाला","","pantry"]],"st":[["Pressure cook rajma soft.","राजमा उबालें।"],["Thick onion-tomato masala.","गाढ़ा मसाला।"],["Simmer till creamy; rice.","क्रीमी होने तक; चावल।"]]},
+{"id":"z65","n":["Aloo Gobi","आलू गोभी"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":35,"kc":240,"ev":false,"needs":["potatoes","cauliflower"],"ing":[["Potato, cauliflower","आलू, फूलगोभी","","veg"],["Cumin, turmeric, ginger, chilli","जीरा, हल्दी, अदरक","","pantry"]],"st":[["Temper cumin; potato + gobi.","जीरा; आलू + गोभी।"],["Turmeric, cover, cook dry.","हल्दी, ढककर सुखाएँ।"],["Coriander; roti.","धनिया; रोटी।"]]},
+{"id":"z66","n":["Mixed Veg Korma","वेज कोरमा"],"cz":"Indian","p":"veg","co":["lunch","dinner"],"ef":2,"tm":45,"kc":380,"ev":false,"needs":["cream"],"ing":[["Mixed veg","मिक्स सब्ज़ी","","veg"],["Cashew, cream, coconut","काजू, क्रीम, नारियल","","dairy"],["Mild garam masala","हल्का गरम मसाला","","pantry"]],"st":[["Cashew-cream-coconut gravy.","काजू-क्रीम तरी।"],["Add parboiled veg.","आधी पकी सब्ज़ी।"],["Mild, rich; roti/rice.","हल्की; रोटी/चावल।"]]},
+{"id":"z67","n":["Sambar & Rice","सांबर चावल"],"cz":"Indian","p":"veg","co":["lunch"],"ef":2,"tm":50,"kc":360,"ev":false,"isDal":true,"onepot":true,"needs":["dal"],"ing":[["Toor dal","तूर दाल","1.5 cups","pantry"],["Veg (drumstick, pumpkin, okra), tamarind","सब्ज़ी, इमली","","veg"],["Sambar powder, curry leaf","सांबर पाउडर","","pantry"]],"st":[["Cook dal soft.","दाल उबालें।"],["Add veg + tamarind + sambar powder.","सब्ज़ी + इमली + पाउडर।"],["Tadka; with rice.","तड़का; चावल।"]]},
+{"id":"z68","n":["Palak Dal","पालक दाल"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":40,"kc":300,"ev":false,"isDal":true,"needs":["dal","spinach"],"ing":[["Moong/toor dal","मूंग/तूर दाल","1.5 cups","pantry"],["Spinach","पालक","2 bunches","veg"],["Garlic, cumin, chilli","लहसुन, जीरा","","pantry"]],"st":[["Cook dal with spinach.","दाल + पालक।"],["Garlic-cumin-chilli tadka.","लहसुन-जीरा तड़का।"],["Healthy, quick; rice/roti.","हेल्दी; चावल/रोटी।"]]},
+{"id":"z69","n":["Veg Pulao","वेज पुलाव"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":35,"kc":380,"ev":false,"onepot":true,"needs":["rice"],"ing":[["Basmati rice","बासमती","2 cups","pantry"],["Mixed veg, whole spices","सब्ज़ी, साबुत मसाले","","veg"],["Ghee, fried onion","घी, तले प्याज़","","pantry"]],"st":[["Temper whole spices in ghee.","साबुत मसाले घी में।"],["Veg + rice + water; cook.","सब्ज़ी + चावल + पानी।"],["Fluff; with raita.","रायते के साथ।"]]},
+{"id":"z70","n":["Stuffed Paratha (aloo/gobi/paneer)","भरवां पराठा"],"cz":"Indian","p":"veg","co":["lunch","breakfast"],"ef":2,"tm":40,"kc":420,"ev":false,"needs":["potatoes","maida"],"ing":[["Atta","आटा","","pantry"],["Potato/cauliflower/paneer filling","आलू/गोभी/पनीर","","veg"],["Butter, curd","मक्खन, दही","","dairy"]],"st":[["Make spiced filling.","मसालेदार भरावन।"],["Stuff, roll, roast with butter.","भरें, बेलें, मक्खन से सेकें।"],["Curd + pickle.","दही + अचार।"]]},
+{"id":"z71","n":["Veg Kolhapuri","वेज कोल्हापुरी"],"cz":"Indian","p":"veg","co":["lunch","dinner"],"ef":2,"tm":45,"kc":360,"ev":false,"needs":["coconut"],"ing":[["Mixed veg","मिक्स सब्ज़ी","","veg"],["Coconut, dry chilli, sesame masala","नारियल, मिर्च, तिल मसाला","","pantry"]],"st":[["Roast & grind the fiery masala.","तीखा मसाला पीसें।"],["Cook veg in it.","सब्ज़ी पकाएँ।"],["Spicy Maharashtrian; roti.","तीखा; रोटी।"]]},
+{"id":"z72","n":["Bhindi Masala","भिंडी मसाला"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":30,"kc":240,"ev":false,"needs":["okra"],"ing":[["Okra","भिंडी","500 g","veg"],["Onion, tomato, amchur","प्याज़, टमाटर, अमचूर","","veg"]],"st":[["Fry okra to remove sliminess.","भिंडी भूनें।"],["Onion-tomato; amchur for tang.","प्याज़-टमाटर; अमचूर।"],["Dry sabzi; roti.","सूखी सब्ज़ी; रोटी।"]]},
+{"id":"z73","n":["Dal Tadka","दाल तड़का"],"cz":"Indian","p":"veg","co":["lunch"],"ef":1,"tm":35,"kc":300,"ev":false,"isDal":true,"needs":["dal"],"ing":[["Toor/moong dal","तूर/मूंग दाल","1.5 cups","pantry"],["Ghee, garlic, cumin, dry chilli","घी, लहसुन, जीरा","","pantry"],["Tomato","टमाटर","","veg"]],"st":[["Cook dal soft.","दाल उबालें।"],["Sizzling ghee-garlic-chilli tadka.","घी-लहसुन तड़का।"],["Pour over; rice/roti.","ऊपर डालें।"]]},
+{"id":"z74","n":["Paneer Bhurji","पनीर भुर्जी"],"cz":"Indian","p":"paneer","co":["lunch","breakfast"],"ef":1,"tm":20,"kc":360,"ev":false,"needs":["paneer","onions"],"ing":[["Paneer (crumbled)","पनीर","400 g","dairy"],["Onion, tomato, capsicum","प्याज़, टमाटर, शिमला","","veg"],["Turmeric, chilli","हल्दी, मिर्च","","pantry"]],"st":[["Sauté onion-tomato-capsicum.","प्याज़-टमाटर-शिमला।"],["Add crumbled paneer + spices.","पनीर + मसाले।"],["Quick; roti/pav.","झटपट; रोटी/पाव।"]]},
+{"id":"z75","n":["Undhiyu-style Mixed Veg","मिक्स सब्ज़ी (उंधियू शैली)"],"cz":"Indian","p":"veg","co":["lunch"],"ef":2,"tm":50,"kc":360,"ev":false,"fest":true,"needs":[],"ing":[["Surti veg (yam, beans, brinjal, potato)","मिक्स सब्ज़ी","","veg"],["Coconut, coriander, green masala","नारियल, धनिया, हरा मसाला","","pantry"]],"st":[["Make green coconut-coriander masala.","हरा मसाला बनाएँ।"],["Layer veg, slow-cook.","सब्ज़ी धीमी पकाएँ।"],["Festive Gujarati winter dish.","गुजराती सर्दी की डिश।"]]},
+{"id":"z76","n":["Butter Chicken","बटर चिकन"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":2,"tm":55,"kc":580,"ev":false,"fest":true,"needs":["chicken","tomatoes","cream"],"ing":[["Chicken (tandoori-marinated)","चिकन","800 g","meat"],["Tomato, cashew, cream, butter","टमाटर, काजू, क्रीम, मक्खन","","dairy"],["Kasuri methi, garam masala","कसूरी मेथी","","pantry"]],"st":[["Grill marinated chicken.","मैरिनेटेड चिकन ग्रिल।"],["Silky tomato-butter gravy.","टमाटर-मक्खन तरी।"],["Chicken + cream + kasuri methi. Naan/rice.","चिकन + क्रीम; नान/चावल।"]]},
+{"id":"z77","n":["Chicken Stew (Kerala)","केरला चिकन स्टू"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":2,"tm":50,"kc":420,"ev":false,"onepot":true,"needs":["chicken","coconut","potatoes"],"ing":[["Chicken","चिकन","700 g","meat"],["Coconut milk, potato, carrot","नारियल दूध, आलू, गाजर","","veg"],["Whole spices, curry leaf","साबुत मसाले, करी पत्ता","","pantry"]],"st":[["Gentle cook chicken + veg + whole spices.","चिकन + सब्ज़ी + मसाले।"],["Coconut milk; don’t boil hard.","नारियल दूध; तेज़ न उबालें।"],["White, fragrant; appam/bread.","सफ़ेद, ख़ुशबूदार; अप्पम।"]]},
+{"id":"z78","n":["Tandoori Chicken","तंदूरी चिकन"],"cz":"Indian","p":"chicken","co":["dinner"],"ef":2,"tm":60,"kc":420,"ev":false,"fest":true,"needs":["chicken","yogurt"],"ing":[["Chicken (whole legs)","चिकन टांगें","800 g","meat"],["Yogurt, tandoori masala, lemon","दही, तंदूरी मसाला, नींबू","","dairy"]],"st":[["Deep marinate 4 hrs+.","4 घंटे+ मैरिनेट।"],["Roast hot / airfry till charred.","तेज़ भूनें।"],["Lemon + onion; mint chutney.","नींबू + प्याज़; चटनी।"]]},
+{"id":"z79","n":["Fish Moilee (Kerala coconut)","फिश मोइली"],"cz":"Indian","p":"fish","co":["dinner"],"ef":2,"tm":40,"kc":380,"ev":false,"needs":["fish","coconut"],"ing":[["Fish fillets","मछली","600 g","meat"],["Coconut milk, ginger, green chilli","नारियल दूध, अदरक, मिर्च","","pantry"],["Curry leaf, turmeric","करी पत्ता, हल्दी","","veg"]],"st":[["Gentle ginger-chilli-turmeric base.","अदरक-मिर्च-हल्दी बेस।"],["Coconut milk; slip in fish.","नारियल दूध; मछली।"],["Mild, white, fragrant; rice.","हल्की; चावल।"]]},
+{"id":"z80","n":["Egg Curry (dhaba style)","अंडा करी"],"cz":"Indian","p":"egg","co":["dinner"],"ef":1,"tm":35,"kc":400,"ev":true,"needs":["eggs","onions"],"ing":[["Eggs (boiled)","अंडे (उबले)","6","dairy"],["Onion, tomato, ginger-garlic","प्याज़, टमाटर","","veg"],["Garam masala","गरम मसाला","","pantry"]],"st":[["Fry boiled eggs lightly.","उबले अंडे हल्के तलें।"],["Thick onion-tomato gravy.","गाढ़ी तरी।"],["Eggs in; simmer. Rice/roti.","अंडे डालें; चावल/रोटी।"]]},
+{"id":"z81","n":["Chicken Do Pyaza","चिकन दो प्याज़ा"],"cz":"Indian","p":"chicken","co":["dinner","lunch"],"ef":2,"tm":50,"kc":440,"ev":false,"needs":["chicken","onions"],"ing":[["Chicken","चिकन","800 g","meat"],["Onions (double, two ways)","प्याज़ (दुगुने)","5","veg"],["Yogurt, garam masala","दही, गरम मसाला","","dairy"]],"st":[["Brown half the onions into masala.","आधे प्याज़ मसाले में।"],["Cook chicken; add chunky onions late.","चिकन; बड़े प्याज़ बाद में।"],["Onion-forward, semi-dry.","प्याज़दार, अर्ध-सूखा।"]]},
+{"id":"z82","n":["Prawn Pulao","प्रॉन पुलाव"],"cz":"Indian","p":"prawns","co":["dinner","lunch"],"ef":2,"tm":40,"kc":440,"ev":false,"onepot":true,"needs":["prawns","rice"],"ing":[["Prawns","झींगे","400 g","meat"],["Basmati, whole spices","बासमती, साबुत मसाले","","pantry"],["Onion, mint","प्याज़, पुदीना","","veg"]],"st":[["Spiced prawn masala.","मसालेदार झींगे।"],["Layer with par-cooked rice; dum.","चावल की परत; दम।"],["Fragrant one-pot.","ख़ुशबूदार वन-पॉट।"]]},
+{"id":"z83","n":["Lemon Herb Grilled Fish","लेमन हर्ब ग्रिल्ड फिश"],"cz":"Western","p":"fish","co":["dinner"],"ef":1,"tm":25,"kc":340,"ev":false,"needs":["fish","lemon"],"ing":[["Fish fillets","मछली","600 g","meat"],["Lemon, garlic, parsley, olive oil","नींबू, लहसुन, अजमोद","","pantry"],["Veg/salad","सब्ज़ी/सलाद","","veg"]],"st":[["Marinate in lemon-garlic-herb.","नींबू-लहसुन में।"],["Grill 4 min a side.","हर तरफ़ 4 मिनट।"],["Light; greens alongside.","हल्की; साग।"]]},
+{"id":"z84","n":["Chicken Cacciatore","चिकन काचियातोरे"],"cz":"Italian","p":"chicken","co":["dinner"],"ef":2,"tm":55,"kc":480,"ev":false,"onepot":true,"needs":["chicken","tomatoes"],"ing":[["Chicken pieces","चिकन","800 g","meat"],["Tomato, onion, capsicum, olives","टमाटर, प्याज़, ज़ैतून","","veg"],["Herbs, garlic","जड़ी-बूटी, लहसुन","","pantry"]],"st":[["Brown chicken; set aside.","चिकन सेंकें।"],["Tomato-pepper-olive sauce.","टमाटर-शिमला-ज़ैतून सॉस।"],["Braise chicken in it. Bread/pasta.","चिकन पकाएँ; ब्रेड/पास्ता।"]]},
+{"id":"z85","n":["Paneer Tikka Masala","पनीर टिक्का मसाला"],"cz":"Indian","p":"paneer","co":["dinner"],"ef":2,"tm":45,"kc":480,"ev":false,"fest":true,"needs":["paneer","tomatoes","cream"],"ing":[["Paneer (tikka-grilled)","पनीर","400 g","dairy"],["Tomato, cream, capsicum, onion","टमाटर, क्रीम, शिमला","","dairy"],["Tikka masala","टिक्का मसाला","","pantry"]],"st":[["Grill marinated paneer + peppers.","पनीर + शिमला ग्रिल।"],["Tomato-cream tikka gravy.","टमाटर-क्रीम तरी।"],["Fold in; naan/rice.","मिलाएँ; नान/चावल।"]]},
+{"id":"z86","n":["Keema Pav","कीमा पाव"],"cz":"Indian","p":"mutton","co":["lunch"],"ef":2,"tm":45,"kc":480,"ev":false,"needs":["mutton-keema","bread"],"ing":[["Mutton keema","मटन कीमा","500 g","meat"],["Onion, tomato, peas","प्याज़, टमाटर, मटर","","veg"],["Pav, garam masala","पाव, गरम मसाला","","bakery"]],"st":[["Bhuno keema with masala + peas.","कीमा भूनें + मटर।"],["Cook till dry-ish.","गाढ़ा होने तक।"],["Buttered pav.","मक्खन पाव।"]]},
+{"id":"z87","n":["Egg Fried Rice","एग फ्राइड राइस"],"cz":"Chinese","p":"egg","co":["dinner","lunch"],"ef":1,"tm":25,"kc":420,"ev":true,"onepot":true,"needs":["rice","eggs"],"ing":[["Cooked rice (cold)","ठंडा चावल","4 cups","pantry"],["Eggs, spring onion, veg","अंडे, हरा प्याज़","","veg"],["Soy, pepper","सोया, काली मिर्च","","pantry"]],"st":[["Scramble egg; remove.","अंडा भूनें।"],["High-heat fry rice + veg + soy.","चावल + सब्ज़ी + सोया।"],["Egg back; spring onion.","अंडा वापस; हरा प्याज़।"]]},
+{"id":"z88","n":["English Breakfast Plate","इंग्लिश ब्रेकफास्ट"],"cz":"Western","p":"egg","co":["breakfast"],"ef":2,"tm":30,"kc":520,"ev":true,"fest":true,"needs":["eggs","potatoes","bread"],"ing":[["Eggs, sausages (chicken)","अंडे, चिकन सॉसेज","","meat"],["Baked beans, hash brown, toast, tomato","बीन्स, हैश ब्राउन, टोस्ट","","pantry"]],"st":[["Fry eggs + sausages.","अंडे + सॉसेज।"],["Warm beans; toast bread.","बीन्स; टोस्ट।"],["Plate it all up — weekend treat.","सब प्लेट में — वीकेंड ट्रीट।"]]},
+{"id":"z89","n":["Banana Walnut Pancakes","बनाना वॉलनट पैनकेक"],"cz":"Western","p":"veg","co":["breakfast"],"ef":2,"tm":30,"kc":440,"ev":false,"fest":true,"needs":["maida","milk"],"ing":[["Flour, milk, banana","मैदा, दूध, केला","","pantry"],["Walnuts, honey, butter","अखरोट, शहद, मक्खन","","pantry"]],"st":[["Mash banana into batter.","केला घोल में।"],["Cook pancakes; toast walnuts.","पैनकेक; अखरोट भूनें।"],["Honey + walnuts on top.","शहद + अखरोट।"]]},
+{"id":"z90","n":["Veg Frankie / Kathi Roll","वेज फ्रैंकी"],"cz":"Indian","p":"veg","co":["lunch","dinner"],"ef":2,"tm":35,"kc":420,"ev":false,"needs":["maida","paneer"],"ing":[["Roti/wrap","रोटी/रैप","","bakery"],["Paneer/potato filling, onion, chutney","पनीर/आलू, प्याज़, चटनी","","veg"]],"st":[["Make spiced filling.","मसालेदार भरावन।"],["Roll in roti with chutney + onion.","रोटी में लपेटें।"],["Quick, handheld.","झटपट।"]]},
+{"id":"z91","n":["Chicken Kathi Roll","चिकन कठी रोल"],"cz":"Indian","p":"chicken","co":["lunch","dinner"],"ef":2,"tm":40,"kc":460,"ev":false,"needs":["chicken","maida"],"ing":[["Chicken (tikka)","चिकन टिक्का","500 g","meat"],["Paratha/roti, onion, chutney","पराठा, प्याज़, चटनी","","bakery"]],"st":[["Grill tikka chicken.","टिक्का चिकन ग्रिल।"],["Roll in paratha with onion + chutney.","पराठे में लपेटें।"],["Egg coating optional (visible — Aveer note).","अंडा वैकल्पिक।"]]}
 );
 </script>
 <script>
@@ -1372,117 +1544,161 @@ function setSlot(dateIso,meal,id){
 function quotaBar(){
   const el=document.getElementById('qbar');
   if(!plan){ el.style.display='none'; return }
-  el.style.display='flex';
+  el.style.display='block';
   const count={chicken:0,fish:0,beef:0,mutton:0,pork:0,veg:0};
   plan.days.forEach(d=>['lunch','dinner'].forEach(m=>{ const sl=d[m]; if(!sl||sl.skipped) return; const p=primary(sl); if(p&&byId(p)) count[tokenOf(byId(p).p)]++ }));
-  let h='';
-  ['chicken','fish','beef','mutton','pork'].forEach(t=>{
+  let rows='';
+  ['chicken','fish','beef','mutton','pork','veg'].forEach(t=>{
     const tgt=settings.quota[t]||0; const c=count[t];
+    if(t==='pork'&&tgt===0&&c===0) return;
     const meta=PROTEIN_META[t==='fish'?'fish':t];
-    const dots=Array.from({length:Math.max(tgt,c)},(_,i)=>`<i class="${i<c?'f':''}"></i>`).join('');
-    h+=`<span class="qi ${c>tgt?'over':(c===tgt?'met':'')}"><span class="pdot" style="background:${meta[1]};border-color:transparent"></span>${pName(t==='fish'?'fish':t)} ${c}/${tgt}<span class="meter">${dots}</span></span>`;
+    const dots=Array.from({length:Math.max(tgt,c,1)},(_,i)=>`<i class="${i<c?'f':''}"></i>`).join('');
+    let state='', tag='';
+    if(t==='veg'){ tag=`${c} ${LT('qPlanned')||'planned'}`; }
+    else if(c>tgt){ state='over'; tag=`+${c-tgt} ${LT('qOver')||'over'}`; }
+    else if(c===tgt){ state='met'; tag=`✓ ${LT('qDone')||'done'}`; }
+    else { tag=`${tgt-c} ${LT('qLeft')||'left'}`; }
+    rows+=`<div class="qrow ${state}">
+      <span class="qname"><span class="pdot" style="background:${meta[1]}"></span>${pName(t==='fish'?'fish':t)}</span>
+      <span class="qmeter">${dots}</span>
+      <span class="qtag">${tag}</span></div>`;
   });
-  h+=`<span class="qi"><span class="pdot" style="background:#3E6B3A"></span>${pName('veg')} ${count.veg}</span>`;
-  el.innerHTML=h;
+  el.innerHTML=`<div class="qled-head">${LT('qHead')||'This week\u2019s proteins · हफ़्ते का हिसाब'}</div><div class="qled-grid">${rows}</div>`;
 }
-function dishChips(r,meal,fam){
-  const zp = fam && !zoyaOK(r);
-  const warn = fam && !aveerOK(r);
-  const vegLunch = meal==='lunch' && tokenOf(r.p)==='veg';
-  return [
-    warn?`<span class="chip warn" style="font-size:10px;padding:2px 7px">✗ Aveer</span>`:'',
-    zp?`<span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('zoyaPair')}</span>`:'',
-    vegLunch?`<span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('tikkaAddon')}</span>`:''
-  ].filter(Boolean).join('');
+/* bilingual lockup: EN over HI (planner) — cook mode handled where dishes render in cook views */
+function lockup(item){
+  const en=esc(item[0]||''), hi=esc(item[1]||item[0]||'');
+  return `<div class="lock2"><div class="en">${en}</div><div class="hi" lang="hi">${hi}</div></div>`;
+}
+function effDiamonds(n){ return '<span class="eff">'+'◆'.repeat(Math.max(1,n||1))+'</span>'; }
+function metaLine(r){
+  const pm=PROTEIN_META[r.p];
+  const parts=[
+    `<span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)}`,
+    czName(r.cz),
+    `${r.tm}${LT('min')}`,
+    effDiamonds(r.ef)
+  ];
+  if(r.kc) parts.push(`~${r.kc}`);
+  return `<div class="ometa">`+parts.map((p,i)=>i?`<span class="sep">·</span>${p}`:p).join('')+`</div>`;
+}
+/* warning + pairing notes now render as chips BELOW the row, not inside the lockup */
+function mealWarnChips(r,meal,fam,di,mealName){
+  const out=[];
+  if(fam && !aveerOK(r)) out.push(`<span class="warnchip">⚑ ${LT('aveerAlt')||'Aveer'}</span>`);
+  if(fam && !zoyaOK(r)) out.push(`<span class="warnchip">⚑ ${LT('zoyaPair')}</span>`);
+  if(meal==='lunch' && tokenOf(r.p)==='veg') out.push(`<span class="warnchip">⚑ ${LT('tikkaAddon')}</span>`);
+  return out.join('');
+}
+function thaliStrip(di,meal,slot){
+  if(meal==='breakfast') return '';
+  const names=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
+  const chips = names.length
+    ? names.map(n=>`<span class="th-chip">${n}</span>`).join('')
+    : `<span class="th-chip" style="opacity:.6">+ ${LT('sdal')} · ${LT('ssabzi')} · ${LT('sstaple')} …</span>`;
+  return `<div class="thali ${names.length?'':'empty'}" onclick="openSidesEditor(${di},'${meal}')">
+    <div class="th-head"><span class="th-lbl">${LT('thaliLabel')||'THALI · साथ में'}</span><span class="th-change">${LT('changeSides')||'Change sides ›'}</span></div>
+    <div class="th-chips">${chips}</div></div>`;
 }
 function mealRow(di,meal,slot,dateIso){
   const who = meal==='breakfast'?'':(isFamilySlot(meal,dateIso)?LT('everyone'):LT('usTwo'));
   const lab = LT(meal);
-  const ro = !planEditable();   // read-only: cook, or owner with a locked week
+  const ro = !planEditable();
+  const headWho = who?`<small>${who}</small>`:'';
   if(!slot||!(slot.alts||[]).length){
-    return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div><div class="empty-slot" style="padding:8px 16px">—</div></div>`;
+    return `<div class="mealblock"><div class="mealhead"><span>${lab}</span>${headWho}</div><div class="skiprow"><div class="lbl" style="color:var(--ink-faint)">—</div></div></div>`;
   }
   const fam = isFamilySlot(meal,dateIso);
+  const changeLink = ro?'':`<a class="changelink" onclick="changeMeal(${di},'${meal}')"><span class="ck">${LT('change')}</span></a>`;
+
   if(slot.skipped){
     return `<div class="mealblock">
-      <div class="mealhead"><span>${lab}</span><small>${who}</small>
-        ${ro?'':`<a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a>`}</div>
-      <div class="savedrow" style="color:var(--muted)"><div style="flex:1"><div class="oname" style="color:var(--muted)">${LT('skippedLabel')}</div></div></div>
+      <div class="mealhead"><span>${lab}</span>${headWho}${changeLink}</div>
+      <div class="skiprow"><div class="seal">⤫</div><div class="lbl">${LT('skippedLabel')}</div>
+        ${ro?'':`<span class="undo" onclick="changeMeal(${di},'${meal}')">${LT('change')}</span>`}</div>
     </div>`;
   }
+
   if(slot.saved){
     const rows=slot.chosen.map(id=>{
       const r=byId(id); if(!r) return '';
-      const pm=PROTEIN_META[r.p];
+      const warn=mealWarnChips(r,meal,fam,di,meal);
+      const thaliSum = (meal!=='breakfast' && ['Indian','Goan'].includes(r.cz) && slot.sides && Object.keys(slot.sides).length)
+        ? `<div class="thali-sum">${LT('withSides')}: ${Object.values(slot.sides).map(sid=>sideById(sid)?esc(L(sideById(sid).n)):'').filter(Boolean).join(' · ')}</div>` : '';
       return `<div class="savedrow" onclick="openRecipe('${id}')">
-        <div style="flex:1;min-width:0">
-          <div class="oname">✓ ${esc(L(r.n))}</div>
-          <div class="ometa"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)} · ${czName(r.cz)} · ${r.tm}${LT('min')} · ${'🧑‍🍳'.repeat(r.ef)}${r.kc?` · ~${r.kc} kcal`:''}${dishChips(r,meal,fam)?` · ${dishChips(r,meal,fam)}`:''}</div>
-        </div>
-      </div>`;
+        <div class="seal">✓</div>
+        <div class="body">${lockup(r.n)}${metaLine(r)}${thaliSum}</div>
+        ${ro?'':`<span class="edit" onclick="event.stopPropagation();changeMeal(${di},'${meal}')">${LT('change')}</span>`}
+      </div>${warn?`<div style="margin-bottom:6px">${warn}</div>`:''}`;
     }).join('');
-    const ideaRows=(slot.ideas||[]).map(x=>`<div class="savedrow"><div style="flex:1"><div class="oname">✱ ${esc(x)}</div>
-      <div class="ometa"><span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('ideaTag')}</span></div></div></div>`).join('');
-    const sideNames=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
-    const sidesBar=`<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${sideNames.length?sideNames.join(' · '):'<span style="opacity:.6">+ '+LT('sdal')+' / '+LT('ssabzi')+' / '+LT('sstaple')+' …</span>'}</div>`;
+    const ideaRows=(slot.ideas||[]).map(x=>`<div class="savedrow idea"><div class="seal">✱</div>
+      <div class="body"><div class="lock2"><div class="en">${esc(x)}</div></div>
+      <div class="ometa"><span class="th-chip" style="background:var(--warn-bg);border-color:var(--warn-border)">${LT('ideaTag')}</span></div></div></div>`).join('');
     return `<div class="mealblock">
-      <div class="mealhead"><span>${lab}</span><small>${who}</small>
-        ${ro?'':`<a class="changelink" onclick="changeMeal(${di},'${meal}')">${LT('change')}</a>`}</div>
-      ${rows}${ideaRows}${sidesBar}</div>`;
+      <div class="mealhead"><span>${lab}</span>${headWho}${changeLink}</div>
+      ${rows}${ideaRows}</div>`;
   }
+
   if(ro){
-    // read-only view of an unsaved meal (cook side, owner hasn't decided yet)
     if((slot.chosen||[]).length||(slot.ideas||[]).length){
-      const names=(slot.chosen||[]).map(id=>byId(id)?esc(L(byId(id).n)):'').filter(Boolean).concat((slot.ideas||[]).map(x=>'✱ '+esc(x)));
-      const sb2=Object.values(slot.sides||{}).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean);
-      return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div>
-        ${names.map(n=>`<div class="savedrow" onclick="${slot.chosen&&slot.chosen[0]?`openRecipe('${slot.chosen[0]}')`:''}"><div style="flex:1"><div class="oname">${n}</div></div></div>`).join('')}
-        ${sb2.length?`<div class="sides"><b>${LT('withSides')}:</b> ${sb2.join(' · ')}</div>`:''}</div>`;
+      const rows=(slot.chosen||[]).map(id=>{ const r=byId(id); if(!r) return '';
+        return `<div class="savedrow" onclick="openRecipe('${id}')"><div class="seal">✓</div><div class="body">${lockup(r.n)}${metaLine(r)}</div></div>`;
+      }).join('')+(slot.ideas||[]).map(x=>`<div class="savedrow idea"><div class="seal">✱</div><div class="body"><div class="lock2"><div class="en">${esc(x)}</div></div></div></div>`).join('');
+      return `<div class="mealblock"><div class="mealhead"><span>${lab}</span>${headWho}</div>${rows}</div>`;
     }
-    return `<div class="mealblock"><div class="mealhead"><span>${lab}</span><small>${who}</small></div>
-      <div class="savedrow" style="color:var(--muted)"><div style="flex:1"><div class="oname" style="color:var(--muted)">${LT('notDecided')}</div></div></div></div>`;
+    return `<div class="mealblock"><div class="mealhead"><span>${lab}</span>${headWho}</div>
+      <div class="skiprow"><div class="seal" style="border-style:solid;border-color:var(--mirchi);color:var(--mirchi)">?</div><div class="lbl" style="color:var(--mirchi)">${LT('notDecided')}</div></div></div>`;
   }
-  // selection mode: bubbles
+
+  // selection mode
   const bubbles=(slot.alts||[]).slice(0,3).map(id=>{
     const r=byId(id); if(!r) return '';
-    const pm=PROTEIN_META[r.p];
     const on=slot.chosen.includes(id);
+    const liked=taste.stars[id]==='more';
+    const warn=mealWarnChips(r,meal,fam,di,meal);
     return `<div class="dishbub ${on?'on':''}" onclick="toggleDish(${di},'${meal}','${id}')">
-      <div class="tickc">${on?'✓':''}</div>
-      <div style="flex:1;min-width:0">
-        <div class="oname">${esc(L(r.n))}</div>
-        <div class="ometa"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)} · ${czName(r.cz)} · ${r.tm}${LT('min')} · ${'🧑‍🍳'.repeat(r.ef)}${r.kc?` · ~${r.kc} kcal`:''}${dishChips(r,meal,fam)?` · ${dishChips(r,meal,fam)}`:''}</div>
-      </div>
-      <button class="infobtn ${taste.stars[id]==='more'?'liked':''}" onclick="event.stopPropagation();likeDish('${id}');renderPlan()">👍</button>
-      <button class="infobtn" onclick="event.stopPropagation();openRecipe('${id}')">ⓘ</button>
-      <button class="infobtn" style="color:var(--mirchi)" onclick="event.stopPropagation();refreshOption(${di},'${meal}','${id}')">↻</button>
-      <button class="infobtn" style="color:var(--muted);font-size:14px" onclick="event.stopPropagation();trashDish('${id}')">🗑</button>
-    </div>`;
+      <div class="seal">${on?'✓':''}</div>
+      <div class="body">${lockup(r.n)}${metaLine(r)}</div>
+      ${liked?`<span class="liked-heart">♥</span>`:''}
+      <button class="ovf" onclick="event.stopPropagation();openDishMenu(${di},'${meal}','${id}')">⋯</button>
+    </div>${warn?`<div style="margin:-4px 12px 8px 48px">${warn}</div>`:''}`;
   }).join('');
-  const ideaBubs=(slot.ideas||[]).map((x,i)=>`<div class="dishbub on" style="border-style:dashed">
-      <div class="tickc">✱</div>
-      <div style="flex:1;min-width:0"><div class="oname">${esc(x)}</div>
-      <div class="ometa"><span class="chip haldi" style="font-size:10px;padding:2px 7px">${LT('ideaTag')}</span></div></div>
-      <button class="infobtn" onclick="event.stopPropagation();removeIdea(${di},'${meal}',${i})">✕</button>
+  const ideaBubs=(slot.ideas||[]).map((x,i)=>`<div class="dishbub idea on">
+      <div class="seal">✱</div>
+      <div class="body"><div class="lock2"><div class="en">${esc(x)}</div></div>
+      <div class="ometa"><span class="th-chip" style="background:var(--warn-bg);border-color:var(--warn-border)">${LT('ideaTag')}</span></div></div>
+      <button class="ovf" onclick="event.stopPropagation();removeIdea(${di},'${meal}',${i})">✕</button>
     </div>`).join('');
-  const selSides = meal!=='breakfast' && slot.sides && Object.keys(slot.sides).length
-    ? `<div class="sides" onclick="openSidesEditor(${di},'${meal}')"><b>${LT('withSides')}:</b> ${Object.values(slot.sides).map(id=>sideById(id)?esc(L(sideById(id).n)):'').filter(Boolean).join(' · ')}</div>` : '';
+  const thali = thaliStrip(di,meal,slot);
   const tokNow = slot.token || (byId(primary(slot))?tokenOf(byId(primary(slot)).p):'');
-  const protBtn = meal==='breakfast' ? '' :
-    `<button class="btn ghost small" onclick="openProteinSheet(${di},'${meal}')"><span class="pdot" style="background:${(PROTEIN_META[tokNow==='veg'?'veg':tokNow]||['','#999'])[1]};margin-right:4px"></span>${LT('changeProt')}</button>`;
+  const protPill = meal==='breakfast' ? '' :
+    `<button class="protpill" onclick="openProteinSheet(${di},'${meal}')"><span class="pdot" style="background:${(PROTEIN_META[tokNow==='veg'?'veg':tokNow]||['','#999'])[1]}"></span>${LT('changeProt')}<span class="car">▾</span></button>`;
   return `<div class="mealblock">
-    <div class="mealhead"><span>${lab}</span><small>${who}</small></div>
-    <div class="pickhint">${LT('pickHint')}</div>
-    ${bubbles}${ideaBubs}
-    <div style="padding:0 16px 6px"><span style="font-size:12.5px;color:var(--steel);text-decoration:underline;cursor:pointer;font-family:var(--disp);font-weight:700" onclick="openIdeaSheet(${di},'${meal}')">${LT('addIdea')}</span></div>
-    ${selSides}
-    <div class="saverow">
-      <button class="btn primary small" onclick="saveMeal(${di},'${meal}')">💾 ${LT('save')}</button>
-      <button class="btn ghost small" onclick="swapSlot(${di},'${meal}')">${LT('newOpts')}</button>
-      ${protBtn}
-      <button class="btn ghost small" style="color:var(--muted)" onclick="skipMeal(${di},'${meal}')">${LT('skip')}</button>
+    <div class="mealhead open"><span>${lab}</span>${headWho}${protPill}</div>
+    ${bubbles}${ideaBubs}${thali}
+    <div class="mealfoot">
+      <div class="quiet">
+        <span class="qlink" onclick="swapSlot(${di},'${meal}')">↻ ${LT('newOpts')}</span>
+        <span class="qlink" onclick="openIdeaSheet(${di},'${meal}')">＋ ${LT('addIdea')}</span>
+      </div>
+      <div class="saverow">
+        <button class="btn-save" onclick="saveMeal(${di},'${meal}')">${LT('save')}</button>
+        <span class="skip-link" onclick="skipMeal(${di},'${meal}')">${LT('skip')}</span>
+      </div>
     </div>
   </div>`;
+}
+/* overflow menu for a dish bubble (like / replace / remove) */
+function openDishMenu(di,meal,id){
+  const r=byId(id); if(!r) return;
+  const liked=taste.stars[id]==='more';
+  openSheetHtml(`<h2>${esc(L(r.n))}</h2>
+    <div class="ovfmenu">
+      <button onclick="likeDish('${id}');closeSheet();renderPlan()">${liked?'♥ '+(LT('unlike')||'Remove like'):'♡ '+(LT('like')||'Like')}</button>
+      <button onclick="closeSheet();refreshOption(${di},'${meal}','${id}')">↻ ${LT('replaceOpt')||'Replace this option'}</button>
+      <button onclick="openRecipe('${id}')">${LT('viewRecipe')||'View recipe'} ›</button>
+      <button class="danger" onclick="closeSheet();trashDish('${id}')">${LT('removeDish')||'Remove'}</button>
+    </div>`);
 }
 function renderPlan(){
   quotaBar();
