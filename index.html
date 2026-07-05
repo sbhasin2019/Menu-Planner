@@ -169,6 +169,38 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .thali .th-chips{display:flex; gap:5px; flex-wrap:wrap}
 .thali .th-chip{background:var(--card-active); border:1px solid #EAD9AE; border-radius:var(--r-chip); font-size:12px; padding:2px 10px; color:var(--ink)}
 .thali.empty .th-chips{opacity:.65; font-style:normal}
+/* thali trigger bubble */
+.dishbub.thali-trigger{border-color:var(--haldi); background:var(--thali-bg)}
+.dishbub.thali-trigger .chev{align-self:center}
+/* thali composer chips */
+.tg-lbl{font-family:var(--font-text); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-label); margin:14px 0 7px}
+.tg-accordion{display:flex; flex-direction:column; gap:8px; margin-top:4px}
+/* persistent 'your thali so far' strip */
+.thali-sofar{background:var(--saved-fill); border:1px solid var(--saved-border); border-radius:var(--r-strip); padding:9px 12px; margin:2px 0 4px}
+.thali-sofar .tsf-lbl{font-family:var(--font-text); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dhaniya); margin-bottom:6px}
+.thali-sofar .tsf-chips{display:flex; flex-wrap:wrap; gap:6px}
+.tsf-chip{display:inline-flex; align-items:center; gap:6px; background:var(--card-active); border:1px solid var(--saved-border); border-radius:var(--r-chip); padding:4px 6px 4px 11px; font-family:var(--font-display); font-weight:600; font-size:13.5px; color:var(--ink)}
+.tsf-chip .x{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--dhaniya);color:#fff;font-size:10px;cursor:pointer}
+.tg-sec{border:1.5px solid var(--c-line-mid); border-radius:var(--r-bubble); background:var(--card); overflow:hidden}
+.tg-sec.open{border-color:var(--haldi)}
+.tg-head{width:100%; display:flex; align-items:center; justify-content:space-between; background:none; border:none; padding:14px 16px; cursor:pointer; font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--ink); min-height:50px}
+.tg-sec.open .tg-head{background:var(--thali-bg)}
+.tg-head-lbl{text-align:left}
+.tg-caret{color:var(--haldi-deep); font-size:14px; font-weight:700}
+.tg-sec .tg-wrap{padding:4px 14px 14px}
+.tg-wrap{display:flex; flex-wrap:wrap; gap:7px}
+.tchip{border:1.5px solid var(--c-line-mid); background:var(--card-active); border-radius:var(--r-chip); padding:8px 13px; font-family:var(--font-text); font-size:13.5px; font-weight:600; color:var(--ink); cursor:pointer; min-height:40px}
+.tchip.on{background:var(--dhaniya); border-color:var(--dhaniya); color:#fff}
+.thali-foot{position:sticky; bottom:0; background:var(--paper); padding-top:10px; margin-top:8px}
+.th-chip .x{margin-left:5px; color:var(--mirchi); cursor:pointer; font-weight:700}
+.th-chip.add{border-style:dashed; cursor:pointer; color:var(--ink-muted)}
+/* saved thali row */
+.savedrow.thali-saved{border-left-color:var(--haldi)}
+.th-protline{font-family:var(--font-text); font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--haldi-deep); margin-bottom:4px}
+.th-complist{display:flex; flex-wrap:wrap; gap:5px}
+.th-comp{font-family:var(--font-display); font-weight:600; font-size:14.5px; color:var(--ink); background:var(--card-active); border:1px solid var(--c-line-mid); border-radius:var(--r-chip); padding:2px 10px; cursor:pointer}
+.th-comp.staple{color:var(--haldi-deep)}
+.th-comp.extra{color:var(--ink-muted); font-weight:500; border-style:dashed}
 /* collapsed 'tap to choose' row (one-meal-open) */
 .choose-row{display:flex; align-items:center; gap:12px; margin:0 12px 8px; padding:13px 14px; border:1.5px solid var(--mirchi); border-radius:var(--r-bubble); background:var(--card-active); cursor:pointer}
 .choose-row .seal{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
@@ -477,6 +509,45 @@ const T = {
   changeSides:['Change sides ›','साइड बदलें ›'],
   serves:['serves','के लिए'],
   tapChoose:['Tap to choose','चुनने के लिए टैप करें'],
+  indianMeal:['Indian Meal','भारतीय थाली'],
+  indianMealHi:['थाली बनाएँ','थाली बनाएँ'],
+  indianMealSub:['Build a full thali — dals, sabzis, curd, salad','दाल, सब्ज़ी, दही, सलाद — पूरी थाली'],
+  thaliBuild:['Build your thali','अपनी थाली बनाएँ'],
+  thaliVegQ:['Is this a veg or non-veg meal?','यह वेज है या नॉन-वेज?'],
+  thaliVeg:['🥬 Veg','🥬 वेज'],
+  thaliNonveg:['🍗 Non-veg','🍗 नॉन-वेज'],
+  thaliEggNote:['Egg dishes appear in both.','अंडे की डिश दोनों में मिलेंगी।'],
+  thaliProtQ:['Which protein?','कौन-सा प्रोटीन?'],
+  thaliPickDishes:['Pick your dishes','अपनी डिश चुनें'],
+  thaliPickHint:['Choose as many as you like — a dal, a sabzi, whatever the meal is.','जितनी चाहें चुनें — दाल, सब्ज़ी, जो भी हो।'],
+  thaliChosen:['dishes chosen','डिश चुनी'],
+  thaliSoFar:['Your thali so far','अब तक की थाली'],
+  thaliNonePicked:['Pick at least one dish','कम से कम एक डिश चुनें'],
+  thaliNext:['Next','आगे'],
+  back:['Back','पीछे'],
+  thaliStapleQ:['Roti or rice?','रोटी या चावल?'],
+  thaliStapleHint:['Pick one, both, or neither.','एक, दोनों, या कोई नहीं।'],
+  thaliRoti:['🫓 Roti','🫓 रोटी'],
+  thaliRice:['🍚 Rice','🍚 चावल'],
+  thaliReview:['Your thali','आपकी थाली'],
+  thaliDishes:['Dishes','डिश'],
+  thaliStaple:['Staple','रोटी/चावल'],
+  thaliAlways:['Always on the table','हमेशा साथ'],
+  thaliCurd:['Curd','दही'],
+  thaliSalad:['Salad','सलाद'],
+  thaliZoyaQ:['Non-veg thali on a family night — how does Zoya eat?','फैमिली नॉन-वेज थाली — ज़ोया क्या खाएगी?'],
+  thaliZoyaVeg:['She eats the veg dishes','वह वेज डिश खाएगी'],
+  thaliZoyaSwap:['Add chicken/fish for her','उसके लिए चिकन/मछली'],
+  thaliDone:['Save thali','थाली सेव करें'],
+  thaliEditDishes:['Edit dishes','डिश बदलें'],
+  thaliSaved:['Thali saved','थाली सेव हो गई'],
+  thaliNeedDish:['Pick at least one dish','कम से कम एक डिश चुनें'],
+  thaliVegLabel:['Veg thali','वेज थाली'],
+  thaliNonvegLabel:['thali','थाली'],
+  tgDal:['Dals & lentils','दाल'],
+  tgPulse:['Pulses (rajma, chole…)','राजमा, छोले…'],
+  tgPaneer:['Paneer','पनीर'],
+  tgSabzi:['Sabzis','सब्ज़ी'],
   qHead:['This week\u2019s proteins','हफ़्ते का हिसाब'],
   qLeft:['left','बाकी'], qDone:['done','पूरा'], qOver:['over','ज़्यादा'], qPlanned:['planned','तय'],
   replaceOpt:['Replace this option','यह विकल्प बदलें'],
@@ -596,6 +667,37 @@ const SIDE_TYPES = ['dal','sabzi','staple','salad','raita'];
 const SIDE_TYPE_LABEL = {dal:'sdal',sabzi:'ssabzi',staple:'sstaple',salad:'ssalad',raita:'sraita'};
 function sideById(id){ return SIDES.find(s=>s.id===id) }
 function sidesOf(type){ return SIDES.filter(s=>s.type===type) }
+
+/* ============ THALI COMPOSER CATALOG ============ */
+/* Unifies veg-Indian SEED dishes + SIDES accompaniments into scannable groups.
+   Each component: {id, n:[en,hi], grp, src:'seed'|'side'}. grp ∈ dal|sabzi|paneer|pulse */
+function thaliComponents(){
+  const out=[];
+  // from SIDES (simple accompaniment versions)
+  SIDES.filter(s=>s.type==='dal').forEach(s=>out.push({id:s.id,n:s.n,grp:'dal',src:'side'}));
+  SIDES.filter(s=>s.type==='sabzi').forEach(s=>out.push({id:s.id,n:s.n,grp:'sabzi',src:'side'}));
+  // from SEED (fuller Indian veg dishes) — classify by name/flags
+  const PULSE_IDS=['l15','l16','y11','z21','z62','z64','z67','z68'];   // rajma/chole/lobia/chana/sambar/palak dal
+  const DAL_IDS=['y8','y9','y10','z23','z30','z61','z73','x2'];         // dal makhani/kadhi/khichdi/sindhi/lemon rice/panchmel/dal tadka/dosa
+  activeRecipes().filter(r=>r.cz==='Indian'&&(r.co.includes('lunch')||r.co.includes('dinner'))).forEach(r=>{
+    if(r.p==='paneer') out.push({id:r.id,n:r.n,grp:'paneer',src:'seed'});
+    else if(r.p==='veg'){
+      if(PULSE_IDS.includes(r.id)) out.push({id:r.id,n:r.n,grp:'pulse',src:'seed'});
+      else if(DAL_IDS.includes(r.id)||r.isDal) out.push({id:r.id,n:r.n,grp:'dal',src:'seed'});
+      else out.push({id:r.id,n:r.n,grp:'sabzi',src:'seed'});
+    }
+  });
+  // dedupe by id
+  const seen={}; return out.filter(c=>seen[c.id]?false:(seen[c.id]=true));
+}
+/* non-veg Indian protein dishes for the composer, by protein token */
+function thaliProteinDishes(tok){
+  return activeRecipes().filter(r=>r.cz==='Indian'&&tokenOf(r.p)===tok&&(r.co.includes('lunch')||r.co.includes('dinner')));
+}
+/* resolve a thali component or dish id to a display name (handles both SIDES and SEED) */
+function thaliName(id){ const r=byId(id); if(r) return L(r.n); const s=sideById(id); return s?L(s.n):id; }
+function thaliNameObj(id){ const r=byId(id); if(r) return r.n; const s=sideById(id); return s?s.n:[id,id]; }
+const THALI_GROUPS=[['dal','tgDal'],['pulse','tgPulse'],['paneer','tgPaneer'],['sabzi','tgSabzi']];
 </script>
 <script>
 /* ============ MAINS — bilingual ============
@@ -1437,6 +1539,172 @@ function setProtein(di,meal,tok){
   logEvent({k:'prot',d:day.date,m:meal,p:tok});
   closeSheet(); savePlan(); store.set('sideHist',sideHist); renderPlan();
 }
+
+/* ================= THALI COMPOSER ================= */
+/* Working draft while composing; committed to the slot on Done. */
+let thaliDraft = null;   // {di, meal, veg, protein, dishes:[ids], staple:[], curd, salad, zoya}
+function startThali(di,meal){
+  const existing = plan.days[di][meal] && plan.days[di][meal].thali ? plan.days[di][meal] : null;
+  thaliDraft = existing ? JSON.parse(JSON.stringify({di,meal,veg:existing.veg,protein:existing.protein,dishes:existing.dishes||[],staple:existing.staple||[],curd:existing.curd!==false,salad:existing.salad!==false,zoya:existing.zoya||null}))
+                        : {di,meal,veg:null,protein:null,dishes:[],staple:[],curd:true,salad:true,zoya:null};
+  thaliStep('type');
+}
+function thaliStep(step){
+  const d=thaliDraft; if(!d) return;
+  if(step==='type'){
+    openSheetHtml(`<h2>${LT('thaliBuild')}</h2>
+      <div class="hint" style="font-size:13px;color:var(--ink-muted);margin:4px 0 12px">${LT('thaliVegQ')}</div>
+      <div class="pgrid">
+        <button class="pchip ${d.veg===true?'on':''}" onclick="thaliDraft.veg=true;thaliDraft.protein=null;thaliStep('dishes')">${LT('thaliVeg')}</button>
+        <button class="pchip ${d.veg===false?'on':''}" onclick="thaliDraft.veg=false;thaliStep('protein')">${LT('thaliNonveg')}</button>
+      </div>
+      <div class="hint" style="font-size:11.5px;color:var(--ink-faint);margin-top:10px">${LT('thaliEggNote')}</div>`);
+  }
+  else if(step==='protein'){
+    const prots=[['chicken'],['fish'],['prawns'],['mutton'],['egg']];
+    openSheetHtml(`<h2>${LT('thaliProtQ')}</h2>
+      <div class="pgrid">${prots.map(([t])=>{
+        const meta=PROTEIN_META[t];
+        return `<button class="pchip ${d.protein===t?'on':''}" onclick="thaliDraft.protein='${t}';thaliStep('dishes')"><span class="pdot" style="background:${meta[1]};margin-right:5px"></span>${pName(t)}</button>`;
+      }).join('')}</div>
+      <div style="margin-top:14px"><span class="skip-link" onclick="thaliStep('type')">‹ ${LT('back')}</span></div>`);
+  }
+  else if(step==='dishes'){
+    let h=`<h2>${LT('thaliPickDishes')}</h2>`;
+    // persistent "your thali so far" strip — always visible, updates live
+    if(d.dishes.length){
+      h+=`<div class="thali-sofar">
+        <div class="tsf-lbl">${LT('thaliSoFar')}</div>
+        <div class="tsf-chips">${d.dishes.map(id=>`<span class="tsf-chip">${esc(thaliName(id))}<span class="x" onclick="thaliRemoveFromStrip('${id}')">✕</span></span>`).join('')}</div>
+      </div>`;
+    }
+    h+=`<div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliPickHint')}</div>`;
+    // build the list of accordion sections: [key, label, items[]]
+    const sections=[];
+    if(!d.veg && d.protein){
+      sections.push(['prot', pName(d.protein), thaliProteinDishes(d.protein).map(r=>({id:r.id,n:r.n}))]);
+    }
+    const comps=thaliComponents();
+    THALI_GROUPS.forEach(([g,lbl])=>{
+      const items=comps.filter(c=>c.grp===g);
+      if(items.length) sections.push([g, LT(lbl), items]);
+    });
+    // default open group = first section, unless the draft remembers one
+    if(d.openGrp===undefined) d.openGrp = sections.length? sections[0][0] : null;
+    h+=`<div class="tg-accordion">`;
+    sections.forEach(([key,label,items])=>{
+      const open = d.openGrp===key;
+      h+=`<div class="tg-sec ${open?'open':''}">
+        <button class="tg-head" onclick="thaliOpenGroup('${key}')">
+          <span class="tg-head-lbl">${label}</span>
+          <span class="tg-caret">${open?'▾':'▸'}</span>
+        </button>`;
+      if(open){
+        h+=`<div class="tg-wrap">`+items.map(c=>thaliChip(c.id,c.n)).join('')+`</div>`;
+      }
+      h+=`</div>`;
+    });
+    h+=`</div>`;
+    h+=`<div class="thali-foot">
+      <div class="hint" style="font-size:12px;color:var(--ink-muted)">${(d.dishes.length? d.dishes.length+' '+LT('thaliChosen') : LT('thaliNonePicked'))}</div>
+      <div class="btnrow" style="margin-top:10px">
+        <button class="btn primary" onclick="thaliStep('staple')" ${d.dishes.length?'':'disabled style=opacity:.5'}>${LT('thaliNext')} ›</button>
+        <button class="btn ghost small" onclick="thaliStep('${d.veg?'type':'protein'}')">‹ ${LT('back')}</button>
+      </div></div>`;
+    openSheetHtml(h);
+  }
+  else if(step==='staple'){
+    openSheetHtml(`<h2>${LT('thaliStapleQ')}</h2>
+      <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliStapleHint')}</div>
+      <div class="pgrid">
+        <button class="pchip ${d.staple.includes('roti')?'on':''}" onclick="thaliToggleStaple('roti')">${LT('thaliRoti')}</button>
+        <button class="pchip ${d.staple.includes('rice')?'on':''}" onclick="thaliToggleStaple('rice')">${LT('thaliRice')}</button>
+      </div>
+      <div class="btnrow" style="margin-top:16px">
+        <button class="btn primary" onclick="thaliStep('review')">${LT('thaliNext')} ›</button>
+        <button class="btn ghost small" onclick="thaliStep('dishes')">‹ ${LT('back')}</button>
+      </div>`);
+  }
+  else if(step==='review'){
+    const chips = d.dishes.map(id=>`<span class="th-chip">${esc(thaliName(id))} <span class="x" onclick="thaliRemoveDish('${id}')">✕</span></span>`).join('');
+    const staples = d.staple.map(s=>`<span class="th-chip">${LT('thali'+s.charAt(0).toUpperCase()+s.slice(1))} <span class="x" onclick="thaliToggleStaple('${s}');thaliStep('review')">✕</span></span>`).join('');
+    let h=`<h2>${LT('thaliReview')}</h2>
+      <div class="tg-lbl">${LT('thaliDishes')}</div><div class="th-chips" style="margin-bottom:10px">${chips||'<span class="hint">—</span>'}</div>`;
+    if(staples) h+=`<div class="tg-lbl">${LT('thaliStaple')}</div><div class="th-chips" style="margin-bottom:10px">${staples}</div>`;
+    h+=`<div class="tg-lbl">${LT('thaliAlways')}</div><div class="th-chips" style="margin-bottom:10px">
+      ${d.curd?`<span class="th-chip">${LT('thaliCurd')} <span class="x" onclick="thaliDraft.curd=false;thaliStep('review')">✕</span></span>`:`<span class="th-chip add" onclick="thaliDraft.curd=true;thaliStep('review')">+ ${LT('thaliCurd')}</span>`}
+      ${d.salad?`<span class="th-chip">${LT('thaliSalad')} <span class="x" onclick="thaliDraft.salad=false;thaliStep('review')">✕</span></span>`:`<span class="th-chip add" onclick="thaliDraft.salad=true;thaliStep('review')">+ ${LT('thaliSalad')}</span>`}
+    </div>`;
+    // Zoya prompt for non-veg family meal
+    const fam=isFamilySlot(d.meal, plan.days[d.di].date);
+    if(!d.veg && fam){
+      h+=`<div class="tg-lbl">${LT('thaliZoyaQ')}</div><div class="pgrid" style="margin-bottom:8px">
+        <button class="pchip ${d.zoya==='veg'?'on':''}" onclick="thaliDraft.zoya='veg';thaliStep('review')">${LT('thaliZoyaVeg')}</button>
+        <button class="pchip ${d.zoya==='swap'?'on':''}" onclick="thaliDraft.zoya='swap';thaliStep('review')">${LT('thaliZoyaSwap')}</button>
+      </div>`;
+    }
+    h+=`<div class="btnrow" style="margin-top:16px">
+      <button class="btn primary" onclick="commitThali()">${LT('thaliDone')}</button>
+      <button class="btn ghost small" onclick="thaliStep('dishes')">${LT('thaliEditDishes')}</button>
+    </div>`;
+    openSheetHtml(h);
+  }
+}
+function thaliGroupOf(id){
+  // which accordion group a picked dish belongs to
+  const d=thaliDraft;
+  if(!d.veg && d.protein){
+    if(thaliProteinDishes(d.protein).some(r=>r.id===id)) return 'prot';
+  }
+  const c=thaliComponents().find(x=>x.id===id);
+  return c?c.grp:(d.openGrp||null);
+}
+function thaliRemoveFromStrip(id){
+  const i=thaliDraft.dishes.indexOf(id);
+  if(i>=0) thaliDraft.dishes.splice(i,1);
+  // reopen the group the dish came from, so you can re-pick in context
+  thaliDraft.openGrp = thaliGroupOf(id);
+  thaliStep('dishes');
+}
+function thaliOpenGroup(key){
+  // one group open at a time; tapping the open one collapses it
+  thaliDraft.openGrp = (thaliDraft.openGrp===key) ? null : key;
+  thaliStep('dishes');
+}
+function thaliChip(id,n){
+  const on=thaliDraft.dishes.includes(id);
+  return `<button class="tchip ${on?'on':''}" onclick="thaliToggleDish('${id}')">${on?'✓ ':''}${esc(L(n))}</button>`;
+}
+function thaliToggleDish(id){
+  const i=thaliDraft.dishes.indexOf(id);
+  if(i>=0) thaliDraft.dishes.splice(i,1); else thaliDraft.dishes.push(id);
+  thaliStep('dishes');
+}
+function thaliRemoveDish(id){ const i=thaliDraft.dishes.indexOf(id); if(i>=0) thaliDraft.dishes.splice(i,1); thaliStep('review'); }
+function thaliToggleStaple(s){
+  const i=thaliDraft.staple.indexOf(s);
+  if(i>=0) thaliDraft.staple.splice(i,1); else thaliDraft.staple.push(s);
+  thaliStep('staple');
+}
+function commitThali(){
+  const d=thaliDraft; if(!d||!d.dishes.length){ toast(LT('thaliNeedDish')); return }
+  const day=plan.days[d.di];
+  // protein token for quota: non-veg thali counts as its protein; veg counts veg
+  const tok = d.veg ? 'veg' : (d.protein==='prawns'?'fish':d.protein==='egg'?'veg':d.protein);
+  day[d.meal] = {
+    thali:true, veg:d.veg, protein:d.protein,
+    dishes:d.dishes.slice(), staple:d.staple.slice(),
+    curd:d.curd!==false, salad:d.salad!==false, zoya:d.zoya,
+    saved:true, token:tok,
+    chosen:d.dishes.slice(), alts:d.dishes.slice()   // compatibility with engine helpers
+  };
+  logEvent({k:'thali',d:day.date,m:d.meal,veg:d.veg,protein:d.protein,dishes:d.dishes.slice(),staple:d.staple.slice(),curd:d.curd!==false,salad:d.salad!==false,zoya:d.zoya});
+  d.dishes.forEach(id=>{ if(byId(id)){ bumpTaste(id,1); history[id]=day.date; } });
+  thaliDraft=null;
+  advanceAfterDecision(d.di,d.meal);
+  closeSheet(); savePlan(); store.set('history',history); renderPlan();
+  toast(LT('thaliSaved'));
+}
 function refreshSidesForLead(di,meal){
   const day=plan.days[di], slot=day[meal];
   if(meal==='breakfast'||slot.sidesEdited) return;
@@ -1690,6 +1958,26 @@ function mealRow(di,meal,slot,dateIso){
     </div>`;
   }
 
+  if(slot.thali && slot.saved){
+    const comps = (slot.dishes||[]).map(id=>{
+      const nm=thaliNameObj(id);
+      return `<span class="th-comp" onclick="event.stopPropagation();openRecipe('${id}')">${esc(L(nm))}</span>`;
+    }).join('');
+    const staples = (slot.staple||[]).map(s=>`<span class="th-comp staple">${LT('thali'+s.charAt(0).toUpperCase()+s.slice(1))}</span>`).join('');
+    const extras = [slot.curd!==false?`<span class="th-comp extra">${LT('thaliCurd')}</span>`:'', slot.salad!==false?`<span class="th-comp extra">${LT('thaliSalad')}</span>`:''].filter(Boolean).join('');
+    const protLine = slot.veg ? LT('thaliVegLabel') : `${pName(slot.protein||'chicken')} ${LT('thaliNonvegLabel')}`;
+    const zoyaChip = (!slot.veg && slot.zoya==='swap') ? `<div class="warnchip" style="margin:2px 0 6px 58px">⚑ ${LT('zoyaPair')}</div>` : '';
+    return `<div class="mealblock">
+      <div class="mealhead"><span>${lab}</span>${headWho}${changeLink}</div>
+      <div class="savedrow thali-saved" onclick="startThali(${di},'${meal}')">
+        <div class="seal" style="background:var(--haldi)">◍</div>
+        <div class="body">
+          <div class="th-protline">${protLine}</div>
+          <div class="th-complist">${comps}${staples}${extras}</div>
+        </div>
+        ${ro?'':`<span class="edit">${LT('change')}</span>`}
+      </div>${zoyaChip}</div>`;
+  }
   if(slot.saved){
     const rows=slot.chosen.map(id=>{
       const r=byId(id); if(!r) return '';
@@ -1770,12 +2058,19 @@ function mealRow(di,meal,slot,dateIso){
       <button class="ovf" onclick="event.stopPropagation();removeIdea(${di},'${meal}',${i})">✕</button>
     </div>`).join('');
   const thali = thaliStrip(di,meal,slot);
+  const indianMealBtn = meal==='breakfast' ? '' :
+    `<div class="dishbub thali-trigger" onclick="startThali(${di},'${meal}')">
+      <div class="seal" style="border-color:var(--haldi);color:var(--haldi)">◍</div>
+      <div class="body"><div class="lock2"><div class="en">${LT('indianMeal')}</div><div class="hi" lang="hi">${LT('indianMealHi')}</div></div>
+      <div class="ometa">${LT('indianMealSub')}</div></div>
+      <span class="chev" style="color:var(--haldi);font-family:var(--font-display);font-weight:700;font-size:18px">›</span>
+    </div>`;
   const tokNow = slot.token || (byId(primary(slot))?tokenOf(byId(primary(slot)).p):'');
   const protPill = meal==='breakfast' ? '' :
     `<button class="protpill" onclick="openProteinSheet(${di},'${meal}')"><span class="pdot" style="background:${(PROTEIN_META[tokNow==='veg'?'veg':tokNow]||['','#999'])[1]}"></span>${LT('changeProt')}<span class="car">▾</span></button>`;
   return `<div class="mealblock">
     <div class="mealhead open"><span>${lab}</span>${headWho}${protPill}</div>
-    ${bubbles}${ideaBubs}${thali}
+    ${bubbles}${ideaBubs}${indianMealBtn}${thali}
     <div class="mealfoot">
       <div class="quiet">
         <span class="qlink" onclick="swapSlot(${di},'${meal}')">↻ ${LT('newOpts')}</span>
@@ -1882,6 +2177,15 @@ function menuText(lg){
       const sl=d[m]; if(!sl) return;
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
       if(sl.skipped){ t+=pre+Lx(T.skippedWA,lg)+'\n'; return }
+      if(sl.thali && sl.saved){
+        const parts=(sl.dishes||[]).map(id=>{ const nm=thaliNameObj(id); return Lx(nm,lg); }).filter(Boolean);
+        (sl.staple||[]).forEach(s=>parts.push(Lx(T['thali'+s.charAt(0).toUpperCase()+s.slice(1)],lg)));
+        if(sl.curd!==false) parts.push(Lx(T.thaliCurd,lg));
+        if(sl.salad!==false) parts.push(Lx(T.thaliSalad,lg));
+        const zp=(!sl.veg&&sl.zoya==='swap')?' ('+Lx(T.zoyaPair,lg).replace('+ ','')+')':'';
+        t+=pre+parts.join(' + ')+zp+'\n';
+        return;
+      }
       if(!sl.saved||!sl.chosen.length){ t+=pre+Lx(T.notDecided,lg)+'\n'; return }
       const names=sl.chosen.map(id=>byId(id)?Lx(byId(id).n,lg):'').filter(Boolean)
         .concat((sl.ideas||[]).map(x=>'✱ '+x));
@@ -2077,6 +2381,14 @@ function buildGrocery(){
       if(m==='lunch' && tokenOf(r.p)==='veg') vegLunches++;
       r.ing.forEach(g=>addItem(g[0],g[1],g[2],g[3]));
     });
+    // thali: SIDES-based components (dals/sabzis not in SEED) + staple + curd/salad
+    if(slot.thali){
+      (slot.dishes||[]).forEach(cid=>{ const s=sideById(cid); if(s&&s.buy&&s.buy[0]) addItem(s.buy[0],s.buy[1],s.buy[2],s.buy[3]); });
+      if((slot.staple||[]).includes('roti')) addItem('Atta','आटा','','pantry');
+      if((slot.staple||[]).includes('rice')) addItem('Rice','चावल','','pantry');
+      if(slot.curd!==false) addItem('Curd','दही','','dairy');
+      if(slot.salad!==false) addItem('Cucumber + tomato + onion','खीरा + टमाटर + प्याज़','','veg');
+    }
     Object.values(slot.sides||{}).forEach(id=>{ const s=sideById(id); if(s&&s.buy&&s.buy[0]) addItem(s.buy[0],s.buy[1],s.buy[2],s.buy[3]) });
   }));
   if(vegLunches) addItem('Chicken boneless (tikka add-on)','बोनलेस चिकन (टिक्का के लिए)',(350*vegLunches)+' g','meat');
