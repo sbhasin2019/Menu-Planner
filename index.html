@@ -67,10 +67,10 @@ nav.tabs button.on .ic{filter:none; transform:translateY(-2px)}
 nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:25%; height:3px; border-radius:0 0 4px 4px; background:var(--haldi)}
 .page{display:none}
 .page.on{display:block}
-.btn{border:2px solid var(--ink); border-radius:999px; padding:10px 16px; font-family:var(--disp); font-weight:700; font-size:14px; cursor:pointer; box-shadow:3px 3px 0 var(--ink); transition:transform .08s, box-shadow .08s}
-.btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
-.btn.primary{background:var(--mirchi); color:#FFFAF0}
-.btn.ghost{background:var(--card); color:var(--ink)}
+.btn{border:1.5px solid var(--c-line-strong); border-radius:999px; padding:11px 18px; font-family:var(--font-display); font-weight:700; font-size:14px; cursor:pointer; box-shadow:var(--shadow-button); transition:transform .08s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--mirchi); color:#fff; border-color:var(--mirchi)}
+.btn.ghost{background:var(--card-active); color:var(--ink)}
 .btn.small{padding:6px 12px; font-size:13px}
 .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px}
 /* quota dabba */
@@ -178,40 +178,62 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .protpill{display:inline-flex; align-items:center; gap:5px; background:var(--card-active); border:1.5px solid var(--c-line-mid); border-radius:var(--r-chip); padding:5px 12px; font-family:var(--font-text); font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer; margin-left:auto}
 .protpill .car{font-size:10px; color:var(--ink-label)}
 .empty-slot{color:var(--muted); font-style:italic; font-size:14px}
-.chip{display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; background:var(--dhaniya-soft); color:var(--dhaniya)}
-.chip.cuisine{background:var(--steel-soft); color:var(--steel)}
-.chip.warn{background:var(--mirchi-soft); color:var(--mirchi)}
-.chip.haldi{background:var(--haldi-soft); color:#8A6310}
+.chip{display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:600; font-family:var(--font-text); background:var(--saved-fill); color:var(--dhaniya)}
+.chip.cuisine{background:var(--card-active); border:1px solid var(--c-line-mid); color:var(--ink)}
+.chip.warn{background:var(--warn-bg); border:1px solid var(--warn-border); color:var(--warn-text)}
+.chip.haldi{background:var(--warn-bg); color:var(--haldi-deep)}
 .flames{font-size:11px; letter-spacing:-1px}
 .searchrow{display:flex; gap:8px; margin:6px 0 10px}
 .searchrow input{flex:1; border:2px solid var(--ink); border-radius:999px; padding:10px 16px; font-family:var(--body-font); font-size:15px; background:var(--card)}
 .filters{display:flex; gap:7px; overflow-x:auto; padding:2px 2px 10px}
 .filters::-webkit-scrollbar{display:none}
-.fchip{flex-shrink:0; border:2px solid var(--ink); background:var(--card); border-radius:999px; padding:6px 13px; font-family:var(--disp); font-size:13px; font-weight:700; color:var(--ink); cursor:pointer}
-.fchip.on{background:var(--haldi); box-shadow:2px 2px 0 var(--ink)}
-.rcard{background:var(--card); border:2px solid var(--ink); border-radius:var(--r); box-shadow:3px 3px 0 rgba(32,36,47,.12); padding:13px 16px; margin-bottom:11px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform .08s}
-.rcard:active{transform:translate(1px,1px)}
+.fchip{flex-shrink:0; border:1.5px solid var(--c-line-mid); background:var(--card-active); border-radius:999px; padding:7px 14px; font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--ink); cursor:pointer}
+.fchip.on{background:var(--ink-surface); border-color:var(--ink-surface); color:var(--ink-on-dark)}
+.rcard{background:var(--card); border:1px solid var(--c-line-mid); border-radius:var(--r-ticket-sm); box-shadow:var(--shadow-print); padding:13px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; gap:12px}
+
 .rcard.hiddenr{opacity:.45}
 .rcard .info{flex:1; min-width:0}
 .rcard .nm{font-family:var(--disp); font-weight:700; font-size:16px}
-.rcard .mt{font-size:12.5px; color:var(--muted); margin-top:2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-.kidflags{display:flex; flex-direction:column; gap:3px; font-size:10.5px; font-weight:700; text-align:right; flex-shrink:0; font-family:var(--disp)}
+.rcard .info .lock2 .en{font-size:16px}
+.rcard .info .lock2 .hi{font-size:14.5px; color:var(--ink-muted)}
+.rcard .mt{font-family:var(--font-text); font-size:12.5px; color:var(--ink-muted); margin-top:3px; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.kidflags{display:flex; flex-direction:column; gap:3px; font-size:10.5px; font-weight:600; text-align:right; flex-shrink:0; font-family:var(--font-text)}
 .kidflags .no{color:var(--mirchi)}
 .kidflags .ok{color:var(--dhaniya)}
 .sheetbg{position:fixed; inset:0; background:rgba(32,36,47,.5); z-index:100; display:none}
 .sheetbg.on{display:block}
-.sheet{position:fixed; left:0; right:0; bottom:0; max-height:88vh; overflow-y:auto; background:var(--aam); border:2px solid var(--ink); border-bottom:none; border-radius:22px 22px 0 0; z-index:101; padding:22px 18px calc(24px + env(safe-area-inset-bottom)); transform:translateY(102%); transition:transform .22s ease; max-width:680px; margin:0 auto}
-.sheet::before{content:''; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:44px; height:5px; border-radius:99px; background:var(--line)}
+.sheet{position:fixed; left:0; right:0; bottom:0; max-height:88vh; overflow-y:auto; background:var(--paper); border:1px solid var(--c-line-mid); border-bottom:none; border-radius:24px 24px 0 0; z-index:101; padding:22px 18px calc(24px + env(safe-area-inset-bottom)); transform:translateY(102%); transition:transform .22s ease; max-width:680px; margin:0 auto; box-shadow:0 -8px 30px rgba(51,41,28,.14)}
+.sheet::before{content:''; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:44px; height:5px; border-radius:99px; background:var(--c-line-mid)}
 .sheet.on{transform:none}
-.sheet h2{font-family:var(--disp); font-weight:800; font-size:22px; margin:6px 24px 4px 0; line-height:1.2}
+.sheet h2{font-family:var(--font-display); font-weight:700; font-size:22px; margin:6px 24px 4px 0; line-height:1.2}
 .sheet .badges{display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px}
-.sheet h3{font-family:var(--disp); font-size:12px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); margin:18px 0 8px}
-.ingline{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px dashed var(--line); font-size:14.5px}
+.sheet h3{font-family:var(--font-text); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-label); margin:20px 0 9px}
+/* recipe sheet — bilingual by construction */
+.rx-title{margin:4px 20px 10px 0}
+.rx-title .rx-hi{font-family:var(--font-display); font-weight:700; font-size:23px; line-height:1.3; color:var(--ink)}
+.rx-title .rx-en{font-family:var(--font-display); font-weight:600; font-size:16px; line-height:1.25; color:var(--ink-muted); margin-top:1px}
+.rx-meta{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+.rx-pill{display:inline-flex; align-items:center; gap:5px; background:var(--card-active); border:1px solid var(--c-line-mid); border-radius:var(--r-chip); font-family:var(--font-text); font-size:12px; font-weight:600; color:var(--ink); padding:3px 11px}
+.rx-flag{display:inline-block; font-family:var(--font-text); font-size:12.5px; font-weight:600; color:var(--warn-text); background:var(--warn-bg); border:1px solid var(--warn-border); border-radius:var(--r-strip); padding:6px 11px; margin:0 0 6px}
+.rx-serves{font-weight:500; letter-spacing:0; text-transform:none; color:var(--ink-faint)}
+.rx-ings{margin-bottom:4px}
+.rx-ing{display:grid; grid-template-columns:78px 1fr; grid-template-areas:'qty hi' 'qty en'; gap:0 12px; padding:8px 0; border-bottom:1px solid var(--c-line-soft)}
+.rx-ing .rx-qty{grid-area:qty; font-family:var(--font-text); font-weight:700; font-size:13.5px; color:var(--haldi-deep); align-self:center}
+.rx-ing .rx-ihi{grid-area:hi; font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--ink); line-height:1.3}
+.rx-ing .rx-ien{grid-area:en; font-family:var(--font-text); font-size:12.5px; color:var(--ink-muted); line-height:1.3}
+.rx-steps{counter-reset:none}
+.rx-step{display:flex; gap:12px; margin-bottom:14px}
+.rx-step .rx-n{flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--mirchi); color:#fff; font-family:var(--font-display); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center}
+.rx-step .rx-stext{flex:1; min-width:0}
+.rx-step .rx-shi{font-family:var(--font-display); font-weight:600; font-size:15.5px; line-height:1.45; color:var(--ink)}
+.rx-step .rx-sen{font-family:var(--font-text); font-size:13px; line-height:1.4; color:var(--ink-muted); margin-top:2px}
+.rx-select{flex:1; border:1.5px solid var(--c-line-mid); border-radius:10px; padding:10px; font-family:var(--font-text); background:var(--card-active); color:var(--ink)}
+.ingline{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid var(--c-line-soft); font-size:14.5px; font-family:var(--font-text)}
 .ingline span:last-child{color:var(--muted); white-space:nowrap}
 .stepline{display:flex; gap:10px; margin-bottom:10px; font-size:15px}
 .stepline .n{font-family:var(--disp); font-weight:800; color:var(--mirchi); flex-shrink:0; width:18px}
 .closex{position:absolute; right:14px; top:14px; border:2px solid var(--ink); background:var(--card); border-radius:50%; width:32px; height:32px; font-size:14px; cursor:pointer}
-.sheet .note{background:var(--haldi-soft); border:1.5px dashed var(--haldi); border-radius:10px; padding:10px 12px; font-size:13.5px; color:#6d4f10; margin-bottom:8px}
+.sheet .note{background:var(--thali-bg); border:1px solid #EAD9AE; border-left:4px solid var(--haldi); border-radius:var(--r-strip); padding:11px 13px; font-family:var(--font-text); font-size:13.5px; line-height:1.5; color:var(--haldi-deep); margin-bottom:10px}
 .siderow{background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:11px 13px; margin-bottom:9px}
 .siderow .lab{font-family:var(--disp); font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--mirchi); margin-bottom:5px}
 .siderow select{width:100%; border:2px solid var(--ink); border-radius:10px; padding:9px 10px; font-family:var(--body-font); font-size:14.5px; background:#fff}
@@ -228,15 +250,15 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .addrow{display:flex; gap:8px; margin:8px 0 14px}
 .addrow input{flex:1; border:2px solid var(--ink); border-radius:999px; padding:9px 15px; font-family:var(--body-font); font-size:14px; background:var(--card)}
 .pgrid{display:flex; flex-wrap:wrap; gap:7px; margin:6px 0 4px}
-.pchip{border:2px solid var(--ink); background:var(--card); border-radius:999px; padding:7px 13px; font-family:var(--disp); font-size:13.5px; font-weight:700; color:var(--ink); cursor:pointer}
-.pchip.on{background:var(--steel); border-color:var(--ink); color:#FFFAF0; box-shadow:2px 2px 0 var(--ink)}
+.pchip{border:1.5px solid var(--c-line-mid); background:var(--card-active); border-radius:999px; padding:9px 15px; font-family:var(--font-text); font-size:13.5px; font-weight:600; color:var(--ink); cursor:pointer; min-height:40px}
+.pchip.on{background:var(--ink-surface); border-color:var(--ink-surface); color:var(--ink-on-dark)}
 .match{background:var(--card); border:2px solid var(--ink); border-radius:var(--r); box-shadow:3px 3px 0 rgba(32,36,47,.12); padding:12px 16px; margin-bottom:11px}
 .match .top{display:flex; justify-content:space-between; align-items:center; cursor:pointer}
 .match .pct{font-family:var(--disp); font-weight:800; color:var(--dhaniya); font-size:18px}
 .match .miss{font-size:12.5px; color:var(--mirchi); margin-top:4px}
 .match .have{font-size:12.5px; color:var(--dhaniya); margin-top:2px}
-.frm label{display:block; font-family:var(--disp); font-size:12px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin:13px 0 5px}
-.frm input[type=text], .frm input[type=number], .frm select, .frm textarea{width:100%; border:2px solid var(--ink); border-radius:10px; padding:10px 12px; font-family:var(--body-font); font-size:15px; background:var(--card)}
+.frm label{display:block; font-family:var(--font-text); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-label); margin:13px 0 5px}
+.frm input[type=text], .frm input[type=number], .frm select, .frm textarea{width:100%; border:1.5px solid var(--c-line-mid); border-radius:10px; padding:11px 12px; font-family:var(--font-text); font-size:15px; background:var(--card-active); color:var(--ink)}
 .frm textarea{min-height:90px}
 .frm .hint{font-size:12px; color:var(--muted); margin-top:4px}
 .setrow{display:flex; justify-content:space-between; align-items:center; padding:13px 0; border-bottom:1px dashed var(--line); gap:12px}
@@ -325,7 +347,7 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 <script>
 /* ============ i18n: [en, hi] everywhere; L(x) picks current language ============ */
 const T = {
-  plansub:['7-day plan. Tap a dish for its recipe, tap the yellow strip to change sides. 🧑‍🍳 = cook\'s effort (not spice).','7 दिन का प्लान। रेसिपी के लिए डिश पर, साइड बदलने के लिए पीली पट्टी पर टैप करें। 🧑‍🍳 = कुक की मेहनत (तीखापन नहीं)।'],
+  plansub:['7-day plan. Tap a dish for its recipe, tap the thali strip to change sides. ◆ = cook\'s effort (not spice).','7 दिन का प्लान। रेसिपी के लिए डिश पर, साइड बदलने के लिए थाली पट्टी पर टैप करें। ◆ = कुक की मेहनत (तीखापन नहीं)।'],
   gen:['↻ New week plan','↻ नया हफ्ते का प्लान'], wa:['🟢 WhatsApp'], copy:['Copy','कॉपी'],
   tabPlan:['Plan','प्लान'], tabRecipes:['Recipes','रेसिपी'], tabBazaar:['Bazaar','बाज़ार'], tabTonight:['Tonight','आज क्या?'],
   bzsub:['Shopping list from the week plan. Tick = at home / bought.','हफ्ते के प्लान से शॉपिंग लिस्ट। टिक = घर पर है / ले लिया।'],
@@ -361,7 +383,7 @@ const T = {
   addToPlan:['Add to plan','प्लान में डालें'],
   set:['Set','सेट'],
   sendRecipe:['🟢 Send recipe to cook (Hindi)','🟢 कुक को रेसिपी भेजें'],
-  edit:['✏️ Edit','✏️ बदलें'], del:['🗑 Delete','🗑 हटाएँ'],
+  edit:['Edit','बदलें'], del:['Delete','हटाएँ'],
   hide:['🙈 Remove from rotation','🙈 रोटेशन से हटाएँ'], unhide:['👁 Bring back to rotation','👁 रोटेशन में वापस लाएँ'],
   hid:['Removed from rotation','रोटेशन से हट गया'], unhid:['Back in rotation','वापस आ गया'],
   zoyaAlt:['Zoya needs an alternative','ज़ोया के लिए अलग बनाना होगा'],
@@ -426,8 +448,8 @@ const T = {
   mealSaved:['Saved','सेव हो गया'],
   pickData:['📊 Copy picks data (for Claude)','📊 पिक्स डेटा कॉपी करें (Claude के लिए)'],
   pickCopied:['Picks data copied — paste it to Claude for trend analysis','डेटा कॉपी हो गया — ट्रेंड के लिए Claude को भेजें'],
-  like:['👍 Like','👍 पसंद'],
-  trash:['🗑 Trash','🗑 ट्रैश'],
+  like:['Like','पसंद'],
+  trash:['Remove','हटाएँ'],
   restoreDish:['↩️ Restore','↩️ वापस लाएँ'],
   trashHead:['Trash','ट्रैश'],
   skip:['⏭ Skip — eating out','⏭ स्किप — बाहर खाना'],
@@ -444,6 +466,7 @@ const T = {
   changeProt:['Protein','प्रोटीन'],
   thaliLabel:['THALI · साथ में','थाली · साथ में'],
   changeSides:['Change sides ›','साइड बदलें ›'],
+  serves:['serves','के लिए'],
   qHead:['This week\u2019s proteins','हफ़्ते का हिसाब'],
   qLeft:['left','बाकी'], qDone:['done','पूरा'], qOver:['over','ज़्यादा'], qPlanned:['planned','तय'],
   replaceOpt:['Replace this option','यह विकल्प बदलें'],
@@ -482,7 +505,7 @@ const T = {
   tikkaAddon:['+ quick chicken tikka for us two','+ हम दोनों के लिए झटपट चिकन टिक्का'],
   tuneHead:['Menu tuning','मेनू ट्यूनिंग'],
   indDin:['Indian dinners / week (max)','हफ्ते में भारतीय डिनर (अधिकतम)'],
-  heavyDin:['🧑‍🍳🧑‍🍳🧑‍🍳 dinners / week (max)','🧑‍🍳🧑‍🍳🧑‍🍳 डिनर हफ्ते में (अधिकतम)']
+  heavyDin:['◆◆◆ dinners / week (max)','◆◆◆ डिनर हफ्ते में (अधिकतम)']
 };
 let lang = 'en';
 function L(x){ if(Array.isArray(x)) return x[lang==='hi'?1:0]||x[0]; return x }
@@ -1856,8 +1879,8 @@ function renderRecipes(){
   document.getElementById('rlist').innerHTML = list.length? list.map(r=>{
     const pm=PROTEIN_META[r.p];
     return `<div class="rcard ${(hidden.includes(r.id)||trashed.includes(r.id))?'hiddenr':''}" onclick="openRecipe('${r.id}')">
-      <div class="info"><div class="nm">${esc(L(r.n))}</div>
-      <div class="mt"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)} · ${czName(r.cz)} · ${r.tm} ${LT('min')} · <span class="flames">${'🧑‍🍳'.repeat(r.ef)}</span>${r.kc?` · ~${r.kc} kcal`:''}</div></div>
+      <div class="info">${lockup(r.n)}
+      <div class="mt"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)} · ${czName(r.cz)} · ${r.tm} ${LT('min')} · <span class="eff">${'◆'.repeat(Math.max(1,r.ef))}</span>${r.kc?` · ~${r.kc}`:''}</div></div>
       <div class="kidflags"><span class="${zoyaOK(r)?'ok':'no'}">${zoyaOK(r)?'✓':'✗'} Zoya</span><span class="${aveerOK(r)?'ok':'no'}">${aveerOK(r)?'✓':'✗'} Aveer</span></div>
     </div>`;
   }).join('') : `<div class="legend">${LT('notFound')}</div>`;
@@ -1866,33 +1889,37 @@ function openRecipe(id){
   const r=byId(id); if(!r) return;
   const isCustom=custom.some(c=>c.id===id);
   const dayOpts = plan? plan.days.map(d=>`<option value="${d.date}">${dayLabel(d.date)} (${fmtDate(d.date)})</option>`).join('') : '';
-  let h=`<h2>${esc(L(r.n))}</h2>
-  <div class="badges">
-    <span class="chip cuisine">${czName(r.cz)}</span><span class="chip">${pName(r.p)}</span>
-    <span class="chip haldi">${r.tm} ${LT('min')} · ${LT('effort'+r.ef)}</span>
-    ${r.kc?`<span class="chip">~${r.kc} kcal / serving</span>`:''}
-    ${zoyaOK(r)?'':`<span class="chip warn">✗ Zoya</span>`}${aveerOK(r)?'':`<span class="chip warn">✗ Aveer (${lang==='hi'?'अंडा':'egg'})</span>`}
+  const pm=PROTEIN_META[r.p];
+  // Title: Hindi leads (read at the stove), English rides below in muted ink
+  let h=`<div class="rx-title"><div class="rx-hi" lang="hi">${esc(r.n[1]||r.n[0])}</div><div class="rx-en">${esc(r.n[0])}</div></div>
+  <div class="rx-meta">
+    <span class="rx-pill"><span class="pdot" style="background:${pm[1]}"></span>${pName(r.p)}</span>
+    <span class="rx-pill">${czName(r.cz)}</span>
+    <span class="rx-pill">${r.tm} ${LT('min')}</span>
+    <span class="rx-pill"><span class="eff">${'◆'.repeat(Math.max(1,r.ef))}</span> ${LT('effort'+r.ef)}</span>
+    ${r.kc?`<span class="rx-pill">~${r.kc} kcal</span>`:''}
   </div>`;
-  if(r.gn) h+=`<div class="note">💡 ${esc(L(r.gn))}</div>`;
-  if(!zoyaOK(r)) h+=`<div class="note">${LT('zoyaNote')}</div>`;
-  h+=`<h3>${LT('ingredients')}</h3>`;
-  r.ing.forEach(g=>h+=`<div class="ingline"><span>${esc(L([g[0],g[1]]))}</span><span>${esc(g[2]||'')}</span></div>`);
-  h+=`<h3>${LT('method')}</h3>`;
-  r.st.forEach((s,i)=>h+=`<div class="stepline"><span class="n">${i+1}</span><span>${esc(L(s))}</span></div>`);
+  if(!zoyaOK(r)) h+=`<div class="rx-flag">⚑ ${LT('zoyaPair')}${lang==='hi'?'':' — mild/chicken for Zoya'}</div>`;
+  if(!aveerOK(r)) h+=`<div class="rx-flag">⚑ ${lang==='hi'?'अवीर — अंडा दिखता है':'Aveer — visible egg'}</div>`;
+  if(r.gn) h+=`<div class="note">${esc(L(r.gn))}</div>`;
+  h+=`<h3>${LT('ingredients')} <span class="rx-serves">· ${LT('serves')||'serves'} 4</span></h3><div class="rx-ings">`;
+  r.ing.forEach(g=>h+=`<div class="rx-ing"><span class="rx-qty">${esc(g[2]||'')}</span><span class="rx-ihi" lang="hi">${esc(g[1]||g[0])}</span><span class="rx-ien">${esc(g[0])}</span></div>`);
+  h+=`</div><h3>${LT('method')}</h3><div class="rx-steps">`;
+  r.st.forEach((s,i)=>h+=`<div class="rx-step"><span class="rx-n">${i+1}</span><div class="rx-stext"><div class="rx-shi" lang="hi">${esc(s[1]||s[0])}</div><div class="rx-sen">${esc(s[0])}</div></div></div>`);
+  h+=`</div>`;
   if(plan) h+=`<h3>${LT('addToPlan')}</h3>
   <div style="display:flex;gap:8px">
-    <select id="ap-day" style="flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px;font-family:var(--body-font);background:#fff">${dayOpts}</select>
-    <select id="ap-meal" style="flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px;font-family:var(--body-font);background:#fff">
+    <select id="ap-day" class="rx-select">${dayOpts}</select>
+    <select id="ap-meal" class="rx-select">
       ${r.co.map(c=>`<option value="${c}">${LT(c)}</option>`).join('')}</select>
-    <button class="btn primary small" onclick="setSlot(document.getElementById('ap-day').value,document.getElementById('ap-meal').value,'${r.id}')">${LT('set')}</button>
+    <button class="btn-save" style="padding:9px 18px;font-size:14px" onclick="setSlot(document.getElementById('ap-day').value,document.getElementById('ap-meal').value,'${r.id}')">${LT('set')}</button>
   </div>`;
   const st=taste.stars[r.id]||'';
   const isTrashed=trashed.includes(r.id);
   h+=`<h3>${LT('tasteHead')}</h3><div class="pgrid">
-    <button class="pchip ${st==='more'?'on':''}" onclick="likeDish('${r.id}',true)">${LT('like')}</button>
-    <button class="pchip ${st==='less'?'on':''}" onclick="setStar('${r.id}',${JSON.stringify('less')});openRecipe('${r.id}')">👎 ${LT('likeLess')}</button>
+    <button class="pchip ${st==='more'?'on':''}" onclick="likeDish('${r.id}',true)">${st==='more'?'♥':'♡'} ${LT('like')}</button>
     ${isTrashed
-      ?`<button class="pchip" style="background:var(--dhaniya);color:#fff;border-color:var(--ink)" onclick="restoreDish('${r.id}')">${LT('restoreDish')}</button>`
+      ?`<button class="pchip" style="background:var(--dhaniya);color:#fff" onclick="restoreDish('${r.id}')">${LT('restoreDish')}</button>`
       :`<button class="pchip" style="color:var(--mirchi)" onclick="trashDish('${r.id}')">${LT('trash')}</button>`}
   </div>`;
   h+=`<div class="btnrow" style="margin-top:16px">
@@ -1925,7 +1952,7 @@ function openAddRecipe(editId){
   <label>${LT('fProtein')}</label><select id="f-p">${prots.map(p=>`<option ${r&&r.p===p?'selected':''} value="${p}">${pName(p)}</option>`).join('')}</select>
   <label>${LT('fWhen')}</label>
   <div class="pgrid">${['breakfast','lunch','dinner'].map(c=>`<button class="pchip ${r&&r.co.includes(c)?'on':''}" data-co="${c}" onclick="this.classList.toggle('on')">${LT(c)}</button>`).join('')}</div>
-  <label>${LT('fEffort')}</label><select id="f-ef">${[1,2,3].map(e=>`<option ${r&&r.ef===e?'selected':''} value="${e}">${'🧑‍🍳'.repeat(e)} ${LT('effort'+e)}</option>`).join('')}</select>
+  <label>${LT('fEffort')}</label><select id="f-ef">${[1,2,3].map(e=>`<option ${r&&r.ef===e?'selected':''} value="${e}">${'◆'.repeat(e)} ${LT('effort'+e)}</option>`).join('')}</select>
   <label>${LT('fTime')}</label><input type="number" id="f-tm" value="${r?r.tm:30}">
   <label>kcal / serving (optional)</label><input type="number" id="f-kc" value="${r&&r.kc?r.kc:''}">
   <label style="display:flex;align-items:center;gap:8px;text-transform:none"><input type="checkbox" id="f-ev" style="width:18px;height:18px" ${r&&r.ev?'checked':''}> ${LT('fEgg')}</label>
