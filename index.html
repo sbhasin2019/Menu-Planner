@@ -169,6 +169,15 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .thali .th-chips{display:flex; gap:5px; flex-wrap:wrap}
 .thali .th-chip{background:var(--card-active); border:1px solid #EAD9AE; border-radius:var(--r-chip); font-size:12px; padding:2px 10px; color:var(--ink)}
 .thali.empty .th-chips{opacity:.65; font-style:normal}
+/* collapsed 'tap to choose' row (one-meal-open) */
+.choose-row{display:flex; align-items:center; gap:12px; margin:0 12px 8px; padding:13px 14px; border:1.5px solid var(--mirchi); border-radius:var(--r-bubble); background:var(--card-active); cursor:pointer}
+.choose-row .seal{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.choose-row .lbl{flex:1; font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--mirchi)}
+.choose-row .chev{font-family:var(--font-display); font-weight:700; font-size:18px; color:var(--mirchi)}
+/* earlier-day ticket = settled history: slightly recede */
+.day.history{opacity:.9}
+.day.history .dayhead{background:var(--ink-surface)}
+.day.history .dayname{color:rgba(252,247,234,.82)}
 /* dish overflow menu */
 .ovfmenu{display:flex; flex-direction:column; gap:2px; margin-top:4px}
 .ovfmenu button{text-align:left; border:none; background:none; font-family:var(--font-text); font-size:14px; font-weight:600; color:var(--ink); padding:14px 6px; cursor:pointer; border-bottom:1px solid var(--c-line-soft); min-height:48px}
@@ -467,6 +476,7 @@ const T = {
   thaliLabel:['THALI · साथ में','थाली · साथ में'],
   changeSides:['Change sides ›','साइड बदलें ›'],
   serves:['serves','के लिए'],
+  tapChoose:['Tap to choose','चुनने के लिए टैप करें'],
   qHead:['This week\u2019s proteins','हफ़्ते का हिसाब'],
   qLeft:['left','बाकी'], qDone:['done','पूरा'], qOver:['over','ज़्यादा'], qPlanned:['planned','तय'],
   replaceOpt:['Replace this option','यह विकल्प बदलें'],
@@ -1106,6 +1116,25 @@ if(!store.get('seed_bfw',false)){ if(settings.breakfast===false) settings.breakf
 function bfOn(dateIso){ const b=settings.breakfast; if(b===true||b==='all') return true; if(b==='weekend') return isWeekend(dateIso); return false }
 if(settings.heavyDinners===undefined) settings.heavyDinners=2;
 let trashed = store.get('trashed',[]);
+/* one-meal-open state: {di, meal} of the currently expanded undecided meal (null = auto) */
+let openSlot = null;
+const MEAL_ORDER = ['breakfast','lunch','dinner'];
+function mealsOfDay(di){ const d=plan.days[di]; return MEAL_ORDER.filter(m=>d[m]); }
+function slotDecided(slot){ return !!slot && (slot.saved || slot.skipped); }
+function dayFullyDecided(di){ return mealsOfDay(di).every(m=>slotDecided(plan.days[di][m])); }
+/* current interactive day = first day (top-down) that still has an undecided meal */
+function currentDayIndex(){
+  for(let i=0;i<plan.days.length;i++){ if(!dayFullyDecided(i)) return i; }
+  return plan.days.length-1; // whole week decided → last day is "current" (all fixed anyway)
+}
+/* which undecided meal is expanded on the current day */
+function openMealFor(di){
+  const d=plan.days[di];
+  if(openSlot && openSlot.di===di && d[openSlot.meal] && !slotDecided(d[openSlot.meal])) return openSlot.meal;
+  // default: first undecided meal of the day
+  for(const m of mealsOfDay(di)){ if(!slotDecided(d[m])) return m; }
+  return null;
+}
 let ideasLog = store.get('ideas',[]);
 let pickLog = store.get('plog',[]);
 function logEvent(e){ pickLog.push(Object.assign({t:Date.now()},e)); if(pickLog.length>600) pickLog=pickLog.slice(-600); store.set('plog',pickLog) }
@@ -1496,6 +1525,22 @@ function toggleDish(di,meal,id){
   refreshSidesForLead(di,meal);
   savePlan(); renderPlan();
 }
+function openThisMeal(di,meal){
+  openSlot = {di, meal};
+  renderPlan();
+  // scroll the opened meal into comfortable view
+  setTimeout(()=>{ const el=document.getElementById('plan-days'); if(el){} },0);
+}
+/* after deciding a meal, auto-open the next undecided meal in the same day (if any) */
+function advanceAfterDecision(di,meal){
+  const d=plan.days[di];
+  const order=mealsOfDay(di);
+  const idx=order.indexOf(meal);
+  for(let k=idx+1;k<order.length;k++){ if(!slotDecided(d[order[k]])){ openSlot={di,meal:order[k]}; return } }
+  // none later in this day; try earlier undecided in this day (jump-around case)
+  for(const m of order){ if(!slotDecided(d[m])){ openSlot={di,meal:m}; return } }
+  openSlot=null; // day complete → next day becomes current automatically
+}
 function saveMeal(di,meal){
   const day=plan.days[di], slot=day[meal]; if(!slot) return;
   if(!slot.chosen.length && !(slot.ideas||[]).length){ toast(LT('pickOne')); return }
@@ -1533,12 +1578,14 @@ function saveMeal(di,meal){
   }));
   if(moved) notes.push(LT('movedDup'));
   toast(notes.length?notes.join(' · '):LT('mealSaved'));
+  advanceAfterDecision(di,meal);
   savePlan(); store.set('history',history); store.set('sideHist',sideHist);
   renderPlan();
 }
 function changeMeal(di,meal){
   const slot=plan.days[di][meal]; if(!slot) return;
   slot.saved=false; slot.skipped=false;
+  openSlot={di,meal};   // reopen the meal being changed
   if(!(slot.alts||[]).length){ swapSlot(di,meal); return }
   savePlan(); renderPlan();
 }
@@ -1546,6 +1593,7 @@ function skipMeal(di,meal){
   const slot=plan.days[di][meal]; if(!slot) return;
   slot.skipped=true; slot.saved=true;
   logEvent({k:'skip',d:plan.days[di].date,m:meal});
+  advanceAfterDecision(di,meal);
   savePlan(); renderPlan(); toast(LT('skippedToast'));
 }
 
@@ -1673,6 +1721,35 @@ function mealRow(di,meal,slot,dateIso){
       <div class="skiprow"><div class="seal" style="border-style:solid;border-color:var(--mirchi);color:var(--mirchi)">?</div><div class="lbl" style="color:var(--mirchi)">${LT('notDecided')}</div></div></div>`;
   }
 
+  // ---- one-meal-open gating (only when editable) ----
+  if(!ro){
+    const curDi = currentDayIndex();
+    const isCurrentDay = (di === curDi);
+    const openM = isCurrentDay ? openMealFor(di) : null;
+    const isOpen = isCurrentDay && (meal === openM);
+    if(!isOpen){
+      // collapsed placeholder for an undecided meal
+      const tappable = isCurrentDay; // current day: tap to open; earlier/later days: fixed history
+      const lead = byId(primary(slot));
+      // if it happens to have a provisional pick, show it faintly; else a plain "choose" prompt
+      const promptEn = LT('tapChoose')||'Tap to choose';
+      if(tappable){
+        return `<div class="mealblock">
+          <div class="mealhead"><span>${lab}</span>${headWho}</div>
+          <div class="choose-row" onclick="openThisMeal(${di},'${meal}')">
+            <div class="seal" style="border:2px solid var(--mirchi);color:var(--mirchi);background:var(--card-active)">?</div>
+            <div class="lbl">${promptEn}</div>
+            <span class="chev">›</span>
+          </div></div>`;
+      } else {
+        // earlier/later day, undecided → quiet fixed placeholder (history view)
+        return `<div class="mealblock">
+          <div class="mealhead"><span>${lab}</span>${headWho}</div>
+          <div class="skiprow" style="border-style:dashed;opacity:.7"><div class="seal">·</div><div class="lbl" style="color:var(--ink-faint)">${LT('notDecided')}</div></div></div>`;
+      }
+    }
+  }
+
   // selection mode
   const bubbles=(slot.alts||[]).slice(0,3).map(id=>{
     const r=byId(id); if(!r) return '';
@@ -1738,7 +1815,8 @@ function renderPlan(){
     html+=`<div style="padding:4px 4px 10px"><button class="btn primary" style="width:100%" onclick="lockPlan()">${LT('lockPlan')}</button></div>`;
   }
   plan.days.forEach((d,di)=>{
-    html+=`<div class="day ${di===0?'today':''} ${isWeekend(d.date)?'wknd':''}">
+    const _curDi = planEditable()? currentDayIndex() : -1;
+    html+=`<div class="day ${di===0?'today':''} ${isWeekend(d.date)?'wknd':''} ${(_curDi>=0&&di<_curDi)?'history':''}">
       <div class="dayhead"><span class="dayname">${dayLabel(d.date)}</span><span class="daydate">${fmtDate(d.date)}${isWeekend(d.date)?' · '+LT('weekend'):''}</span></div>
       ${bfOn(d.date)?mealRow(di,'breakfast',d.breakfast,d.date):''}
       ${mealRow(di,'lunch',d.lunch,d.date)}
