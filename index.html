@@ -67,6 +67,13 @@ nav.tabs button.on .ic{filter:none; transform:translateY(-2px)}
 nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:25%; height:3px; border-radius:0 0 4px 4px; background:var(--haldi)}
 .page{display:none}
 .page.on{display:block}
+/* tab slide transitions */
+.page.slide-in-r{ transform:translateX(100%); }
+.page.slide-in-l{ transform:translateX(-100%); }
+.page.on:not(.slide-in-r):not(.slide-in-l){ transition:transform .26s cubic-bezier(.3,.7,.3,1); transform:translateX(0); }
+.page.slide-out-l{ display:block; position:fixed; top:0; left:0; right:0; transition:transform .26s cubic-bezier(.3,.7,.3,1); transform:translateX(-100%); z-index:1; pointer-events:none; }
+.page.slide-out-r{ display:block; position:fixed; top:0; left:0; right:0; transition:transform .26s cubic-bezier(.3,.7,.3,1); transform:translateX(100%); z-index:1; pointer-events:none; }
+@media (prefers-reduced-motion: reduce){ .page{transition:none!important} }
 .btn{border:1.5px solid var(--c-line-strong); border-radius:999px; padding:11px 18px; font-family:var(--font-display); font-weight:700; font-size:14px; cursor:pointer; box-shadow:var(--shadow-button); transition:transform .08s}
 .btn:active{transform:translateY(1px)}
 .btn.primary{background:var(--mirchi); color:#fff; border-color:var(--mirchi)}
@@ -176,9 +183,14 @@ nav.tabs button.on::after{content:''; position:absolute; top:0; left:25%; right:
 .tg-lbl{font-family:var(--font-text); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-label); margin:14px 0 7px}
 .tg-accordion{display:flex; flex-direction:column; gap:8px; margin-top:4px}
 /* persistent 'your thali so far' strip */
-.thali-sofar{background:var(--saved-fill); border:1px solid var(--saved-border); border-radius:var(--r-strip); padding:9px 12px; margin:2px 0 4px}
+.thali-sofar{background:var(--saved-fill); border:1px solid var(--saved-border); border-radius:var(--r-strip); padding:11px 12px 12px; margin:2px 0 4px}
 .thali-sofar .tsf-lbl{font-family:var(--font-text); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dhaniya); margin-bottom:6px}
 .thali-sofar .tsf-chips{display:flex; flex-wrap:wrap; gap:6px}
+.thali-plate .katori{transition:opacity .15s}
+.thali-plate .tp-legend{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:8px}
+.tp-leg{display:inline-flex; align-items:center; gap:5px; background:var(--card-active); border:1px solid var(--saved-border); border-radius:var(--r-chip); padding:3px 9px; font-family:var(--font-display); font-weight:600; font-size:12.5px; color:var(--ink); cursor:pointer}
+.tp-dot{width:10px; height:10px; border-radius:50%; border:1px solid var(--ink); display:inline-block}
+.tp-x{color:var(--mirchi); font-weight:700; font-size:10px}
 .tsf-chip{display:inline-flex; align-items:center; gap:6px; background:var(--card-active); border:1px solid var(--saved-border); border-radius:var(--r-chip); padding:4px 6px 4px 11px; font-family:var(--font-display); font-weight:600; font-size:13.5px; color:var(--ink)}
 .tsf-chip .x{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--dhaniya);color:#fff;font-size:10px;cursor:pointer}
 .tg-sec{border:1.5px solid var(--c-line-mid); border-radius:var(--r-bubble); background:var(--card); overflow:hidden}
@@ -515,6 +527,31 @@ const T = {
   thaliBuild:['Build your thali','अपनी थाली बनाएँ'],
   thaliVegQ:['Is this a veg or non-veg meal?','यह वेज है या नॉन-वेज?'],
   thaliVeg:['🥬 Veg','🥬 वेज'],
+  thaliFormatQ:['Thali, or another format?','थाली, या कुछ और?'],
+  thaliFormatHint:['A full thali, or a dosa / paratha meal?','पूरी थाली, या डोसा / पराठा?'],
+  thaliFormThali:['🍽️ Thali','🍽️ थाली'],
+  thaliFormOther:['🌯 Dosa / Paratha','🌯 डोसा / पराठा'],
+  thaliPickFormat:['Which one?','कौन-सा?'],
+  thaliFillingQ:['What filling?','क्या भरें?'],
+  thaliStuffingQ:['What stuffing?','क्या भरावन?'],
+  thaliDosaAuto:['Comes with sambar + coconut chutney','सांबर + नारियल चटनी के साथ'],
+  thaliParathaAuto:['Comes with curd + achar','दही + अचार के साथ'],
+  thaliComesWith:['Comes with','साथ में'],
+  thaliAddMoreQ:['Add more dishes around it?','इसके साथ और डिश जोड़ें?'],
+  thaliAddYes:['+ Add dishes','+ डिश जोड़ें'],
+  thaliAddNo:['Just this','बस यही'],
+  thaliHeroHint:['The protein is the hero — pick it first.','प्रोटीन मुख्य है — पहले चुनें।'],
+  thaliHeroQ:['Pick the hero dish','मुख्य डिश चुनें'],
+  thaliHeroPick:['Which dish carries this protein?','कौन-सी डिश?'],
+  thaliHeroLbl:['Hero','मुख्य'],
+  thaliAroundHero:['Add sabzi & sides around it (optional)','साथ में सब्ज़ी (वैकल्पिक)'],
+  thaliNoHero:['No dishes here (household rules) — pick another protein.','यहाँ कोई डिश नहीं — दूसरा प्रोटीन चुनें।'],
+  thaliNeedHero:['Pick a hero dish first','पहले मुख्य डिश चुनें'],
+  tpPaneer:['Paneer','पनीर'],
+  tpDal:['Dal / Lentils','दाल'],
+  tpPulse:['Pulses (rajma, chole)','राजमा, छोले'],
+  tpEgg:['Egg','अंडा'],
+  tpSoya:['Soya / Tofu','सोया / टोफू'],
   thaliNonveg:['🍗 Non-veg','🍗 नॉन-वेज'],
   thaliEggNote:['Egg dishes appear in both.','अंडे की डिश दोनों में मिलेंगी।'],
   thaliProtQ:['Which protein?','कौन-सा प्रोटीन?'],
@@ -671,33 +708,82 @@ function sidesOf(type){ return SIDES.filter(s=>s.type===type) }
 /* ============ THALI COMPOSER CATALOG ============ */
 /* Unifies veg-Indian SEED dishes + SIDES accompaniments into scannable groups.
    Each component: {id, n:[en,hi], grp, src:'seed'|'side'}. grp ∈ dal|sabzi|paneer|pulse */
+/* ===== curated thali catalogue =====
+   Excludes format dishes (dosa/paratha/frankie) and rice-baked-in dishes from the
+   component groups — those are handled via the hero/format flow or the staple step. */
+const THALI_FORMAT_IDS = ['x2','x3','z70','z90','z91'];        // dosa / paratha / frankie / kathi roll
+const THALI_STAPLE_BAKED = ['y9','y10','z30','z67','z69','d15','d16','z18','z82'];  // rice/naan baked into the dish name
+const THALI_EXCLUDE = THALI_FORMAT_IDS.concat(THALI_STAPLE_BAKED);
+/* which SEED veg dish sits in which component group (curated, not guessed) */
+const THALI_VEG_GROUP = {
+  // dals
+  y8:'dal', z61:'dal', z73:'dal', z23:'dal', z68:'dal',
+  // pulses
+  l15:'pulse', l16:'pulse', y11:'pulse', z21:'pulse', z62:'pulse', z64:'pulse',
+  // paneer
+  l12:'paneer', l13:'paneer', d17:'paneer', n11:'paneer', z25:'paneer', z85:'paneer',
+  // sabzi
+  z27:'sabzi', z63:'sabzi', z65:'sabzi', z66:'sabzi', z71:'sabzi', z72:'sabzi', z75:'sabzi'
+};
 function thaliComponents(){
-  const out=[];
-  // from SIDES (simple accompaniment versions)
-  SIDES.filter(s=>s.type==='dal').forEach(s=>out.push({id:s.id,n:s.n,grp:'dal',src:'side'}));
-  SIDES.filter(s=>s.type==='sabzi').forEach(s=>out.push({id:s.id,n:s.n,grp:'sabzi',src:'side'}));
-  // from SEED (fuller Indian veg dishes) — classify by name/flags
-  const PULSE_IDS=['l15','l16','y11','z21','z62','z64','z67','z68'];   // rajma/chole/lobia/chana/sambar/palak dal
-  const DAL_IDS=['y8','y9','y10','z23','z30','z61','z73','x2'];         // dal makhani/kadhi/khichdi/sindhi/lemon rice/panchmel/dal tadka/dosa
-  activeRecipes().filter(r=>r.cz==='Indian'&&(r.co.includes('lunch')||r.co.includes('dinner'))).forEach(r=>{
-    if(r.p==='paneer') out.push({id:r.id,n:r.n,grp:'paneer',src:'seed'});
-    else if(r.p==='veg'){
-      if(PULSE_IDS.includes(r.id)) out.push({id:r.id,n:r.n,grp:'pulse',src:'seed'});
-      else if(DAL_IDS.includes(r.id)||r.isDal) out.push({id:r.id,n:r.n,grp:'dal',src:'seed'});
-      else out.push({id:r.id,n:r.n,grp:'sabzi',src:'seed'});
-    }
+  const out=[]; const seenName={};
+  const push=(id,n,grp,src)=>{ const key=(L(n)||'').toLowerCase().trim(); if(seenName[key]) return; seenName[key]=1; out.push({id,n,grp,src}); };
+  // SIDES accompaniment dals + sabzis (clean, canonical)
+  SIDES.filter(s=>s.type==='dal').forEach(s=>push(s.id,s.n,'dal','side'));
+  SIDES.filter(s=>s.type==='sabzi').forEach(s=>push(s.id,s.n,'sabzi','side'));
+  // curated SEED veg dishes
+  activeRecipes().forEach(r=>{
+    if(THALI_EXCLUDE.includes(r.id)) return;
+    const g=THALI_VEG_GROUP[r.id];
+    if(g) push(r.id,r.n,g,'seed');
   });
-  // dedupe by id
-  const seen={}; return out.filter(c=>seen[c.id]?false:(seen[c.id]=true));
+  return out;
 }
-/* non-veg Indian protein dishes for the composer, by protein token */
+/* hero PROTEIN options. Veg proteins are heroes too. */
+const THALI_VEG_PROTEINS = [
+  ['paneer','tpPaneer'], ['dal','tpDal'], ['pulse','tpPulse'], ['egg','tpEgg'], ['soya','tpSoya']
+];
+const THALI_NONVEG_PROTEINS = [
+  ['chicken',null], ['fish',null], ['prawns',null], ['mutton',null], ['beef',null], ['pork',null], ['egg','tpEgg']
+];
+/* dishes that carry a given hero protein (the "hero dish" picker) */
+function thaliHeroDishes(kind, meal, dateIso){
+  // veg-protein kinds map to component groups; non-veg map to protein tokens
+  if(kind==='paneer'||kind==='dal'||kind==='pulse'){
+    return thaliComponents().filter(c=>c.grp===kind);
+  }
+  if(kind==='egg'){
+    return activeRecipes().filter(r=>r.cz==='Indian'&&r.p==='egg'&&!THALI_EXCLUDE.includes(r.id)).map(r=>({id:r.id,n:r.n,grp:'egg',src:'seed'}));
+  }
+  if(kind==='soya'){ return []; } // none in roster yet
+  // non-veg protein token
+  const fam = isFamilySlot(meal,dateIso);
+  return activeRecipes().filter(r=>{
+    if(r.cz!=='Indian'||THALI_EXCLUDE.includes(r.id)) return false;
+    if(tokenOf(r.p)!==kind) return false;
+    // honour household rules: beef/pork only weekday lunch; family slots need zoya/aveer-safe
+    if(['beef','pork','mutton'].includes(kind)){ if(!(meal==='lunch' && !isWeekend(dateIso))) return false; }
+    return true;
+  }).map(r=>({id:r.id,n:r.n,grp:kind,src:'seed'}));
+}
+/* non-veg Indian protein dishes (legacy helper, kept for compatibility) */
 function thaliProteinDishes(tok){
-  return activeRecipes().filter(r=>r.cz==='Indian'&&tokenOf(r.p)===tok&&(r.co.includes('lunch')||r.co.includes('dinner')));
+  return activeRecipes().filter(r=>r.cz==='Indian'&&tokenOf(r.p)===tok&&!THALI_EXCLUDE.includes(r.id)&&(r.co.includes('lunch')||r.co.includes('dinner')));
 }
 /* resolve a thali component or dish id to a display name (handles both SIDES and SEED) */
 function thaliName(id){ const r=byId(id); if(r) return L(r.n); const s=sideById(id); return s?L(s.n):id; }
 function thaliNameObj(id){ const r=byId(id); if(r) return r.n; const s=sideById(id); return s?s.n:[id,id]; }
 const THALI_GROUPS=[['dal','tgDal'],['pulse','tgPulse'],['paneer','tgPaneer'],['sabzi','tgSabzi']];
+/* ---- format heroes: dosa & paratha, with fillings/stuffings + auto-accompaniments ---- */
+const THALI_FORMATS = [
+  {key:'dosa', label:['Dosa','डोसा'],
+   fillingsVeg:[['potato',['Potato masala','आलू मसाला']]],
+   fillingsNonveg:[['keema',['Chicken keema','चिकन कीमा']],['potato',['Potato masala','आलू मसाला']]],
+   auto:[['sambar',['Sambar','सांबर']],['cchutney',['Coconut chutney','नारियल चटनी']]]},
+  {key:'paratha', label:['Stuffed Paratha','भरवां पराठा'],
+   stuffings:[['aloo',['Aloo','आलू']],['gobi',['Gobi','गोभी']],['mooli',['Mooli','मूली']],['paneer',['Paneer','पनीर']]],
+   auto:[['curd',['Curd','दही']],['achar',['Achar','अचार']]]}
+];
 </script>
 <script>
 /* ============ MAINS — bilingual ============
@@ -1360,7 +1446,11 @@ function mainPool(meal,dateIso,token,ovr){
   if(token) pool=pool.filter(r=>TOKEN_MATCH[token].includes(r.p));
   if(meal==='breakfast'){ pool=pool.filter(r=>aveerOK(r));
     const west=pool.filter(r=>r.cz==='Western'); if(west.length) pool=west; }
-  else if(isFamilySlot(meal,dateIso)) pool=pool.filter(r=> ovr ? aveerOK(r) : (zoyaOK(r)||r.zpair)&&aveerOK(r));
+  else {
+    // Indian food is composed via the thali builder, so the quick-pick bubbles are non-Indian only (Goan stays)
+    pool=pool.filter(r=>r.cz!=='Indian');
+    if(isFamilySlot(meal,dateIso)) pool=pool.filter(r=> ovr ? aveerOK(r) : (zoyaOK(r)||r.zpair)&&aveerOK(r));
+  }
   return pool;
 }
 function pickMain(meal,dateIso,token,ctx){
@@ -1398,6 +1488,17 @@ function pickAlternates(meal,dateIso,token,ctx,mainId){
     const ctx2=Object.assign({},ctx,{picked:ctx.picked.concat(alts)});
     const r=pickMain(meal,dateIso,token,ctx2);
     if(r && !alts.includes(r.id)) alts.push(r.id);
+  }
+  // fallback: thin non-Indian pools (e.g. veg lunches) may not yield 3 via the tiers.
+  // top up directly from the (non-Indian) pool, ignoring recency, so a slot always has options.
+  if(alts.length<3){
+    const pool=mainPool(meal,dateIso,token,ctx&&ctx.ovr).filter(r=>!alts.includes(r.id) && !ctx.picked.includes(r.id));
+    for(const r of pool){ if(alts.length>=3) break; alts.push(r.id); }
+    // last resort: allow already-picked-elsewhere to guarantee ≥2
+    if(alts.length<2){
+      const pool2=mainPool(meal,dateIso,token,ctx&&ctx.ovr).filter(r=>!alts.includes(r.id));
+      for(const r of pool2){ if(alts.length>=2) break; alts.push(r.id); }
+    }
   }
   return alts;
 }
@@ -1544,73 +1645,111 @@ function setProtein(di,meal,tok){
 /* Working draft while composing; committed to the slot on Done. */
 let thaliDraft = null;   // {di, meal, veg, protein, dishes:[ids], staple:[], curd, salad, zoya}
 function startThali(di,meal){
-  const existing = plan.days[di][meal] && plan.days[di][meal].thali ? plan.days[di][meal] : null;
-  thaliDraft = existing ? JSON.parse(JSON.stringify({di,meal,veg:existing.veg,protein:existing.protein,dishes:existing.dishes||[],staple:existing.staple||[],curd:existing.curd!==false,salad:existing.salad!==false,zoya:existing.zoya||null}))
-                        : {di,meal,veg:null,protein:null,dishes:[],staple:[],curd:true,salad:true,zoya:null};
+  const ex = plan.days[di][meal] && plan.days[di][meal].thali ? plan.days[di][meal] : null;
+  thaliDraft = ex ? JSON.parse(JSON.stringify({di,meal,veg:ex.veg,format:ex.format||'thali',formatKey:ex.formatKey||null,filling:ex.filling||null,protein:ex.protein,heroId:ex.heroId||null,dishes:ex.dishes||[],staple:ex.staple||[],curd:ex.curd!==false,salad:ex.salad!==false,zoya:ex.zoya||null,auto:ex.auto||[]}))
+                  : {di,meal,veg:null,format:null,formatKey:null,filling:null,protein:null,heroId:null,dishes:[],staple:[],curd:true,salad:true,zoya:null,auto:[]};
   thaliStep('type');
 }
 function thaliStep(step){
   const d=thaliDraft; if(!d) return;
+  const backLink=(to)=>`<div style="margin-top:14px"><span class="skip-link" onclick="thaliStep('${to}')">‹ ${LT('back')}</span></div>`;
+
   if(step==='type'){
     openSheetHtml(`<h2>${LT('thaliBuild')}</h2>
       <div class="hint" style="font-size:13px;color:var(--ink-muted);margin:4px 0 12px">${LT('thaliVegQ')}</div>
       <div class="pgrid">
-        <button class="pchip ${d.veg===true?'on':''}" onclick="thaliDraft.veg=true;thaliDraft.protein=null;thaliStep('dishes')">${LT('thaliVeg')}</button>
-        <button class="pchip ${d.veg===false?'on':''}" onclick="thaliDraft.veg=false;thaliStep('protein')">${LT('thaliNonveg')}</button>
+        <button class="pchip ${d.veg===true?'on':''}" onclick="thaliDraft.veg=true;thaliStep('format')">${LT('thaliVeg')}</button>
+        <button class="pchip ${d.veg===false?'on':''}" onclick="thaliDraft.veg=false;thaliStep('format')">${LT('thaliNonveg')}</button>
       </div>
       <div class="hint" style="font-size:11.5px;color:var(--ink-faint);margin-top:10px">${LT('thaliEggNote')}</div>`);
   }
+  else if(step==='format'){
+    openSheetHtml(`<h2>${LT('thaliFormatQ')}</h2>
+      <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliFormatHint')}</div>
+      <div class="pgrid">
+        <button class="pchip ${d.format==='thali'?'on':''}" onclick="thaliDraft.format='thali';thaliStep('protein')">${LT('thaliFormThali')}</button>
+        <button class="pchip ${d.format==='other'?'on':''}" onclick="thaliDraft.format='other';thaliStep('pickformat')">${LT('thaliFormOther')}</button>
+      </div>${backLink('type')}`);
+  }
+  // ---------- FORMAT (dosa/paratha) branch ----------
+  else if(step==='pickformat'){
+    openSheetHtml(`<h2>${LT('thaliPickFormat')}</h2>
+      <div class="pgrid">${THALI_FORMATS.map(f=>
+        `<button class="pchip ${d.formatKey===f.key?'on':''}" onclick="thaliDraft.formatKey='${f.key}';thaliDraft.filling=null;thaliStep('filling')">${L(f.label)}</button>`
+      ).join('')}</div>${backLink('format')}`);
+  }
+  else if(step==='filling'){
+    const f=THALI_FORMATS.find(x=>x.key===d.formatKey);
+    let opts;
+    if(f.key==='dosa') opts = d.veg ? f.fillingsVeg : f.fillingsNonveg;
+    else opts = d.veg ? f.stuffings.filter(s=>s[0]!=='keema') : f.stuffings; // paratha: keema only if non-veg
+    // paratha keema option for non-veg
+    if(f.key==='paratha' && !d.veg) opts = f.stuffings.concat([['keema',['Keema','कीमा']]]);
+    const q = f.key==='dosa'?LT('thaliFillingQ'):LT('thaliStuffingQ');
+    openSheetHtml(`<h2>${q}</h2>
+      <div class="pgrid">${opts.map(o=>
+        `<button class="pchip ${d.filling===o[0]?'on':''}" onclick="thaliDraft.filling='${o[0]}';thaliStep('addmore')">${L(o[1])}</button>`
+      ).join('')}</div>
+      <div class="hint" style="font-size:11.5px;color:var(--ink-faint);margin-top:10px">${f.key==='dosa'?LT('thaliDosaAuto'):LT('thaliParathaAuto')}</div>
+      ${backLink('pickformat')}`);
+  }
+  else if(step==='addmore'){
+    const f=THALI_FORMATS.find(x=>x.key===d.formatKey);
+    const fillLabel=(f.key==='dosa'?(d.veg?f.fillingsVeg:f.fillingsNonveg):f.stuffings.concat(!d.veg?[['keema',['Keema','कीमा']]]:[])).find(o=>o[0]===d.filling);
+    openSheetHtml(`<h2>${L(f.label)}${fillLabel?' · '+L(fillLabel[1]):''}</h2>
+      <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 6px">${LT('thaliComesWith')}: ${f.auto.map(a=>L(a[1])).join(' + ')}</div>
+      <div class="tg-lbl" style="margin-top:14px">${LT('thaliAddMoreQ')}</div>
+      <div class="pgrid">
+        <button class="pchip" onclick="thaliStep('dishes')">${LT('thaliAddYes')}</button>
+        <button class="pchip on" onclick="commitThali()">${LT('thaliAddNo')}</button>
+      </div>${backLink('filling')}`);
+  }
+  // ---------- THALI branch: protein hero first ----------
   else if(step==='protein'){
-    const prots=[['chicken'],['fish'],['prawns'],['mutton'],['egg']];
+    const prots = d.veg ? THALI_VEG_PROTEINS : THALI_NONVEG_PROTEINS;
     openSheetHtml(`<h2>${LT('thaliProtQ')}</h2>
-      <div class="pgrid">${prots.map(([t])=>{
-        const meta=PROTEIN_META[t];
-        return `<button class="pchip ${d.protein===t?'on':''}" onclick="thaliDraft.protein='${t}';thaliStep('dishes')"><span class="pdot" style="background:${meta[1]};margin-right:5px"></span>${pName(t)}</button>`;
-      }).join('')}</div>
-      <div style="margin-top:14px"><span class="skip-link" onclick="thaliStep('type')">‹ ${LT('back')}</span></div>`);
+      <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliHeroHint')}</div>
+      <div class="pgrid">${prots.map(([t,lbl])=>{
+        const meta=PROTEIN_META[t==='dal'||t==='pulse'||t==='soya'?'veg':t]||['','#999'];
+        const label = lbl?LT(lbl):pName(t);
+        return `<button class="pchip ${d.protein===t?'on':''}" onclick="thaliDraft.protein='${t}';thaliDraft.heroId=null;thaliStep('hero')"><span class="pdot" style="background:${meta[1]};margin-right:5px"></span>${label}</button>`;
+      }).join('')}</div>${backLink('format')}`);
+  }
+  else if(step==='hero'){
+    const heroes=thaliHeroDishes(d.protein,d.meal,plan.days[d.di].date);
+    if(!heroes.length){
+      openSheetHtml(`<h2>${LT('thaliProtQ')}</h2><div class="hint" style="color:var(--mirchi);margin:8px 0">${LT('thaliNoHero')}</div>${backLink('protein')}`);
+      return;
+    }
+    openSheetHtml(`<h2>${LT('thaliHeroQ')}</h2>
+      <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliHeroPick')}</div>
+      <div class="tg-wrap">${heroes.map(c=>{
+        const on=d.heroId===c.id;
+        return `<button class="tchip ${on?'on':''}" onclick="thaliSetHero('${c.id}')">${on?'✓ ':''}${esc(L(c.n))}</button>`;
+      }).join('')}</div>${backLink('protein')}`);
   }
   else if(step==='dishes'){
     let h=`<h2>${LT('thaliPickDishes')}</h2>`;
-    // persistent "your thali so far" strip — always visible, updates live
-    if(d.dishes.length){
-      h+=`<div class="thali-sofar">
-        <div class="tsf-lbl">${LT('thaliSoFar')}</div>
-        <div class="tsf-chips">${d.dishes.map(id=>`<span class="tsf-chip">${esc(thaliName(id))}<span class="x" onclick="thaliRemoveFromStrip('${id}')">✕</span></span>`).join('')}</div>
-      </div>`;
-    }
-    h+=`<div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliPickHint')}</div>`;
-    // build the list of accordion sections: [key, label, items[]]
-    const sections=[];
-    if(!d.veg && d.protein){
-      sections.push(['prot', pName(d.protein), thaliProteinDishes(d.protein).map(r=>({id:r.id,n:r.n}))]);
-    }
+    if(d.dishes.length) h+=thaliPlateSVG(d);
+    h+=`<div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 12px">${LT('thaliAroundHero')}</div>`;
+    // component groups (hero already chosen; these are the supporting dishes — sabzi etc.)
     const comps=thaliComponents();
-    THALI_GROUPS.forEach(([g,lbl])=>{
-      const items=comps.filter(c=>c.grp===g);
-      if(items.length) sections.push([g, LT(lbl), items]);
-    });
-    // default open group = first section, unless the draft remembers one
-    if(d.openGrp===undefined) d.openGrp = sections.length? sections[0][0] : null;
+    const sections=[];
+    THALI_GROUPS.forEach(([g,lbl])=>{ const items=comps.filter(c=>c.grp===g); if(items.length) sections.push([g, LT(lbl), items]); });
+    if(d.openGrp===undefined) d.openGrp = 'sabzi';
     h+=`<div class="tg-accordion">`;
     sections.forEach(([key,label,items])=>{
-      const open = d.openGrp===key;
-      h+=`<div class="tg-sec ${open?'open':''}">
-        <button class="tg-head" onclick="thaliOpenGroup('${key}')">
-          <span class="tg-head-lbl">${label}</span>
-          <span class="tg-caret">${open?'▾':'▸'}</span>
-        </button>`;
-      if(open){
-        h+=`<div class="tg-wrap">`+items.map(c=>thaliChip(c.id,c.n)).join('')+`</div>`;
-      }
+      const open=d.openGrp===key;
+      h+=`<div class="tg-sec ${open?'open':''}"><button class="tg-head" onclick="thaliOpenGroup('${key}')"><span class="tg-head-lbl">${label}</span><span class="tg-caret">${open?'▾':'▸'}</span></button>`;
+      if(open) h+=`<div class="tg-wrap">`+items.map(c=>thaliChip(c.id,c.n)).join('')+`</div>`;
       h+=`</div>`;
     });
     h+=`</div>`;
-    h+=`<div class="thali-foot">
-      <div class="hint" style="font-size:12px;color:var(--ink-muted)">${(d.dishes.length? d.dishes.length+' '+LT('thaliChosen') : LT('thaliNonePicked'))}</div>
-      <div class="btnrow" style="margin-top:10px">
-        <button class="btn primary" onclick="thaliStep('staple')" ${d.dishes.length?'':'disabled style=opacity:.5'}>${LT('thaliNext')} ›</button>
-        <button class="btn ghost small" onclick="thaliStep('${d.veg?'type':'protein'}')">‹ ${LT('back')}</button>
-      </div></div>`;
+    const nextStep = d.format==='other' ? 'review' : 'staple';
+    h+=`<div class="thali-foot"><div class="btnrow" style="margin-top:10px">
+      <button class="btn primary" onclick="thaliStep('${nextStep}')">${LT('thaliNext')} ›</button>
+      <button class="btn ghost small" onclick="thaliStep('${d.format==='other'?'addmore':'hero'}')">‹ ${LT('back')}</button>
+    </div></div>`;
     openSheetHtml(h);
   }
   else if(step==='staple'){
@@ -1626,16 +1765,28 @@ function thaliStep(step){
       </div>`);
   }
   else if(step==='review'){
+    const isFormat = d.format==='other';
+    const f = isFormat ? THALI_FORMATS.find(x=>x.key===d.formatKey) : null;
+    let h=`<h2>${LT('thaliReview')}</h2>`;
+    // hero line
+    if(isFormat){
+      const fillList=(f.key==='dosa'?(d.veg?f.fillingsVeg:f.fillingsNonveg):f.stuffings.concat(!d.veg?[['keema',['Keema','कीमा']]]:[]));
+      const fillLabel=fillList.find(o=>o[0]===d.filling);
+      h+=`<div class="tg-lbl">${LT('thaliHeroLbl')}</div><div class="th-chips" style="margin-bottom:6px"><span class="th-chip">${L(f.label)}${fillLabel?' · '+L(fillLabel[1]):''}</span></div>
+      <div class="th-chips" style="margin-bottom:10px">${f.auto.map(a=>`<span class="th-chip extra">${L(a[1])}</span>`).join('')}</div>`;
+    } else if(d.heroId){
+      h+=`<div class="tg-lbl">${LT('thaliHeroLbl')}</div><div class="th-chips" style="margin-bottom:10px"><span class="th-chip">${esc(thaliName(d.heroId))}</span></div>`;
+    }
     const chips = d.dishes.map(id=>`<span class="th-chip">${esc(thaliName(id))} <span class="x" onclick="thaliRemoveDish('${id}')">✕</span></span>`).join('');
-    const staples = d.staple.map(s=>`<span class="th-chip">${LT('thali'+s.charAt(0).toUpperCase()+s.slice(1))} <span class="x" onclick="thaliToggleStaple('${s}');thaliStep('review')">✕</span></span>`).join('');
-    let h=`<h2>${LT('thaliReview')}</h2>
-      <div class="tg-lbl">${LT('thaliDishes')}</div><div class="th-chips" style="margin-bottom:10px">${chips||'<span class="hint">—</span>'}</div>`;
-    if(staples) h+=`<div class="tg-lbl">${LT('thaliStaple')}</div><div class="th-chips" style="margin-bottom:10px">${staples}</div>`;
+    if(chips) h+=`<div class="tg-lbl">${LT('thaliDishes')}</div><div class="th-chips" style="margin-bottom:10px">${chips}</div>`;
+    if(!isFormat){
+      const staples = d.staple.map(s=>`<span class="th-chip">${LT('thali'+s.charAt(0).toUpperCase()+s.slice(1))} <span class="x" onclick="thaliToggleStaple('${s}');thaliStep('review')">✕</span></span>`).join('');
+      if(staples) h+=`<div class="tg-lbl">${LT('thaliStaple')}</div><div class="th-chips" style="margin-bottom:10px">${staples}</div>`;
+    }
     h+=`<div class="tg-lbl">${LT('thaliAlways')}</div><div class="th-chips" style="margin-bottom:10px">
       ${d.curd?`<span class="th-chip">${LT('thaliCurd')} <span class="x" onclick="thaliDraft.curd=false;thaliStep('review')">✕</span></span>`:`<span class="th-chip add" onclick="thaliDraft.curd=true;thaliStep('review')">+ ${LT('thaliCurd')}</span>`}
       ${d.salad?`<span class="th-chip">${LT('thaliSalad')} <span class="x" onclick="thaliDraft.salad=false;thaliStep('review')">✕</span></span>`:`<span class="th-chip add" onclick="thaliDraft.salad=true;thaliStep('review')">+ ${LT('thaliSalad')}</span>`}
     </div>`;
-    // Zoya prompt for non-veg family meal
     const fam=isFamilySlot(d.meal, plan.days[d.di].date);
     if(!d.veg && fam){
       h+=`<div class="tg-lbl">${LT('thaliZoyaQ')}</div><div class="pgrid" style="margin-bottom:8px">
@@ -1643,12 +1794,17 @@ function thaliStep(step){
         <button class="pchip ${d.zoya==='swap'?'on':''}" onclick="thaliDraft.zoya='swap';thaliStep('review')">${LT('thaliZoyaSwap')}</button>
       </div>`;
     }
+    const editBack = isFormat ? (d.dishes.length?'dishes':'addmore') : 'dishes';
     h+=`<div class="btnrow" style="margin-top:16px">
       <button class="btn primary" onclick="commitThali()">${LT('thaliDone')}</button>
-      <button class="btn ghost small" onclick="thaliStep('dishes')">${LT('thaliEditDishes')}</button>
+      <button class="btn ghost small" onclick="thaliStep('${editBack}')">${LT('thaliEditDishes')}</button>
     </div>`;
     openSheetHtml(h);
   }
+}
+function thaliSetHero(id){
+  thaliDraft.heroId = (thaliDraft.heroId===id)?null:id;
+  if(thaliDraft.heroId) thaliStep('dishes'); else thaliStep('hero');
 }
 function thaliGroupOf(id){
   // which accordion group a picked dish belongs to
@@ -1658,6 +1814,190 @@ function thaliGroupOf(id){
   }
   const c=thaliComponents().find(x=>x.id===id);
   return c?c.grp:(d.openGrp||null);
+}
+/* ---- SVG thali plate: line-art, katoris appear as dishes are picked ---- */
+const THALI_TINT={dal:'#E8A72C', pulse:'#C8611E', paneer:'#E0B94A', prot:'#B5502A', curd:'#FFFFFF', sabzi:'#5B8C3A', salad:'#7BAE4A'};
+
+/* ---- classify a dish into a food-texture kind, from its name + group ---- */
+function dishTexture(id, grp){
+  const nm = (thaliName(id)||'').toLowerCase();
+  const r = byId(id);
+  const en = r ? (r.n[0]||'').toLowerCase() : nm;
+  // specific first
+  if(/rajma|kidney bean/.test(en)) return {kind:'beans', base:'#8C3A2B', bean:'#A8442F', hi:'#C25A44'};
+  if(/chole|chana|chickpea|chhole/.test(en)) return {kind:'beans', base:'#B07B36', bean:'#C79A55', hi:'#E0BC7E'};
+  if(/lobia|black.?eyed/.test(en)) return {kind:'beans', base:'#C9B48A', bean:'#E4D6B2', hi:'#F2E9CF'};
+  if(/dal makhani|makhani/.test(en)) return {kind:'smooth', base:'#5E3B2A', swirl:'#C98A5E'};
+  if(/dal|daal|lentil|sambar|kadhi|khichdi/.test(en)) return {kind:'smooth', base:'#E0A72C', swirl:'#F2CD73'};
+  if(/palak|spinach|saag/.test(en)) return {kind:'leafy', base:'#3C5E2A', bit:'#557A38'};
+  if(/paneer|tofu/.test(en)) return {kind:'cubes', base:'#C7622E', cube:'#F0E4C8'};
+  if(/keema|bhurji|mince/.test(en)) return {kind:'mince', base:'#9A4426', bit:'#C36038'};
+  if(/bhindi|okra/.test(en)) return {kind:'leafy', base:'#4A6B2E', bit:'#6B8B44'};
+  if(/aloo|potato|gobi|cauliflower|baingan|brinjal|eggplant/.test(en)) return {kind:'chunky', base:'#B98A3E', chunk:'#E4C77E'};
+  if(/butter chicken|makhani|tikka masala|korma|lababdar/.test(en)) return {kind:'gravy', base:'#C05A2A', piece:'#8A3B25'};
+  if(/curry|masala|jhol|moilee|do pyaza|ghee roast|chettinad|cacciatore|stew/.test(en)) return {kind:'gravy', base:'#B24E28', piece:'#7A3320'};
+  if(/curd|dahi|yogurt|raita/.test(en)) return {kind:'curd', base:'#FBF7EC'};
+  // by group fallback
+  if(grp==='pulse') return {kind:'beans', base:'#9A4A32', bean:'#B85E42', hi:'#D07A5C'};
+  if(grp==='dal') return {kind:'smooth', base:'#E0A72C', swirl:'#F2CD73'};
+  if(grp==='paneer') return {kind:'cubes', base:'#C7622E', cube:'#F0E4C8'};
+  if(grp==='prot') return {kind:'gravy', base:'#B24E28', piece:'#7A3320'};
+  if(grp==='curd') return {kind:'curd', base:'#FBF7EC'};
+  return {kind:'smooth', base:'#C88A3E', swirl:'#E4B268'};
+}
+/* draw the food surface inside a bowl of radius rx,ry at (cx,cy). Deterministic scatter from id hash. */
+function seedRand(id){ let h=0; for(const c of (id||'x')) h=(h*31+c.charCodeAt(0))&0xffff; return ()=>{ h=(h*1103515245+12345)&0x7fffffff; return (h/0x7fffffff); }; }
+function foodFill(id, grp, cx, cy, rx, ry){
+  const tex=dishTexture(id,grp);
+  const rnd=seedRand(id);
+  const clip='fc'+Math.abs(cx*100+cy).toFixed(0);
+  let inner=`<clipPath id="${clip}"><ellipse cx="${cx}" cy="${cy}" rx="${(rx-3).toFixed(1)}" ry="${(ry-3).toFixed(1)}"/></clipPath>`;
+  let g=`<g clip-path="url(#${clip})">`;
+  // base food surface
+  g+=`<ellipse cx="${cx}" cy="${cy}" rx="${(rx-3).toFixed(1)}" ry="${(ry-3).toFixed(1)}" fill="${tex.base}"/>`;
+  const R=(rx-6), Rv=(ry-6);
+  const scatter=(n,draw)=>{ for(let i=0;i<n;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd())* R, x=cx+rr*Math.cos(a), y=cy+rr*Math.cos(a)*0+ (cy+ (Math.sqrt(rnd())*Rv)*Math.sin(a)); g+=draw(x, cy+(Math.sqrt(rnd())*Rv-Rv/2)*0 + (y-cy), rnd); } };
+  if(tex.kind==='beans'){
+    for(let i=0;i<10;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a); const rot=(rnd()*60-30).toFixed(0);
+      g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${rot})"><ellipse rx="4.6" ry="2.7" fill="${tex.bean}" stroke="${tex.base}" stroke-width="0.5"/><path d="M-3,0 q3,-2 6,0" fill="none" stroke="${tex.hi}" stroke-width="0.7" opacity="0.8"/></g>`; }
+  } else if(tex.kind==='smooth'){
+    g+=`<ellipse cx="${cx}" cy="${cy}" rx="${(R).toFixed(1)}" ry="${(Rv).toFixed(1)}" fill="${tex.base}"/>`;
+    g+=`<path d="M${cx-R*0.5},${cy} q${R*0.5},${-Rv*0.5} ${R},0" fill="none" stroke="${tex.swirl}" stroke-width="1.4" opacity="0.7"/>`;
+    g+=`<ellipse cx="${cx+R*0.2}" cy="${cy-Rv*0.2}" rx="2.5" ry="1.6" fill="${tex.swirl}" opacity="0.6"/>`;
+  } else if(tex.kind==='leafy'){
+    for(let i=0;i<14;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a);
+      g+=`<path d="M${x.toFixed(1)},${y.toFixed(1)} q2,-3 4,0 q-2,3 -4,0z" fill="${tex.bit}" opacity="${(0.6+rnd()*0.4).toFixed(2)}"/>`; }
+  } else if(tex.kind==='cubes'){
+    for(let i=0;i<7;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a); const rot=(rnd()*40-20).toFixed(0);
+      g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${rot})"><rect x="-3.4" y="-3.4" width="6.8" height="6.8" rx="1.2" fill="${tex.cube}" stroke="#7A3B1E" stroke-width="0.5"/></g>`; }
+  } else if(tex.kind==='gravy'){
+    for(let i=0;i<6;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a);
+      g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(2.5+rnd()*1.8).toFixed(1)}" fill="${tex.piece}" opacity="0.85"/>`; }
+    g+=`<ellipse cx="${cx-R*0.3}" cy="${cy-Rv*0.3}" rx="3" ry="1.8" fill="#fff" opacity="0.25"/>`;
+  } else if(tex.kind==='mince'){
+    for(let i=0;i<22;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a);
+      g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.4" fill="${tex.bit}" opacity="0.9"/>`; }
+  } else if(tex.kind==='chunky'){
+    for(let i=0;i<8;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd()); const x=cx+rr*R*Math.cos(a), y=cy+rr*Rv*Math.sin(a);
+      g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(2.8+rnd()*1.5).toFixed(1)}" fill="${tex.chunk}" stroke="#8A6320" stroke-width="0.4" opacity="0.9"/>`; }
+  } else if(tex.kind==='curd'){
+    g+=`<ellipse cx="${cx}" cy="${cy}" rx="${R.toFixed(1)}" ry="${Rv.toFixed(1)}" fill="#FBF7EC"/>`;
+    g+=`<ellipse cx="${cx}" cy="${cy+Rv*0.15}" rx="${(R*0.55).toFixed(1)}" ry="${(Rv*0.4).toFixed(1)}" fill="#EFE7D2" opacity="0.7"/>`;
+  }
+  g+=`</g>`;
+  return inner+g;
+}
+/* a 3D steel katori at (cx,cy) holding dish `id`(grp) */
+function katoriSVG(cx,cy,rx,id,grp){
+  const ry=(rx*0.82);
+  const foodR=rx-2, foodRv=ry-2;
+  let s=`<defs><radialGradient id="kg${Math.abs(cx*7+cy).toFixed(0)}" cx="0.4" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#FBFBF9"/><stop offset="0.6" stop-color="#D8D8D2"/><stop offset="1" stop-color="#A9A9A2"/></radialGradient></defs>`;
+  // steel body (outer ellipse with metallic gradient)
+  s+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#kg${Math.abs(cx*7+cy).toFixed(0)})" stroke="#33291C" stroke-width="1.8"/>`;
+  // inner well rim (darker ring so food sits in a well)
+  s+=`<ellipse cx="${cx}" cy="${cy}" rx="${(rx-1.5).toFixed(1)}" ry="${(ry-1.5).toFixed(1)}" fill="none" stroke="#8A8A82" stroke-width="1"/>`;
+  // the food
+  s+=foodFill(id,grp,cx,cy,foodR,foodRv);
+  // rim highlight arc (top-left) for the 3D metal read
+  s+=`<path d="M${(cx-rx*0.72).toFixed(1)},${(cy-ry*0.35).toFixed(1)} a${rx.toFixed(1)},${ry.toFixed(1)} 0 0 1 ${(rx*1.1).toFixed(1)},${(-ry*0.45).toFixed(1)}" fill="none" stroke="#FFFFFF" stroke-width="1.4" opacity="0.7" stroke-linecap="round"/>`;
+  return s;
+}
+function thaliPlateSVG(d){
+  d = d || thaliDraft; if(!d) return '';
+  // classify picks: bowls (dal/pulse/paneer/prot/curd) vs on-plate (sabzi)
+  const bowlDishes=[]; const sabziDishes=[];
+  (d.dishes||[]).forEach(id=>{
+    const grp=thaliGroupOf(id)||'sabzi';
+    if(grp==='sabzi') sabziDishes.push({id,label:thaliName(id)});
+    else bowlDishes.push({id,label:thaliName(id),tint:THALI_TINT[grp]||'#E8A72C',grp});
+  });
+  // curd always in a white bowl, at the end of the arc
+  const bowls = bowlDishes.slice();
+  if(d.curd!==false) bowls.push({id:'_curd',label:LT('thaliCurd'),tint:THALI_TINT.curd,grp:'curd',rm:"thaliDraft.curd=false;thaliStep('dishes')"});
+  const nB=bowls.length;
+  const cx=150, cy=155, plateR=135, rimR=120;
+  // bowls sit along the TOP arc from ~9 o'clock (200deg) to ~3 o'clock (340deg / -20)
+  // measured clockwise from +x axis: left = 200deg, right = 340deg → span across the top
+  const A0=200*Math.PI/180, A1=340*Math.PI/180;
+  const arcR = 88;
+  const bowlR = nB<=3?26 : nB<=4?23 : nB<=5?20 : 18;
+  let bowlsSvg='', labelsSvg='';
+  bowls.forEach((b,i)=>{
+    const t = nB===1 ? 0.5 : i/(nB-1);
+    const ang = A0 + t*(A1-A0);
+    const bx = cx + arcR*Math.cos(ang);
+    const by = cy + arcR*Math.sin(ang);
+    const rm = b.rm || ("thaliRemoveFromStrip('"+b.id+"')");
+    bowlsSvg += '<g class="katori" onclick="event.stopPropagation();'+rm+'" style="cursor:pointer">'
+      + katoriSVG(bx, by, bowlR, b.id, b.grp)
+      +'</g>';
+    // label under each bowl, truncated to fit
+    const short = b.label.length>12 ? b.label.slice(0,11)+'…' : b.label;
+    labelsSvg += '<text x="'+bx.toFixed(0)+'" y="'+(by+bowlR*0.82+13).toFixed(0)+'" text-anchor="middle" font-size="10" font-weight="600" fill="#33291C" style="font-family:Baloo 2,sans-serif">'+esc(short)+'</text>';
+  });
+  // ON-PLATE zones: sabzi LEFT, salad RIGHT, roti/rice MIDDLE
+  const hasRoti=(d.staple||[]).includes('roti'), hasRice=(d.staple||[]).includes('rice');
+  const hasSalad=d.salad!==false;
+  let plateItems='';
+  // sabzi (left) — a mound of green on the plate surface, one blob per sabzi (max shown 2)
+  if(sabziDishes.length){
+    const sx=cx-64, sy=cy+34;
+    const rnd=seedRand(sabziDishes[0].id);
+    const tex=dishTexture(sabziDishes[0].id,'sabzi');
+    const bitColor = tex.bit || tex.chunk || '#6B8B44';
+    const baseColor = tex.base || THALI_TINT.sabzi;
+    let bits='';
+    for(let i=0;i<12;i++){ const bx2=sx-16+rnd()*32, by2=sy-8+rnd()*14;
+      bits+=`<circle cx="${bx2.toFixed(1)}" cy="${by2.toFixed(1)}" r="${(1.6+rnd()*1.6).toFixed(1)}" fill="${bitColor}" opacity="${(0.65+rnd()*0.35).toFixed(2)}"/>`; }
+    plateItems += '<g class="katori" onclick="event.stopPropagation();thaliRemoveFromStrip(\''+sabziDishes[0].id+'\')" style="cursor:pointer">'
+      +'<path d="M'+(sx-22)+','+sy+' q4,-16 22,-16 q18,0 22,16 q2,10 -22,10 q-24,0 -22,-10 z" fill="'+baseColor+'" stroke="#33291C" stroke-width="1.6"/>'
+      +bits
+      +'<path d="M'+(sx-16)+','+(sy-6)+' q16,-8 32,0" fill="none" stroke="#fff" stroke-width="1" opacity="0.3"/>'
+      +'</g>';
+    const sl=sabziDishes.map(s=>s.label).join(', ');
+    const sShort=sl.length>16?sl.slice(0,15)+'…':sl;
+    plateItems += '<text x="'+sx+'" y="'+(sy+22)+'" text-anchor="middle" font-size="10" font-weight="600" fill="#33291C" style="font-family:Baloo 2,sans-serif">'+esc(sShort)+'</text>';
+  }
+  // salad (right) — mixed chopped veg
+  if(hasSalad){
+    const lx=cx+64, ly=cy+34;
+    const rnd=seedRand('salad');
+    let bits='';
+    const cols=['#7BAE4A','#D94F3D','#E8C74A','#C05A2A','#9ECB5A'];
+    for(let i=0;i<11;i++){ const bx2=lx-15+rnd()*30, by2=ly-7+rnd()*13;
+      bits+=`<rect x="${(bx2-1.6).toFixed(1)}" y="${(by2-1.6).toFixed(1)}" width="3.2" height="3.2" rx="0.8" fill="${cols[(rnd()*cols.length)|0]}" opacity="0.9"/>`; }
+    plateItems += '<g class="katori" onclick="event.stopPropagation();thaliDraft.salad=false;thaliStep(\'dishes\')" style="cursor:pointer">'
+      +'<path d="M'+(lx-20)+','+ly+' q3,-14 20,-14 q17,0 20,14 q2,9 -20,9 q-22,0 -20,-9 z" fill="#EAF3DD" stroke="#33291C" stroke-width="1.6"/>'
+      +bits
+      +'</g>';
+    plateItems += '<text x="'+lx+'" y="'+(ly+20)+'" text-anchor="middle" font-size="10" font-weight="600" fill="#33291C" style="font-family:Baloo 2,sans-serif">'+LT('thaliSalad')+'</text>';
+  }
+  // roti/rice (middle-bottom of plate)
+  if(hasRoti){
+    const ry_=cy+40; const rnd=seedRand('roti');
+    let spots='';
+    for(let i=0;i<7;i++){ const a=rnd()*6.283, rr=Math.sqrt(rnd())*15; spots+=`<circle cx="${(cx+rr*Math.cos(a)).toFixed(1)}" cy="${(ry_+rr*Math.sin(a)).toFixed(1)}" r="${(1.4+rnd()*1.4).toFixed(1)}" fill="#B98A46" opacity="0.55"/>`; }
+    plateItems += '<g><circle cx="'+cx+'" cy="'+ry_+'" r="20" fill="#EFDCAE" stroke="#33291C" stroke-width="1.6"/>'
+      +'<circle cx="'+cx+'" cy="'+ry_+'" r="20" fill="none" stroke="#C9A45E" stroke-width="0.8" opacity="0.5"/>'
+      +spots
+      +'<path d="M'+(cx-11)+','+(ry_-6)+' q11,-5 22,0" fill="none" stroke="#fff" stroke-width="1" opacity="0.3"/>'
+      +'<text x="'+cx+'" y="'+(ry_+31)+'" text-anchor="middle" font-size="10" font-weight="600" fill="#7A5A16" style="font-family:Baloo 2,sans-serif">'+LT('thaliRoti')+'</text></g>';
+  } else if(hasRice){
+    const ry_=cy+42; const rnd=seedRand('rice');
+    let grains='';
+    for(let i=0;i<28;i++){ const gx=cx-20+rnd()*40, gy=ry_-11+rnd()*22, rot=(rnd()*180).toFixed(0);
+      grains+=`<g transform="translate(${gx.toFixed(1)},${gy.toFixed(1)}) rotate(${rot})"><ellipse rx="3" ry="1.1" fill="#fff" stroke="#E0D6BE" stroke-width="0.4"/></g>`; }
+    plateItems += '<g><ellipse cx="'+cx+'" cy="'+ry_+'" rx="24" ry="15" fill="#F5EFDD" stroke="#33291C" stroke-width="1.6"/>'
+      +grains
+      +'<text x="'+cx+'" y="'+(ry_+29)+'" text-anchor="middle" font-size="10" font-weight="600" fill="#7A6B52" style="font-family:Baloo 2,sans-serif">'+LT('thaliRice')+'</text></g>';
+  }
+  const svg = '<svg viewBox="0 0 300 320" width="100%" style="max-width:300px;display:block;margin:0 auto">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+plateR+'" fill="#FDF8EC" stroke="#33291C" stroke-width="2.4"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+rimR+'" fill="none" stroke="#33291C" stroke-width="1" opacity="0.35"/>'
+    +plateItems+bowlsSvg+labelsSvg
+    +'</svg>';
+  return '<div class="thali-plate">'+svg+'</div>';
 }
 function thaliRemoveFromStrip(id){
   const i=thaliDraft.dishes.indexOf(id);
@@ -1687,19 +2027,35 @@ function thaliToggleStaple(s){
   thaliStep('staple');
 }
 function commitThali(){
-  const d=thaliDraft; if(!d||!d.dishes.length){ toast(LT('thaliNeedDish')); return }
+  const d=thaliDraft; if(!d) return;
+  const isFormat = d.format==='other';
+  // validation: thali needs a hero; format needs a format+filling
+  if(isFormat){ if(!d.formatKey){ toast(LT('thaliNeedDish')); return } }
+  else { if(!d.heroId){ toast(LT('thaliNeedHero')); return } }
   const day=plan.days[d.di];
-  // protein token for quota: non-veg thali counts as its protein; veg counts veg
-  const tok = d.veg ? 'veg' : (d.protein==='prawns'?'fish':d.protein==='egg'?'veg':d.protein);
+  // all component ids for the meal = hero (if any) + supporting dishes
+  const allDishes = (d.heroId?[d.heroId]:[]).concat(d.dishes.filter(x=>x!==d.heroId));
+  // protein token for quota
+  let tok;
+  if(isFormat){
+    // dosa/paratha: keema/chicken filling → chicken; else veg
+    tok = (!d.veg && (d.filling==='keema')) ? 'chicken' : (!d.veg? 'chicken':'veg');
+    if(d.veg) tok='veg';
+  } else {
+    tok = d.veg ? (d.protein==='paneer'||d.protein==='dal'||d.protein==='pulse'||d.protein==='egg'||d.protein==='soya'?'veg':'veg')
+                : (d.protein==='prawns'?'fish':d.protein==='egg'?'veg':d.protein);
+  }
   day[d.meal] = {
-    thali:true, veg:d.veg, protein:d.protein,
-    dishes:d.dishes.slice(), staple:d.staple.slice(),
+    thali:true, veg:d.veg, format:d.format||'thali', formatKey:d.formatKey||null, filling:d.filling||null,
+    protein:d.protein, heroId:d.heroId||null,
+    dishes:allDishes, staple:isFormat?[]:d.staple.slice(),
     curd:d.curd!==false, salad:d.salad!==false, zoya:d.zoya,
+    auto: isFormat ? (THALI_FORMATS.find(f=>f.key===d.formatKey)||{auto:[]}).auto.map(a=>a[0]) : [],
     saved:true, token:tok,
-    chosen:d.dishes.slice(), alts:d.dishes.slice()   // compatibility with engine helpers
+    chosen:allDishes.slice(), alts:allDishes.slice()
   };
-  logEvent({k:'thali',d:day.date,m:d.meal,veg:d.veg,protein:d.protein,dishes:d.dishes.slice(),staple:d.staple.slice(),curd:d.curd!==false,salad:d.salad!==false,zoya:d.zoya});
-  d.dishes.forEach(id=>{ if(byId(id)){ bumpTaste(id,1); history[id]=day.date; } });
+  logEvent({k:'thali',d:day.date,m:d.meal,veg:d.veg,format:d.format,formatKey:d.formatKey,filling:d.filling,protein:d.protein,hero:d.heroId,dishes:allDishes,staple:day[d.meal].staple,curd:d.curd!==false,salad:d.salad!==false,zoya:d.zoya});
+  allDishes.forEach(id=>{ if(byId(id)){ bumpTaste(id,1); history[id]=day.date; } });
   thaliDraft=null;
   advanceAfterDecision(d.di,d.meal);
   closeSheet(); savePlan(); store.set('history',history); renderPlan();
@@ -1944,7 +2300,7 @@ function mealRow(di,meal,slot,dateIso){
   const lab = LT(meal);
   const ro = !planEditable();
   const headWho = who?`<small>${who}</small>`:'';
-  if(!slot||!(slot.alts||[]).length){
+  if(!slot||(!(slot.alts||[]).length && !slot.thali)){
     return `<div class="mealblock"><div class="mealhead"><span>${lab}</span>${headWho}</div><div class="skiprow"><div class="lbl" style="color:var(--ink-faint)">—</div></div></div>`;
   }
   const fam = isFamilySlot(meal,dateIso);
@@ -1959,13 +2315,27 @@ function mealRow(di,meal,slot,dateIso){
   }
 
   if(slot.thali && slot.saved){
-    const comps = (slot.dishes||[]).map(id=>{
-      const nm=thaliNameObj(id);
-      return `<span class="th-comp" onclick="event.stopPropagation();openRecipe('${id}')">${esc(L(nm))}</span>`;
+    const isFormat = slot.format==='other';
+    let heroChip='';
+    if(isFormat && slot.formatKey){
+      const f=THALI_FORMATS.find(x=>x.key===slot.formatKey);
+      const fillList=f?(f.key==='dosa'?(slot.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!slot.veg?[['keema',['Keema','कीमा']]]:[])):[];
+      const fl=fillList.find(o=>o[0]===slot.filling);
+      heroChip=`<span class="th-comp" style="font-weight:700">${f?esc(L(f.label)):''}${fl?' · '+esc(L(fl[1])):''}</span>`;
+    } else if(slot.heroId){
+      heroChip=`<span class="th-comp" style="font-weight:700" onclick="event.stopPropagation();openRecipe('${slot.heroId}')">${esc(thaliName(slot.heroId))}</span>`;
+    }
+    const others=(slot.dishes||[]).filter(id=>id!==slot.heroId);
+    const comps = others.map(id=>`<span class="th-comp" onclick="event.stopPropagation();openRecipe('${id}')">${esc(thaliName(id))}</span>`).join('');
+    const autos = (slot.auto||[]).map(a=>{
+      const map={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:LT('thaliCurd'),achar:['Achar','अचार']};
+      const lbl = Array.isArray(map[a])?L(map[a]):(map[a]||a);
+      return `<span class="th-comp extra">${esc(lbl)}</span>`;
     }).join('');
     const staples = (slot.staple||[]).map(s=>`<span class="th-comp staple">${LT('thali'+s.charAt(0).toUpperCase()+s.slice(1))}</span>`).join('');
     const extras = [slot.curd!==false?`<span class="th-comp extra">${LT('thaliCurd')}</span>`:'', slot.salad!==false?`<span class="th-comp extra">${LT('thaliSalad')}</span>`:''].filter(Boolean).join('');
-    const protLine = slot.veg ? LT('thaliVegLabel') : `${pName(slot.protein||'chicken')} ${LT('thaliNonvegLabel')}`;
+    const protLine = isFormat ? (slot.veg?LT('thaliVegLabel'):`${LT('thaliNonvegLabel')}`)
+                              : (slot.veg ? (LT('tp'+(slot.protein||'').charAt(0).toUpperCase()+(slot.protein||'').slice(1))||LT('thaliVegLabel')) : `${pName(slot.protein||'chicken')} ${LT('thaliNonvegLabel')}`);
     const zoyaChip = (!slot.veg && slot.zoya==='swap') ? `<div class="warnchip" style="margin:2px 0 6px 58px">⚑ ${LT('zoyaPair')}</div>` : '';
     return `<div class="mealblock">
       <div class="mealhead"><span>${lab}</span>${headWho}${changeLink}</div>
@@ -1973,7 +2343,7 @@ function mealRow(di,meal,slot,dateIso){
         <div class="seal" style="background:var(--haldi)">◍</div>
         <div class="body">
           <div class="th-protline">${protLine}</div>
-          <div class="th-complist">${comps}${staples}${extras}</div>
+          <div class="th-complist">${heroChip}${comps}${staples}${autos}${extras}</div>
         </div>
         ${ro?'':`<span class="edit">${LT('change')}</span>`}
       </div>${zoyaChip}</div>`;
@@ -2178,12 +2548,23 @@ function menuText(lg){
       const pre=(m==='lunch'?'🥗 ':'🍛 ')+Lx(T[m],lg)+': ';
       if(sl.skipped){ t+=pre+Lx(T.skippedWA,lg)+'\n'; return }
       if(sl.thali && sl.saved){
-        const parts=(sl.dishes||[]).map(id=>{ const nm=thaliNameObj(id); return Lx(nm,lg); }).filter(Boolean);
+        const parts=[];
+        // hero first
+        if(sl.format==='other' && sl.formatKey){
+          const f=THALI_FORMATS.find(x=>x.key===sl.formatKey);
+          const fillList=f?(f.key==='dosa'?(sl.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!sl.veg?[['keema',['Keema','कीमा']]]:[])):[];
+          const fl=fillList.find(o=>o[0]===sl.filling);
+          parts.push(Lx(f.label,lg)+(fl?' ('+Lx(fl[1],lg)+')':''));
+        } else if(sl.heroId){
+          parts.push(Lx(thaliNameObj(sl.heroId),lg));
+        }
+        (sl.dishes||[]).filter(id=>id!==sl.heroId).forEach(id=>parts.push(Lx(thaliNameObj(id),lg)));
+        (sl.auto||[]).forEach(a=>{ const m={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:T.thaliCurd,achar:['Achar','अचार']}[a]; if(m) parts.push(Lx(m,lg)); });
         (sl.staple||[]).forEach(s=>parts.push(Lx(T['thali'+s.charAt(0).toUpperCase()+s.slice(1)],lg)));
         if(sl.curd!==false) parts.push(Lx(T.thaliCurd,lg));
         if(sl.salad!==false) parts.push(Lx(T.thaliSalad,lg));
         const zp=(!sl.veg&&sl.zoya==='swap')?' ('+Lx(T.zoyaPair,lg).replace('+ ','')+')':'';
-        t+=pre+parts.join(' + ')+zp+'\n';
+        t+=pre+parts.filter(Boolean).join(' + ')+zp+'\n';
         return;
       }
       if(!sl.saved||!sl.chosen.length){ t+=pre+Lx(T.notDecided,lg)+'\n'; return }
@@ -2629,13 +3010,79 @@ function applyLang(){
   document.getElementById('t-tab-tonight').textContent=LT('tabTonight');
 }
 function setLang(l){ lang=l; store.set('lang',l); applyLang(); renderAll(); closeSheet() }
-function goTab(p,btn){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-  document.getElementById('page-'+p).classList.add('on');
+const TAB_ORDER=['plan','recipes','bazaar','tonight'];
+let currentTab='plan';
+function goTab(p,btn,dir){
+  const from=document.getElementById('page-'+currentTab);
+  const to=document.getElementById('page-'+p);
+  if(!to) return;
+  if(p===currentTab){ window.scrollTo(0,0); return }
+  // directional slide: dir = 1 (new comes from right), -1 (from left). Infer from tab order if not given.
+  if(dir===undefined) dir = TAB_ORDER.indexOf(p) > TAB_ORDER.indexOf(currentTab) ? 1 : -1;
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  window.scrollTo(0,0);
+  const tabBtn = btn || document.querySelector('[data-page='+p+']');
+  if(tabBtn) tabBtn.classList.add('on');
+  if(prefersReduced){
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('on','slide-in-r','slide-in-l','slide-out-r','slide-out-l'));
+    to.classList.add('on'); currentTab=p; window.scrollTo(0,0); return;
+  }
+  // animate: from slides out, to slides in from the correct side
+  to.classList.remove('slide-out-r','slide-out-l');
+  to.classList.add('on', dir>0?'slide-in-r':'slide-in-l');
+  from.classList.add(dir>0?'slide-out-l':'slide-out-r');
+  // force reflow then clear entering transform
+  void to.offsetWidth;
+  to.classList.remove('slide-in-r','slide-in-l');
+  const cleanup=()=>{
+    from.classList.remove('on','slide-out-l','slide-out-r');
+    from.removeEventListener('transitionend',cleanup);
+  };
+  from.addEventListener('transitionend',cleanup);
+  setTimeout(cleanup,320); // fallback
+  currentTab=p; window.scrollTo(0,0);
 }
+function swipeTab(dir){
+  // dir = 1 → next tab (swipe left), -1 → previous (swipe right). Stop at ends.
+  const i=TAB_ORDER.indexOf(currentTab);
+  const j=i+dir;
+  if(j<0||j>=TAB_ORDER.length) return; // stop at ends
+  goTab(TAB_ORDER[j], null, dir);
+}
+/* ---- swipe gesture (deliberate horizontal swipe on the page body) ---- */
+(function(){
+  let x0=null,y0=null,t0=0,guard=false;
+  function startsOnScrollable(el){
+    // ignore swipes that begin on a horizontally scrollable element (chip rows, plate, accordions)
+    for(let n=el; n && n!==document.body; n=n.parentElement){
+      if(!n.scrollWidth) continue;
+      const st=getComputedStyle(n);
+      const ox=st.overflowX;
+      if((ox==='auto'||ox==='scroll') && n.scrollWidth>n.clientWidth+4) return true;
+      if(n.tagName==='SVG'||n.classList.contains('thali-plate')||n.classList.contains('sheet')||n.closest&&n.closest('.sheet')) return true;
+    }
+    return false;
+  }
+  document.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1){ guard=true; return }
+    const t=e.touches[0];
+    if(startsOnScrollable(e.target)){ guard=true; return }
+    // don't start swipes on a modal sheet
+    if(document.querySelector('.sheet.on')){ guard=true; return }
+    guard=false; x0=t.clientX; y0=t.clientY; t0=Date.now();
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(guard||x0===null){ x0=y0=null; return }
+    const t=e.changedTouches[0];
+    const dx=t.clientX-x0, dy=t.clientY-y0, dt=Date.now()-t0;
+    x0=y0=null;
+    // deliberate: mostly-horizontal, long enough, quick enough
+    if(Math.abs(dx)<60) return;
+    if(Math.abs(dx) < Math.abs(dy)*1.8) return; // too diagonal
+    if(dt>600) return; // too slow (probably a scroll/drag)
+    swipeTab(dx<0 ? 1 : -1);
+  },{passive:true});
+})();
 let toastTimer;
 function toast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
