@@ -547,6 +547,9 @@ const T = {
   thaliAroundHero:['Add sabzi & sides around it (optional)','साथ में सब्ज़ी (वैकल्पिक)'],
   thaliNoHero:['No dishes here (household rules) — pick another protein.','यहाँ कोई डिश नहीं — दूसरा प्रोटीन चुनें।'],
   thaliNeedHero:['Pick a hero dish first','पहले मुख्य डिश चुनें'],
+  thaliPickRice:['Which biryani / pulao?','कौन-सी बिरयानी / पुलाव?'],
+  thaliRiceAuto:['Comes with raita','रायते के साथ'],
+  thaliNoRice:['No biryani/pulao for this here — pick another.','यहाँ कोई बिरयानी/पुलाव नहीं।'],
   tpPaneer:['Paneer','पनीर'],
   tpDal:['Dal / Lentils','दाल'],
   tpPulse:['Pulses (rajma, chole)','राजमा, छोले'],
@@ -711,8 +714,8 @@ function sidesOf(type){ return SIDES.filter(s=>s.type===type) }
 /* ===== curated thali catalogue =====
    Excludes format dishes (dosa/paratha/frankie) and rice-baked-in dishes from the
    component groups — those are handled via the hero/format flow or the staple step. */
-const THALI_FORMAT_IDS = ['x2','x3','z70','z90','z91'];        // dosa / paratha / frankie / kathi roll
-const THALI_STAPLE_BAKED = ['y9','y10','z30','z67','z69','d15','d16','z18','z82'];  // rice/naan baked into the dish name
+const THALI_FORMAT_IDS = ['x2','x3','z70','z90','z91','d16','z18','z69','z82'];  // dosa/paratha/frankie/kathi + biryani/pulao
+const THALI_STAPLE_BAKED = ['y9','y10','z30','z67','d15'];  // rice/naan baked into the dish name (biryani handled as format)
 const THALI_EXCLUDE = THALI_FORMAT_IDS.concat(THALI_STAPLE_BAKED);
 /* which SEED veg dish sits in which component group (curated, not guessed) */
 const THALI_VEG_GROUP = {
@@ -774,7 +777,8 @@ function thaliProteinDishes(tok){
 function thaliName(id){ const r=byId(id); if(r) return L(r.n); const s=sideById(id); return s?L(s.n):id; }
 function thaliNameObj(id){ const r=byId(id); if(r) return r.n; const s=sideById(id); return s?s.n:[id,id]; }
 const THALI_GROUPS=[['dal','tgDal'],['pulse','tgPulse'],['paneer','tgPaneer'],['sabzi','tgSabzi']];
-/* ---- format heroes: dosa & paratha, with fillings/stuffings + auto-accompaniments ---- */
+/* ---- format heroes: dosa, paratha, biryani/pulao, with fillings/accompaniments ---- */
+const THALI_RICE_IDS = ['d16','z18','z69','z82'];  // chicken biryani, hyderabadi biryani, veg pulao, prawn pulao
 const THALI_FORMATS = [
   {key:'dosa', label:['Dosa','डोसा'],
    fillingsVeg:[['potato',['Potato masala','आलू मसाला']]],
@@ -782,8 +786,14 @@ const THALI_FORMATS = [
    auto:[['sambar',['Sambar','सांबर']],['cchutney',['Coconut chutney','नारियल चटनी']]]},
   {key:'paratha', label:['Stuffed Paratha','भरवां पराठा'],
    stuffings:[['aloo',['Aloo','आलू']],['gobi',['Gobi','गोभी']],['mooli',['Mooli','मूली']],['paneer',['Paneer','पनीर']]],
-   auto:[['curd',['Curd','दही']],['achar',['Achar','अचार']]]}
+   auto:[['curd',['Curd','दही']],['achar',['Achar','अचार']]]},
+  {key:'rice', label:['Biryani / Pulao','बिरयानी / पुलाव'],
+   pickDish:true,  // choose the actual biryani/pulao from the roster
+   auto:[['raita',['Raita','रायता']]]}
 ];
+function thaliRiceDishes(veg){
+  return activeRecipes().filter(r=>THALI_RICE_IDS.includes(r.id)).filter(r=> veg ? r.p==='veg' : tokenOf(r.p)!=='veg');
+}
 </script>
 <script>
 /* ============ MAINS — bilingual ============
@@ -1352,7 +1362,7 @@ lang = store.get('lang','en');
 
 function normalizePlan(){
   if(!plan) return;
-  plan.days.forEach(d=>['lunch','dinner','breakfast'].forEach(m=>{
+  plan.days.forEach((d,di)=>['lunch','dinner','breakfast'].forEach(m=>{
     const sl=d[m]; if(!sl) return;
     if(sl.main && !sl.chosen){
       sl.chosen=[sl.main.id]; sl.saved=!!sl.main.locked;
@@ -1360,6 +1370,20 @@ function normalizePlan(){
       delete sl.main;
     }
     if(!sl.chosen) sl.chosen=[];
+    // migration: strip stale Indian dishes from UNSAVED lunch/dinner bubbles (Indian now via thali composer)
+    if(m!=='breakfast' && !sl.saved && !sl.thali && (sl.alts||[]).length){
+      const cleaned=sl.alts.filter(id=>{ const r=byId(id); return !r || (r.cz!=='Indian'); });
+      if(cleaned.length!==sl.alts.length){
+        // re-deal fresh non-Indian options for this slot
+        try{
+          const tok=sl.token||(byId(sl.alts[0])?tokenOf(byId(sl.alts[0]).p):'veg');
+          const ctx=slotCtx(d,m);
+          const r=pickMain(m,d.date,tok,ctx);
+          if(r){ sl.alts=pickAlternates(m,d.date,tok,ctx,r.id); sl.chosen=[r.id]; }
+          else { sl.alts=cleaned; sl.chosen=cleaned.slice(0,1); }
+        }catch(e){ sl.alts=cleaned; sl.chosen=sl.chosen.filter(id=>cleaned.includes(id)); }
+      }
+    }
   }));
 }
 function primary(sl){ return sl && (sl.chosen&&sl.chosen[0]) || (sl.alts&&sl.alts[0]) || null }
@@ -1680,10 +1704,22 @@ function thaliStep(step){
   }
   else if(step==='filling'){
     const f=THALI_FORMATS.find(x=>x.key===d.formatKey);
+    // rice format: pick the actual biryani/pulao dish from the roster
+    if(f.pickDish){
+      const dishes=thaliRiceDishes(d.veg);
+      if(!dishes.length){
+        openSheetHtml(`<h2>${L(f.label)}</h2><div class="hint" style="color:var(--mirchi);margin:8px 0">${LT('thaliNoRice')}</div>${backLink('pickformat')}`);
+        return;
+      }
+      openSheetHtml(`<h2>${LT('thaliPickRice')}</h2>
+        <div class="tg-wrap">${dishes.map(r=>`<button class="tchip ${d.filling===r.id?'on':''}" onclick="thaliDraft.filling='${r.id}';thaliStep('addmore')">${d.filling===r.id?'✓ ':''}${esc(L(r.n))}</button>`).join('')}</div>
+        <div class="hint" style="font-size:11.5px;color:var(--ink-faint);margin-top:10px">${LT('thaliRiceAuto')}</div>
+        ${backLink('pickformat')}`);
+      return;
+    }
     let opts;
     if(f.key==='dosa') opts = d.veg ? f.fillingsVeg : f.fillingsNonveg;
-    else opts = d.veg ? f.stuffings.filter(s=>s[0]!=='keema') : f.stuffings; // paratha: keema only if non-veg
-    // paratha keema option for non-veg
+    else opts = d.veg ? f.stuffings.filter(s=>s[0]!=='keema') : f.stuffings;
     if(f.key==='paratha' && !d.veg) opts = f.stuffings.concat([['keema',['Keema','कीमा']]]);
     const q = f.key==='dosa'?LT('thaliFillingQ'):LT('thaliStuffingQ');
     openSheetHtml(`<h2>${q}</h2>
@@ -1695,8 +1731,10 @@ function thaliStep(step){
   }
   else if(step==='addmore'){
     const f=THALI_FORMATS.find(x=>x.key===d.formatKey);
-    const fillLabel=(f.key==='dosa'?(d.veg?f.fillingsVeg:f.fillingsNonveg):f.stuffings.concat(!d.veg?[['keema',['Keema','कीमा']]]:[])).find(o=>o[0]===d.filling);
-    openSheetHtml(`<h2>${L(f.label)}${fillLabel?' · '+L(fillLabel[1]):''}</h2>
+    let fillText='';
+    if(f.pickDish){ const r=byId(d.filling); fillText = r?' · '+esc(L(r.n)):''; }
+    else { const fillLabel=(f.key==='dosa'?(d.veg?f.fillingsVeg:f.fillingsNonveg):f.stuffings.concat(!d.veg?[['keema',['Keema','कीमा']]]:[])).find(o=>o[0]===d.filling); fillText=fillLabel?' · '+L(fillLabel[1]):''; }
+    openSheetHtml(`<h2>${f.pickDish&&byId(d.filling)?esc(L(byId(d.filling).n)):L(f.label)+fillText}</h2>
       <div class="hint" style="font-size:12.5px;color:var(--ink-muted);margin:2px 0 6px">${LT('thaliComesWith')}: ${f.auto.map(a=>L(a[1])).join(' + ')}</div>
       <div class="tg-lbl" style="margin-top:14px">${LT('thaliAddMoreQ')}</div>
       <div class="pgrid">
@@ -2038,9 +2076,9 @@ function commitThali(){
   // protein token for quota
   let tok;
   if(isFormat){
-    // dosa/paratha: keema/chicken filling → chicken; else veg
-    tok = (!d.veg && (d.filling==='keema')) ? 'chicken' : (!d.veg? 'chicken':'veg');
-    if(d.veg) tok='veg';
+    const f=THALI_FORMATS.find(x=>x.key===d.formatKey);
+    if(f && f.pickDish){ const r=byId(d.filling); tok = r? tokenOf(r.p) : (d.veg?'veg':'chicken'); }
+    else { tok = (!d.veg && (d.filling==='keema')) ? 'chicken' : (d.veg?'veg':'chicken'); }
   } else {
     tok = d.veg ? (d.protein==='paneer'||d.protein==='dal'||d.protein==='pulse'||d.protein==='egg'||d.protein==='soya'?'veg':'veg')
                 : (d.protein==='prawns'?'fish':d.protein==='egg'?'veg':d.protein);
@@ -2319,16 +2357,21 @@ function mealRow(di,meal,slot,dateIso){
     let heroChip='';
     if(isFormat && slot.formatKey){
       const f=THALI_FORMATS.find(x=>x.key===slot.formatKey);
-      const fillList=f?(f.key==='dosa'?(slot.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!slot.veg?[['keema',['Keema','कीमा']]]:[])):[];
-      const fl=fillList.find(o=>o[0]===slot.filling);
-      heroChip=`<span class="th-comp" style="font-weight:700">${f?esc(L(f.label)):''}${fl?' · '+esc(L(fl[1])):''}</span>`;
+      if(f && f.pickDish){
+        const r=byId(slot.filling);
+        heroChip=`<span class="th-comp" style="font-weight:700" ${r?`onclick="event.stopPropagation();openRecipe('${slot.filling}')"`:''}>${r?esc(L(r.n)):L(f.label)}</span>`;
+      } else {
+        const fillList=f?(f.key==='dosa'?(slot.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!slot.veg?[['keema',['Keema','कीमा']]]:[])):[];
+        const fl=fillList.find(o=>o[0]===slot.filling);
+        heroChip=`<span class="th-comp" style="font-weight:700">${f?esc(L(f.label)):''}${fl?' · '+esc(L(fl[1])):''}</span>`;
+      }
     } else if(slot.heroId){
       heroChip=`<span class="th-comp" style="font-weight:700" onclick="event.stopPropagation();openRecipe('${slot.heroId}')">${esc(thaliName(slot.heroId))}</span>`;
     }
     const others=(slot.dishes||[]).filter(id=>id!==slot.heroId);
     const comps = others.map(id=>`<span class="th-comp" onclick="event.stopPropagation();openRecipe('${id}')">${esc(thaliName(id))}</span>`).join('');
     const autos = (slot.auto||[]).map(a=>{
-      const map={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:LT('thaliCurd'),achar:['Achar','अचार']};
+      const map={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:LT('thaliCurd'),achar:['Achar','अचार'],raita:['Raita','रायता']};
       const lbl = Array.isArray(map[a])?L(map[a]):(map[a]||a);
       return `<span class="th-comp extra">${esc(lbl)}</span>`;
     }).join('');
@@ -2552,14 +2595,17 @@ function menuText(lg){
         // hero first
         if(sl.format==='other' && sl.formatKey){
           const f=THALI_FORMATS.find(x=>x.key===sl.formatKey);
-          const fillList=f?(f.key==='dosa'?(sl.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!sl.veg?[['keema',['Keema','कीमा']]]:[])):[];
-          const fl=fillList.find(o=>o[0]===sl.filling);
-          parts.push(Lx(f.label,lg)+(fl?' ('+Lx(fl[1],lg)+')':''));
+          if(f && f.pickDish){ const r=byId(sl.filling); if(r) parts.push(Lx(r.n,lg)); else parts.push(Lx(f.label,lg)); }
+          else {
+            const fillList=f?(f.key==='dosa'?(sl.veg?f.fillingsVeg:f.fillingsNonveg):(f.stuffings||[]).concat(!sl.veg?[['keema',['Keema','कीमा']]]:[])):[];
+            const fl=fillList.find(o=>o[0]===sl.filling);
+            parts.push(Lx(f.label,lg)+(fl?' ('+Lx(fl[1],lg)+')':''));
+          }
         } else if(sl.heroId){
           parts.push(Lx(thaliNameObj(sl.heroId),lg));
         }
         (sl.dishes||[]).filter(id=>id!==sl.heroId).forEach(id=>parts.push(Lx(thaliNameObj(id),lg)));
-        (sl.auto||[]).forEach(a=>{ const m={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:T.thaliCurd,achar:['Achar','अचार']}[a]; if(m) parts.push(Lx(m,lg)); });
+        (sl.auto||[]).forEach(a=>{ const m={sambar:['Sambar','सांबर'],cchutney:['Coconut chutney','नारियल चटनी'],curd:T.thaliCurd,achar:['Achar','अचार'],raita:['Raita','रायता']}[a]; if(m) parts.push(Lx(m,lg)); });
         (sl.staple||[]).forEach(s=>parts.push(Lx(T['thali'+s.charAt(0).toUpperCase()+s.slice(1)],lg)));
         if(sl.curd!==false) parts.push(Lx(T.thaliCurd,lg));
         if(sl.salad!==false) parts.push(Lx(T.thaliSalad,lg));
@@ -3095,4 +3141,3 @@ initSync();
 </script>
 </body>
 </html>
- 
