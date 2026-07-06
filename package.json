@@ -1,0 +1,9 @@
+{
+  "name": "ghar-ka-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ghar ka Menu - family meal planner with shared menu delivery",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}
