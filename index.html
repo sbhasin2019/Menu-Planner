@@ -606,8 +606,10 @@ const T = {
   enterPinPrompt:['Enter your unlock code:','अपना अनलॉक कोड डालें:'],
   wrongPin:['Wrong code','गलत कोड'],
   syncHead:['Sharing with the cook','कुक के साथ साझा'],
-  syncUrl:['Supabase URL','Supabase URL'],
+  syncUrl:['App web address','ऐप का वेब पता'],
   syncKey:['Publishable key','Publishable key'],
+  syncOwnerKey:['Owner key (secret)','ओनर की (गुप्त)'],
+  syncOwnerKeyPh:['the OWNER_KEY you set','आपकी OWNER_KEY'],
   syncHouse:['Household code (make one up, same on both phones)','घर का कोड (खुद बनाएँ, दोनों फ़ोन पर एक सा)'],
   syncRole:['This phone is','यह फ़ोन है'],
   roleOwner:['Owner (plans the menu)','मालिक (मेन्यू बनाता है)'],
@@ -714,7 +716,7 @@ function sidesOf(type){ return SIDES.filter(s=>s.type===type) }
 /* ===== curated thali catalogue =====
    Excludes format dishes (dosa/paratha/frankie) and rice-baked-in dishes from the
    component groups — those are handled via the hero/format flow or the staple step. */
-const THALI_FORMAT_IDS = ['x2','x3','z70','z90','z91','d16','z18','z69','z82'];  // dosa/paratha/frankie/kathi + biryani/pulao
+const THALI_FORMAT_IDS = ['x2','x3','z70','z90','z91','d16','z18','z69','z82','z92'];  // dosa/paratha/frankie/kathi + biryani/pulao/chorizo
 const THALI_STAPLE_BAKED = ['y9','y10','z30','z67','d15'];  // rice/naan baked into the dish name (biryani handled as format)
 const THALI_EXCLUDE = THALI_FORMAT_IDS.concat(THALI_STAPLE_BAKED);
 /* which SEED veg dish sits in which component group (curated, not guessed) */
@@ -778,7 +780,7 @@ function thaliName(id){ const r=byId(id); if(r) return L(r.n); const s=sideById(
 function thaliNameObj(id){ const r=byId(id); if(r) return r.n; const s=sideById(id); return s?s.n:[id,id]; }
 const THALI_GROUPS=[['dal','tgDal'],['pulse','tgPulse'],['paneer','tgPaneer'],['sabzi','tgSabzi']];
 /* ---- format heroes: dosa, paratha, biryani/pulao, with fillings/accompaniments ---- */
-const THALI_RICE_IDS = ['d16','z18','z69','z82'];  // chicken biryani, hyderabadi biryani, veg pulao, prawn pulao
+const THALI_RICE_IDS = ['d16','z18','z69','z82','z92'];  // + chorizo pork pulao
 const THALI_FORMATS = [
   {key:'dosa', label:['Dosa','डोसा'],
    fillingsVeg:[['potato',['Potato masala','आलू मसाला']]],
@@ -1200,6 +1202,7 @@ SEED.push(
 {"id":"z80","n":["Egg Curry (dhaba style)","अंडा करी"],"cz":"Indian","p":"egg","co":["dinner"],"ef":1,"tm":35,"kc":400,"ev":true,"needs":["eggs","onions"],"ing":[["Eggs (boiled)","अंडे (उबले)","6","dairy"],["Onion, tomato, ginger-garlic","प्याज़, टमाटर","","veg"],["Garam masala","गरम मसाला","","pantry"]],"st":[["Fry boiled eggs lightly.","उबले अंडे हल्के तलें।"],["Thick onion-tomato gravy.","गाढ़ी तरी।"],["Eggs in; simmer. Rice/roti.","अंडे डालें; चावल/रोटी।"]]},
 {"id":"z81","n":["Chicken Do Pyaza","चिकन दो प्याज़ा"],"cz":"Indian","p":"chicken","co":["dinner","lunch"],"ef":2,"tm":50,"kc":440,"ev":false,"needs":["chicken","onions"],"ing":[["Chicken","चिकन","800 g","meat"],["Onions (double, two ways)","प्याज़ (दुगुने)","5","veg"],["Yogurt, garam masala","दही, गरम मसाला","","dairy"]],"st":[["Brown half the onions into masala.","आधे प्याज़ मसाले में।"],["Cook chicken; add chunky onions late.","चिकन; बड़े प्याज़ बाद में।"],["Onion-forward, semi-dry.","प्याज़दार, अर्ध-सूखा।"]]},
 {"id":"z82","n":["Prawn Pulao","प्रॉन पुलाव"],"cz":"Indian","p":"prawns","co":["dinner","lunch"],"ef":2,"tm":40,"kc":440,"ev":false,"onepot":true,"needs":["prawns","rice"],"ing":[["Prawns","झींगे","400 g","meat"],["Basmati, whole spices","बासमती, साबुत मसाले","","pantry"],["Onion, mint","प्याज़, पुदीना","","veg"]],"st":[["Spiced prawn masala.","मसालेदार झींगे।"],["Layer with par-cooked rice; dum.","चावल की परत; दम।"],["Fragrant one-pot.","ख़ुशबूदार वन-पॉट।"]]},
+{"id":"z92","n":["Chorizo (Pork) Pulao","चोरिज़ो पोर्क पुलाव"],"cz":"Indian","p":"pork","co":["dinner","lunch"],"ef":2,"tm":45,"kc":520,"ev":false,"onepot":true,"needs":["chorizo","rice"],"ing":[["Goan pork chorizo (casings removed)","गोअन पोर्क चोरिज़ो (आवरण हटाकर)","250 g","meat"],["Basmati rice","बासमती चावल","2 cups","pantry"],["Onion, sliced","प्याज़, कटी हुई","2 medium","veg"],["Garlic, ginger","लहसुन, अदरक","1 tbsp each","veg"],["Whole spices (bay, clove, cardamom, cinnamon)","साबुत मसाले (तेजपत्ता, लौंग, इलायची, दालचीनी)","","pantry"],["Coriander leaves","हरा धनिया","for garnish","veg"]],"st":[["Rinse and soak the basmati rice for 20 minutes, then drain.","बासमती चावल को धोकर 20 मिनट भिगोएँ, फिर छान लें।"],["Squeeze the chorizo out of its casing. In a heavy pot, fry it on medium heat without extra oil — it releases its own red spiced fat. Break it up as it cooks, about 5–6 minutes.","चोरिज़ो को आवरण से निकालें। भारी बर्तन में मध्यम आँच पर बिना तेल के भूनें — यह अपना लाल मसालेदार तेल छोड़ता है। पकाते हुए तोड़ें, लगभग 5–6 मिनट।"],["Add the whole spices and sliced onion; fry until the onion is golden. Add garlic and ginger, cook 1 minute.","साबुत मसाले और कटी प्याज़ डालें; प्याज़ सुनहरी होने तक भूनें। लहसुन-अदरक डालकर 1 मिनट पकाएँ।"],["Add the drained rice and stir gently for 2 minutes to coat it in the chorizo fat.","छाना हुआ चावल डालें और 2 मिनट धीरे से मिलाएँ ताकि चावल पर चोरिज़ो का तेल लग जाए।"],["Add 3 cups hot water and salt (go easy — chorizo is already salty). Bring to a boil, cover, and cook on the lowest heat 12–15 minutes until the water is absorbed.","3 कप गरम पानी और नमक डालें (कम — चोरिज़ो पहले से नमकीन है)। उबाल आने दें, ढककर सबसे धीमी आँच पर 12–15 मिनट पकाएँ जब तक पानी सूख न जाए।"],["Rest covered 5 minutes, fluff with a fork, garnish with coriander. Serve with a simple raita.","5 मिनट ढका रहने दें, काँटे से खोलें, धनिया डालें। सादे रायते के साथ परोसें।"]]},
 {"id":"z83","n":["Lemon Herb Grilled Fish","लेमन हर्ब ग्रिल्ड फिश"],"cz":"Western","p":"fish","co":["dinner"],"ef":1,"tm":25,"kc":340,"ev":false,"needs":["fish","lemon"],"ing":[["Fish fillets","मछली","600 g","meat"],["Lemon, garlic, parsley, olive oil","नींबू, लहसुन, अजमोद","","pantry"],["Veg/salad","सब्ज़ी/सलाद","","veg"]],"st":[["Marinate in lemon-garlic-herb.","नींबू-लहसुन में।"],["Grill 4 min a side.","हर तरफ़ 4 मिनट।"],["Light; greens alongside.","हल्की; साग।"]]},
 {"id":"z84","n":["Chicken Cacciatore","चिकन काचियातोरे"],"cz":"Italian","p":"chicken","co":["dinner"],"ef":2,"tm":55,"kc":480,"ev":false,"onepot":true,"needs":["chicken","tomatoes"],"ing":[["Chicken pieces","चिकन","800 g","meat"],["Tomato, onion, capsicum, olives","टमाटर, प्याज़, ज़ैतून","","veg"],["Herbs, garlic","जड़ी-बूटी, लहसुन","","pantry"]],"st":[["Brown chicken; set aside.","चिकन सेंकें।"],["Tomato-pepper-olive sauce.","टमाटर-शिमला-ज़ैतून सॉस।"],["Braise chicken in it. Bread/pasta.","चिकन पकाएँ; ब्रेड/पास्ता।"]]},
 {"id":"z85","n":["Paneer Tikka Masala","पनीर टिक्का मसाला"],"cz":"Indian","p":"paneer","co":["dinner"],"ef":2,"tm":45,"kc":480,"ev":false,"fest":true,"needs":["paneer","tomatoes","cream"],"ing":[["Paneer (tikka-grilled)","पनीर","400 g","dairy"],["Tomato, cream, capsicum, onion","टमाटर, क्रीम, शिमला","","dairy"],["Tikka masala","टिक्का मसाला","","pantry"]],"st":[["Grill marinated paneer + peppers.","पनीर + शिमला ग्रिल।"],["Tomato-cream tikka gravy.","टमाटर-क्रीम तरी।"],["Fold in; naan/rice.","मिलाएँ; नान/चावल।"]]},
@@ -1219,14 +1222,28 @@ const store = {
 };
 
 /* ===== Cloud delivery (Supabase). Owner publishes a locked menu; cook's phone polls it. ===== */
-/* Two tables, scoped by household code. Grocery is shared read/write; menu is owner-write, all-read. */
-const SYNC = store.get('sync', { url:'', key:'', house:'', role:'owner' });   // role: 'owner' | 'cook'
+/* Sync via our own Vercel API (backed by Neon Postgres).
+   Two tables, scoped by household code. Grocery is shared read/write; menu is owner-write, all-read. */
+const SYNC = store.get('sync', { url:'', house:'', role:'owner', ownerKey:'' });   // role: 'owner' | 'cook'
 let planLocked = store.get('planLocked', false);
 let ownerPin = store.get('ownerPin', '');
-let sb=null, sbReady=false, pulling=false, pushBusy=false, lastGroceryStamp=0, lastMenuStamp=0;
-function syncOn(){ return !!(SYNC.url && SYNC.key && SYNC.house) }
+let sbReady=false, pulling=false, pushBusy=false, lastGroceryStamp=0, lastMenuStamp=0;
+function apiBase(){ return (SYNC.url||'').trim().replace(/\/+$/,''); }
+function syncOn(){ return !!(apiBase() && SYNC.house) }
 function isCook(){ return SYNC.role==='cook' }
 function isOwner(){ return !isCook() }
+async function apiGet(path){
+  const r=await fetch(apiBase()+path, { method:'GET' });
+  if(!r.ok) throw new Error('GET '+path+' '+r.status);
+  return r.json();
+}
+async function apiPost(path, body, ownerKey){
+  const headers={ 'Content-Type':'application/json' };
+  if(ownerKey) headers['x-owner-key']=ownerKey;
+  const r=await fetch(apiBase()+path, { method:'POST', headers, body:JSON.stringify(body) });
+  if(!r.ok) throw new Error('POST '+path+' '+r.status);
+  return r.json();
+}
 
 function savePlan(){
   store.set('plan', plan);
@@ -1237,13 +1254,13 @@ function schedulePublish(){ clearTimeout(pubTimer); pubTimer=setTimeout(publishM
 async function publishMenu(){
   if(!sbReady || !plan || isCook()) return;
   try{ pushBusy=true;
-    await sb.from('menu').upsert({ house:SYNC.house, plan:plan, locked:planLocked, updated_at:new Date().toISOString() },{onConflict:'house'});
+    await apiPost('/api/menu', { house:SYNC.house, plan:plan, locked:planLocked }, SYNC.ownerKey);
   }catch(e){ console.warn('publish failed',e) } finally{ pushBusy=false; }
 }
 async function pushGrocery(){
   if(!sbReady) return;
   try{ pushBusy=true;
-    await sb.from('grocery').upsert({ house:SYNC.house, items:grocery, updated_at:new Date().toISOString() },{onConflict:'house'});
+    await apiPost('/api/grocery', { house:SYNC.house, items:grocery });
     lastGroceryStamp=Date.now();
   }catch(e){ console.warn('grocery push failed',e) } finally{ pushBusy=false; }
 }
@@ -1256,31 +1273,28 @@ async function pullOnce(){
   try{
     // cook pulls the menu; everyone pulls grocery
     if(isCook()){
-      const { data } = await sb.from('menu').select('plan,locked,updated_at').eq('house',SYNC.house).maybeSingle();
+      const data = await apiGet('/api/menu?house='+encodeURIComponent(SYNC.house));
       if(data && data.plan){
         const st=+new Date(data.updated_at||0);
         if(st!==lastMenuStamp){ lastMenuStamp=st; plan=data.plan; planLocked=!!data.locked; store.set('plan',plan); store.set('planLocked',planLocked); renderPlan(); renderMatches(); }
       }
     }
-    const g = await sb.from('grocery').select('items,updated_at').eq('house',SYNC.house).maybeSingle();
-    if(g.data && g.data.items){
-      const st=+new Date(g.data.updated_at||0);
-      if(st!==lastGroceryStamp){ lastGroceryStamp=st; grocery=g.data.items; store.set('grocery',grocery); renderGrocery(); }
+    const g = await apiGet('/api/grocery?house='+encodeURIComponent(SYNC.house));
+    if(g && g.items){
+      const st=+new Date(g.updated_at||0);
+      if(st!==lastGroceryStamp){ lastGroceryStamp=st; grocery=g.items; store.set('grocery',grocery); renderGrocery(); }
     }
   }catch(e){ /* offline tolerance */ } finally{ pulling=false; }
 }
 async function initSync(){
   if(!syncOn()) return;
   try{
-    await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
-    sb = supabase.createClient(SYNC.url, SYNC.key);
     sbReady=true; setSyncBadge(true);
     await pullOnce();
     if(isOwner() && plan && planLocked) publishMenu();   // make sure cloud has my latest locked menu
     setInterval(pullOnce, 5000);                          // her phone (and yours) checks every 5s
   }catch(e){ console.warn('sync init failed',e); setSyncBadge(false); }
 }
-function loadScript(src){ return new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=src; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); }
 function setSyncBadge(ok){ const el=document.getElementById('sync-badge'); if(el){ el.style.display=ok?'inline-flex':'none'; el.textContent = ok ? (isCook()?'🔗 '+LT('roleCook'):'🔗 '+LT('roleOwner')) : ''; } }
 
 /* lock / unlock */
@@ -2932,9 +2946,9 @@ function openSettings(){
       <button class="pchip ${isOwner()?'on':''}" onclick="setRole('owner')">${LT('roleOwner')}</button>
       <button class="pchip ${isCook()?'on':''}" onclick="setRole('cook')">${LT('roleCook')}</button>
     </div>
-    <label>${LT('syncUrl')}</label><input type="text" id="sy-url" value="${esc(SYNC.url||'')}" placeholder="https://xxxx.supabase.co">
-    <label>${LT('syncKey')}</label><input type="text" id="sy-key" value="${esc(SYNC.key||'')}" placeholder="sb_publishable_… or anon key">
+    <label>${LT('syncUrl')}</label><input type="text" id="sy-url" value="${esc(SYNC.url||'')}" placeholder="https://menu-planner-ten-kappa.vercel.app">
     <label>${LT('syncHouse')}</label><input type="text" id="sy-house" value="${esc(SYNC.house||'')}" placeholder="bhasin-kitchen">
+    ${isOwner()?`<label>${LT('syncOwnerKey')}</label><input type="text" id="sy-ownerkey" value="${esc(SYNC.ownerKey||'')}" placeholder="${LT('syncOwnerKeyPh')}">`:''}
     <div class="btnrow"><button class="btn primary small" onclick="saveSync()">${LT('syncSave')}</button></div>
     <div class="hint" style="font-size:12px;color:var(--muted)">${LT('syncNote')}</div>
   </div>
@@ -2973,12 +2987,14 @@ function saveQuota(){
 function setBfMode(v){ settings.breakfast=(v==='off'?false:v); store.set('settings',settings); openSettings(); renderPlan() }
 function setRole(r){ SYNC.role=r; store.set('sync',SYNC); openSettings(); }
 function saveSync(){
-  SYNC.url=(document.getElementById('sy-url').value||'').trim().replace(/\/$/,'');
-  SYNC.key=(document.getElementById('sy-key').value||'').trim();
+  SYNC.url=(document.getElementById('sy-url').value||'').trim().replace(/\/+$/,'');
+  const ok=document.getElementById('sy-ownerkey');
+  if(ok) SYNC.ownerKey=(ok.value||'').trim();
   SYNC.house=(document.getElementById('sy-house').value||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  delete SYNC.key;
   store.set('sync',SYNC);
   closeSheet();
-  if(syncOn()){ toast(LT('syncSave')); initSync(); } 
+  if(syncOn()){ toast(LT('syncSave')); sbReady=false; initSync(); }
   renderPlan();
 }
 function copyPickData(){
@@ -3141,4 +3157,3 @@ initSync();
 </script>
 </body>
 </html>
- 
