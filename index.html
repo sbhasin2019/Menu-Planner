@@ -615,6 +615,10 @@ const T = {
   roleOwner:['Owner (plans the menu)','मालिक (मेन्यू बनाता है)'],
   roleCook:['Cook (view only)','कुक (सिर्फ़ देखना)'],
   syncSave:['Save & connect','सेव और कनेक्ट'],
+  rotateHouse:['↻ Change code (remove cook\u2019s access)','↻ कोड बदलें (कुक की पहुँच हटाएँ)'],
+  rotateNote:['Use when a cook leaves. Gives you a fresh code to hand the next cook; the old one stops updating.','कुक के जाने पर इस्तेमाल करें। नया कोड मिलेगा; पुराना अपडेट होना बंद।'],
+  rotateConfirm:['Change the household code? Your current cook will stop getting updates. You\u2019ll get a new code to share with the next cook.','कोड बदलें? मौजूदा कुक को अपडेट मिलना बंद हो जाएगा।'],
+  rotateDone:['New household code (share only with your cook):','नया घर कोड (सिर्फ़ कुक को दें):'],
   syncNote:['Leave blank to use the app on one phone only. Setup steps are in the help link below.','एक ही फ़ोन पर इस्तेमाल के लिए खाली छोड़ें।'],
   sidesHint:['The usual ones are pre-filled — add anything else from the other dropdowns.','आम वाले पहले से भरे हैं — बाकी ड्रॉपडाउन से जो चाहें जोड़ें।'],
   trashToast:['Removed from rotation · trash: {n}','रोटेशन से हटा · ट्रैश: {n}'],
@@ -2950,6 +2954,8 @@ function openSettings(){
     <label>${LT('syncHouse')}</label><input type="text" id="sy-house" value="${esc(SYNC.house||'')}" placeholder="bhasin-kitchen">
     ${isOwner()?`<label>${LT('syncOwnerKey')}</label><input type="text" id="sy-ownerkey" value="${esc(SYNC.ownerKey||'')}" placeholder="${LT('syncOwnerKeyPh')}">`:''}
     <div class="btnrow"><button class="btn primary small" onclick="saveSync()">${LT('syncSave')}</button></div>
+    ${(isOwner() && syncOn())?`<div class="btnrow" style="margin-top:6px"><button class="btn ghost small" style="color:var(--mirchi)" onclick="rotateHouse()">${LT('rotateHouse')}</button></div>
+    <div class="hint" style="font-size:11.5px;color:var(--ink-faint);margin-top:2px">${LT('rotateNote')}</div>`:''}
     <div class="hint" style="font-size:12px;color:var(--muted)">${LT('syncNote')}</div>
   </div>
   <h3>${LT('data')}</h3>
@@ -2986,6 +2992,18 @@ function saveQuota(){
 }
 function setBfMode(v){ settings.breakfast=(v==='off'?false:v); store.set('settings',settings); openSettings(); renderPlan() }
 function setRole(r){ SYNC.role=r; store.set('sync',SYNC); openSettings(); }
+async function rotateHouse(){
+  if(!isOwner() || !syncOn()) return;
+  if(!confirm(LT('rotateConfirm'))) return;
+  const base=(SYNC.house||'home').replace(/-[a-z0-9]{4}$/,'');   // strip any prior suffix
+  const suffix=Math.random().toString(36).slice(2,6);
+  SYNC.house = (base+'-'+suffix).toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  store.set('sync',SYNC);
+  sbReady=false; await initSync();
+  if(plan && planLocked) await publishMenu();
+  openSettings();
+  setTimeout(()=>{ alert(LT('rotateDone')+'\n\n'+SYNC.house); }, 60);
+}
 function saveSync(){
   SYNC.url=(document.getElementById('sy-url').value||'').trim().replace(/\/+$/,'');
   const ok=document.getElementById('sy-ownerkey');
